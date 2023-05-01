@@ -3,9 +3,9 @@
 With this project, we want to assist the planning of *knudepunktnetsværker* (cycle node networks) in Denmark and beyond. For the case of Denmark, there is open access to a beta network for the whole country (cf. GeoFA) and open access data on spatial characteristics relevant for cycling tourism (cf. Septima). This repository contains a set of scripts and detailed instructions. The user can run all scripts with step-by-step explanations in their QGIS Python console. The scripts help the user to do the following:
 
 1. Define the area of interest (a part of Denmark)
-2. Fetch spatial data and beta network data for this area
+2. Fetch spatial data (Septima) and beta network data (GeoFA, provided by Folkersma) for this area
 3. Preprocess the fetched data
-4. Analyse the beta network structure and evaluate the beta network based on the spatial characteristics of its surroundings
+4. Analyse the beta network structure ("standalone" analysis) and evaluate the beta network based on the spatial characteristics of its surroundings
 5. Visualize and explore results in QGIS
 6. Adapt the beta network in QGIS and save the adapted ("concept") network
 7. Compare (and visualize differences between) the beta and concept networks
