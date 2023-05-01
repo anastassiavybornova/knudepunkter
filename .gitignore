@@ -161,3 +161,4 @@ cython_debug/
 
 # Archive / local stuff
 _*/
+.DS_Store

@@ -5,8 +5,8 @@ With this project, we want to assist the planning of *knudepunktnetsværker* (cy
 1. Define the area of interest (a part of Denmark)
 2. Fetch spatial data (Septima) and beta network data (GeoFA, provided by Folkersma) for this area
 3. Preprocess the fetched data
-4. Analyse the beta network structure ("standalone" analysis) and evaluate the beta network based on the spatial characteristics of its surroundings
-5. Visualize and explore results in QGIS
+4. Analyse the beta network structure ("standalone" analysis) and evaluate the beta network based on the spatial characteristics of its surroundings. For example outputs, see the [example spatial evaluation of Aabenraa](https://docs.google.com/document/d/1EDlNlafMbcsxuD0dQE4fuGoUe9agLBOIXC2A8BgM9Q8/edit?usp=sharing) and the [example beta network structure analysis of Stevns](https://drive.google.com/file/d/1dLfnuzi2pgBQXU7zUHwXIr4hIx9o99s7/view?usp=sharing)
+5. Visualize and explore results of the analysis in QGIS
 6. Adapt the beta network in QGIS and save the adapted ("concept") network
 7. Compare (and visualize differences between) the beta and concept networks
 
