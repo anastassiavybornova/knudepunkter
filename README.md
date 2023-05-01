@@ -1,16 +1,16 @@
-# knudepunkter
+# Knudepunkter project
 
-## Setting up the virtual environment
-Run in your terminal:
-```
-conda create --name knupu python=3.9
-conda activate knupu
-conda config --prepend channels conda
-conda config --prepend channels conda-forge
-conda install numpy matplotlib pandas geopandas shapely contextily networkx igraph momepy qgis ipykernel
-```
+With this project, we want to assist the planning of *knudepunktnetsværker* (cycle node networks) in Denmark and beyond. For the case of Denmark, there is open access to a beta network for the whole country (cf. GeoFA) and open access data on spatial characteristics relevant for cycling tourism (cf. Septima). This repository contains a set of scripts and detailed instructions. The user can run all scripts with step-by-step explanations in their QGIS Python console. The scripts help the user to do the following:
 
-## Scripts
+1. Define the area of interest (a part of Denmark)
+2. Fetch spatial data and beta network data for this area
+3. Preprocess the fetched data
+4. Analyse the beta network structure and evaluate the beta network based on the spatial characteristics of its surroundings
+5. Visualize and explore results in QGIS
+6. Adapt the beta network in QGIS and save the adapted ("concept") network
+7. Compare (and visualize differences between) the beta and concept networks
+
+## Scripts and To Dos
 
 Step-by-step in 7 steps:
 
@@ -50,8 +50,21 @@ Currently each step will be a Jupyter notebook (see `/scripts/`); those will be 
 
 ### 6. Interactive mode
 
-User modifies beta network layer in QGIS based on network analysis and spatial evaluation. Once modification is finished, user runs a script to export the results. **To Do**: Write detailed README for the modification; and short script for the export of results.
+User modifies beta network layer in QGIS based on network analysis and spatial evaluation, to create the concept network. Once modification is finished, user runs a script to export the concept network. **To Do**: Write detailed README for the modification; and short script for the export of results.
 
 ### 7. Comparison
 
-The beta and modified networks are compared (with the same metrics as in step 4) and visualized. **To Do:** Write script that imports and displays results
+The beta and concept networks are compared (with the same metrics as in step 4) and visualized. **To Do:** Write script that imports and displays results
+
+## Setting up the virtual environment
+
+(Currently, to work with the notebooks)
+
+Run in your terminal:
+```
+conda create --name knupu python=3.9
+conda activate knupu
+conda config --prepend channels conda
+conda config --prepend channels conda-forge
+conda install numpy matplotlib pandas geopandas shapely contextily networkx igraph momepy qgis ipykernel
+```
