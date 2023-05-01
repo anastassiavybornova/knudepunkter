@@ -34,7 +34,7 @@ Currently each step will be a Jupyter notebook (see `/scripts/`); those will be 
 
 ### 3. Preprocess data
 
-* Folkersma beta network: cf. [M1N repo > Folkersma](https://github.com/anastassiavybornova/M1N/tree/master/scripts_python/folkersma) - **To Do:** change to fetching data from GeoFA as soon as there is some available there (Kirsten lets us know)
+* Folkersma beta network: see `03_folkersma_step1/2` (cf. [M1N repo > Folkersma](https://github.com/anastassiavybornova/M1N/tree/master/scripts_python/folkersma)) - **To Do:** change to fetching data from GeoFA as soon as there is some available there, and adapt to folder/data structure of this repository
 * Septima data: cf `scripts/03_septima_draft.ipynb` - **To Do:** script needs to be edited to fetch data for user-defined polygon from https://septima.dk/rida-web/ instead of (current version) accessing and cutting the entire, locally downloaded, data sets.
 
 ### 4. Network evaluation
