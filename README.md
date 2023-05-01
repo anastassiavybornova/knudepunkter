@@ -12,10 +12,10 @@ conda install numpy matplotlib pandas geopandas shapely contextily networkx igra
 
 ## Scripts
 
-Step-by-step in 6 steps:
+Step-by-step in 7 steps:
 
 <p align="left">
-<img src='images/workflow.png' width=350/>
+<img src='images/workflow.png' width=500/>
 </p>
 
 Currently each step will be a Jupyter notebook (see `/scripts/`); those will be converted to `.py` files (that can be run entirely in the QGIS python console) later on.
