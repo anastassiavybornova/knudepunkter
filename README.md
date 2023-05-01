@@ -10,7 +10,7 @@ With this project, we want to assist the planning of *knudepunktnetsværker* (cy
 6. Adapt the beta network in QGIS and save the adapted ("concept") network
 7. Compare (and visualize differences between) the beta and concept networks
 
-## Scripts and To Dos
+## Workflow
 
 Step-by-step in 7 steps:
 
@@ -20,13 +20,15 @@ Step-by-step in 7 steps:
 
 Currently each step will be a Jupyter notebook (see `/scripts/`); those will be converted to `.py` files (that can be run entirely in the QGIS python console) later on.
 
+## Scripts step-by-step and To Dos
+
 ### 1. User input
 
 **To Do:** Write a detailed README with screenshots - the user needs to provide a polygon of the study area (cf. BikeDNA) which can be generated through QGIS (explain how). The user also needs to provide the parameters which will be used for the network evaluation based on Septima data (see step 4).
 
 ### 2. Fetch data
 
-**To Do:** Write a script that fetches 1. [GeoFA](https://www.geodanmark.dk/home/vejledninger/geofa/hent-geofa/) data (Folkersma beta network for the whole country) and 2. [Septima](https://septima.dk/rida-web/) data. 
+**To Do:** Write a script that fetches 1. [GeoFA](https://www.geodanmark.dk/home/vejledninger/geofa/hent-geofa/) data (Folkersma beta network for the whole country) and 2. [Septima](https://septima.dk/rida-web/) data. See instructions for fetching layers in the [PyQGIS cookbook](https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/loadlayer.html)
 
 **To Do:** Make sure we have access to the Septima data (currently password protected)
 
@@ -66,5 +68,5 @@ conda create --name knupu python=3.9
 conda activate knupu
 conda config --prepend channels conda
 conda config --prepend channels conda-forge
-conda install numpy matplotlib pandas geopandas shapely contextily networkx igraph momepy qgis ipykernel
+conda install numpy matplotlib pandas geopandas shapely contextily networkx momepy qgis ipykernel
 ```
