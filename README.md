@@ -15,7 +15,7 @@ With this project, we want to assist the planning of *knudepunktnetsværker* (cy
 Step-by-step in 7 steps:
 
 <p align="left">
-<img src='images/workflow.png' width=500/>
+<img src='images/workflow.png' width=400/>
 </p>
 
 Currently each step will be a Jupyter notebook (see `/scripts/`); those will be converted to `.py` files (that can be run entirely in the QGIS python console) later on.
