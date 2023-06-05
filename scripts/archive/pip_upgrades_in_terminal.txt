@@ -1,0 +1,189 @@
+QGIS version
+**3.28.7-Firenze**
+QGIS code revision
+62cbdb06b6
+Qt version
+5.15.2
+Python version
+3.9.5
+GDAL/OGR version
+3.3.2
+PROJ version
+8.1.1
+EPSG Registry database version
+v10.028 (2021-07-07)
+GEOS version
+3.9.1-CAPI-1.14.2
+SQLite version
+3.35.2
+PDAL version
+2.3.0
+PostgreSQL client version
+unknown
+SpatiaLite version
+5.0.1
+QWT version
+6.1.6
+QScintilla2 version
+2.11.5
+OS version
+macOS 13.4
+
+
+
+
+Active Python plugins
+processing
+2.12.99
+sagaprovider
+2.12.99
+grassprovider
+2.12.99
+db_manager
+0.1.20
+MetaSearch
+0.3.6
+
+
+run in local terminal
+
+*** SHAPELY UPGRADE
+
+(base) anvy@mac622265  bin % /Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9 -m pip install --upgrade shapely
+Requirement already satisfied: shapely in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (1.7.0)
+Collecting shapely
+  Using cached shapely-2.0.1-cp39-cp39-macosx_10_9_x86_64.whl (1.4 MB)
+Requirement already satisfied: numpy>=1.14 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/numpy-1.20.1-py3.9-macosx-10.13.0-x86_64.egg (from shapely) (1.20.1)
+Installing collected packages: shapely
+  Attempting uninstall: shapely
+    Found existing installation: Shapely 1.7.0
+    Uninstalling Shapely-1.7.0:
+      Successfully uninstalled Shapely-1.7.0
+Successfully installed shapely-2.0.1
+
+
+*** GEOPANDAS UPGRADE
+
+(base) anvy@mac622265  ~ % /Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9 -m pip install --upgrade geopandas
+Requirement already satisfied: geopandas in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/geopandas-0.8.1-py3.9.egg (0.8.1)
+Collecting geopandas
+  Downloading geopandas-0.13.0-py3-none-any.whl (1.1 MB)
+     |████████████████████████████████| 1.1 MB 731 kB/s 
+Requirement already satisfied: pyproj>=3.0.1 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/pyproj-3.2.0-py3.9-macosx-10.13.0-x86_64.egg (from geopandas) (3.2.0)
+Requirement already satisfied: packaging in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from geopandas) (20.4)
+Requirement already satisfied: shapely>=1.7.1 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from geopandas) (2.0.1)
+Collecting fiona>=1.8.19
+  Downloading Fiona-1.9.4.post1-cp39-cp39-macosx_10_15_x86_64.whl (18.6 MB)
+     |████████████████████████████████| 18.6 MB 277 kB/s 
+Requirement already satisfied: pandas>=1.1.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/pandas-1.3.3-py3.9-macosx-10.13.0-x86_64.egg (from geopandas) (1.3.3)
+Requirement already satisfied: importlib-metadata in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas) (1.7.0)
+Collecting click~=8.0
+  Using cached click-8.1.3-py3-none-any.whl (96 kB)
+Requirement already satisfied: attrs>=19.2.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas) (19.3.0)
+Requirement already satisfied: six in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas) (1.14.0)
+Requirement already satisfied: certifi in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas) (2020.4.5.1)
+Requirement already satisfied: cligj>=0.5 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas) (0.5.0)
+Requirement already satisfied: click-plugins>=1.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas) (1.1.1)
+Collecting cligj>=0.5
+  Using cached cligj-0.7.2-py3-none-any.whl (7.1 kB)
+Requirement already satisfied: numpy>=1.17.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/numpy-1.20.1-py3.9-macosx-10.13.0-x86_64.egg (from pandas>=1.1.0->geopandas) (1.20.1)
+Requirement already satisfied: python-dateutil>=2.7.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from pandas>=1.1.0->geopandas) (2.8.0)
+Requirement already satisfied: pytz>=2017.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from pandas>=1.1.0->geopandas) (2019.3)
+Requirement already satisfied: zipp>=0.5 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from importlib-metadata->fiona>=1.8.19->geopandas) (3.1.0)
+Requirement already satisfied: pyparsing>=2.0.2 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from packaging->geopandas) (2.4.7)
+Installing collected packages: click, cligj, fiona, geopandas
+  Attempting uninstall: click
+    Found existing installation: click 7.1.2
+    Uninstalling click-7.1.2:
+      Successfully uninstalled click-7.1.2
+  Attempting uninstall: cligj
+    Found existing installation: cligj 0.5.0
+    Uninstalling cligj-0.5.0:
+      Successfully uninstalled cligj-0.5.0
+  Attempting uninstall: fiona
+    Found existing installation: Fiona 1.8.13.post1
+    Uninstalling Fiona-1.8.13.post1:
+      Successfully uninstalled Fiona-1.8.13.post1
+  Attempting uninstall: geopandas
+    Found existing installation: geopandas 0.8.1
+    Uninstalling geopandas-0.8.1:
+      Successfully uninstalled geopandas-0.8.1
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+splot 1.1.3 requires descartes, which is not installed.
+pysal 2.5.0 requires spopt>=0.1.2, which is not installed.
+pysal 2.5.0 requires access>=1.1.3, but you have access 1.1.1 which is incompatible.
+pysal 2.5.0 requires esda>=2.4.1, but you have esda 2.3.1 which is incompatible.
+pysal 2.5.0 requires mapclassify>=2.4.3, but you have mapclassify 2.3.0 which is incompatible.
+pysal 2.5.0 requires mgwr>=2.1.2, but you have mgwr 2.1.1 which is incompatible.
+pysal 2.5.0 requires segregation>=2.0.0, but you have segregation 1.3.0 which is incompatible.
+pysal 2.5.0 requires spaghetti>=1.6.2, but you have spaghetti 1.5.0 which is incompatible.
+pysal 2.5.0 requires spglm>=1.0.8, but you have spglm 1.0.7 which is incompatible.
+pysal 2.5.0 requires spint>=1.0.7, but you have spint 1.0.6 which is incompatible.
+pysal 2.5.0 requires splot>=1.1.4, but you have splot 1.1.3 which is incompatible.
+pysal 2.5.0 requires spreg>=1.2.4, but you have spreg 1.1.2.post1 which is incompatible.
+pysal 2.5.0 requires tobler>=0.8.2, but you have tobler 0.3.1 which is incompatible.
+pysal 2.5.0 requires urllib3>=1.26, but you have urllib3 1.24.3 which is incompatible.
+rasterio 1.1.5 requires click<8,>=4.0, but you have click 8.1.3 which is incompatible.
+Successfully installed click-8.1.3 cligj-0.7.2 fiona-1.9.4.post1 geopandas-0.13.0
+
+(base) anvy@mac622265  ~ % /Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9 -m pip install momepy            
+Collecting momepy
+  Downloading momepy-0.6.0-py3-none-any.whl (275 kB)
+     |████████████████████████████████| 275 kB 447 kB/s 
+Requirement already satisfied: geopandas>=0.8.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from momepy) (0.13.0)
+Collecting libpysal>=4.6.0
+  Downloading libpysal-4.7.0-py3-none-any.whl (2.4 MB)
+     |████████████████████████████████| 2.4 MB 1.8 MB/s 
+Requirement already satisfied: shapely>=2 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from momepy) (2.0.1)
+Requirement already satisfied: tqdm>=4.27.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from momepy) (4.48.2)
+Requirement already satisfied: networkx>=2.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from momepy) (2.4)
+Requirement already satisfied: pandas!=1.5.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/pandas-1.3.3-py3.9-macosx-10.13.0-x86_64.egg (from momepy) (1.3.3)
+Requirement already satisfied: packaging in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from momepy) (20.4)
+Requirement already satisfied: pyproj>=3.0.1 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/pyproj-3.2.0-py3.9-macosx-10.13.0-x86_64.egg (from geopandas>=0.8.0->momepy) (3.2.0)
+Requirement already satisfied: fiona>=1.8.19 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from geopandas>=0.8.0->momepy) (1.9.4.post1)
+Requirement already satisfied: cligj>=0.5 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (0.7.2)
+Requirement already satisfied: attrs>=19.2.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (19.3.0)
+Requirement already satisfied: click~=8.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (8.1.3)
+Requirement already satisfied: click-plugins>=1.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (1.1.1)
+Requirement already satisfied: certifi in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (2020.4.5.1)
+Requirement already satisfied: importlib-metadata in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (1.7.0)
+Requirement already satisfied: six in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from fiona>=1.8.19->geopandas>=0.8.0->momepy) (1.14.0)
+Collecting platformdirs
+  Using cached platformdirs-3.5.1-py3-none-any.whl (15 kB)
+Requirement already satisfied: beautifulsoup4 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from libpysal>=4.6.0->momepy) (4.10.0)
+Requirement already satisfied: numpy>=1.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/numpy-1.20.1-py3.9-macosx-10.13.0-x86_64.egg (from libpysal>=4.6.0->momepy) (1.20.1)
+Requirement already satisfied: scipy>=0.11 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages/scipy-1.5.1-py3.9-macosx-10.13.0-x86_64.egg (from libpysal>=4.6.0->momepy) (1.5.1)
+Requirement already satisfied: jinja2 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from libpysal>=4.6.0->momepy) (2.11.2)
+Requirement already satisfied: requests in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from libpysal>=4.6.0->momepy) (2.23.0)
+Requirement already satisfied: decorator>=4.3.0 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from networkx>=2.3->momepy) (4.4.2)
+Requirement already satisfied: python-dateutil>=2.7.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from pandas!=1.5.0->momepy) (2.8.0)
+Requirement already satisfied: pytz>=2017.3 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from pandas!=1.5.0->momepy) (2019.3)
+Collecting soupsieve>1.2
+  Downloading soupsieve-2.4.1-py3-none-any.whl (36 kB)
+Requirement already satisfied: zipp>=0.5 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from importlib-metadata->fiona>=1.8.19->geopandas>=0.8.0->momepy) (3.1.0)
+Requirement already satisfied: MarkupSafe>=0.23 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from jinja2->libpysal>=4.6.0->momepy) (1.1.1)
+Requirement already satisfied: pyparsing>=2.0.2 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from packaging->momepy) (2.4.7)
+Requirement already satisfied: chardet<4,>=3.0.2 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from requests->libpysal>=4.6.0->momepy) (3.0.4)
+Requirement already satisfied: idna<3,>=2.5 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from requests->libpysal>=4.6.0->momepy) (2.9)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in /Applications/QGIS-LTR.app/Contents/Resources/python/site-packages (from requests->libpysal>=4.6.0->momepy) (1.24.3)
+Installing collected packages: soupsieve, platformdirs, libpysal, momepy
+  Attempting uninstall: libpysal
+    Found existing installation: libpysal 4.5.1
+    Uninstalling libpysal-4.5.1:
+      Successfully uninstalled libpysal-4.5.1
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+splot 1.1.3 requires descartes, which is not installed.
+pysal 2.5.0 requires spopt>=0.1.2, which is not installed.
+pysal 2.5.0 requires access>=1.1.3, but you have access 1.1.1 which is incompatible.
+pysal 2.5.0 requires esda>=2.4.1, but you have esda 2.3.1 which is incompatible.
+pysal 2.5.0 requires mapclassify>=2.4.3, but you have mapclassify 2.3.0 which is incompatible.
+pysal 2.5.0 requires mgwr>=2.1.2, but you have mgwr 2.1.1 which is incompatible.
+pysal 2.5.0 requires segregation>=2.0.0, but you have segregation 1.3.0 which is incompatible.
+pysal 2.5.0 requires spaghetti>=1.6.2, but you have spaghetti 1.5.0 which is incompatible.
+pysal 2.5.0 requires spglm>=1.0.8, but you have spglm 1.0.7 which is incompatible.
+pysal 2.5.0 requires spint>=1.0.7, but you have spint 1.0.6 which is incompatible.
+pysal 2.5.0 requires splot>=1.1.4, but you have splot 1.1.3 which is incompatible.
+pysal 2.5.0 requires spreg>=1.2.4, but you have spreg 1.1.2.post1 which is incompatible.
+pysal 2.5.0 requires tobler>=0.8.2, but you have tobler 0.3.1 which is incompatible.
+pysal 2.5.0 requires urllib3>=1.26, but you have urllib3 1.24.3 which is incompatible.
+Successfully installed libpysal-4.7.0 momepy-0.6.0 platformdirs-3.5.1 soupsieve-2.4.1
