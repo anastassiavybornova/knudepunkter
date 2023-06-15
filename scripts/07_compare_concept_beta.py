@@ -1,3 +1,9 @@
+### TO DO:
+# * segmentization !
+# Ane: selecting black ones: the ones that do not intersect the red buffer
+# cf. clip & cut qgis functionalities
+
+
 ### CUSTOM SETTINGS
 display_complayer_conc = True
 display_complayer_both = True
