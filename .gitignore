@@ -166,3 +166,4 @@ test_ane.qgz
 
 # Data not to be shared publicly
 data/raw/_concept/*
+data/raw/readme_concept.pdf
