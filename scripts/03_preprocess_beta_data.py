@@ -10,8 +10,8 @@ from PyQt5.QtCore import QVariant
 homepath = QgsProject.instance().homePath()
 
 # INPUT/OUTPUT FILE PATHS
-myinputfile = homepath + "/data/processed/workflow_steps/qgis_input_concept.gpkg"
-myoutputfile = homepath + "/data/processed/workflow_steps/qgis_output_concept.gpkg"
+myinputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
+myoutputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 
 # Run processing algorithm "split with lines"
 temp_out_split = processing.run(
@@ -102,7 +102,7 @@ _ = processing.run(
 print(f"done: save to {myoutputfile}")
 
 if display_layer == True:
-    vlayer = QgsVectorLayer(myoutputfile, "Concept data (post-network)", "ogr")
+    vlayer = QgsVectorLayer(myoutputfile, "Beta data (post-network)", "ogr")
     if not vlayer.isValid():
         print("Layer failed to load!")
     else:

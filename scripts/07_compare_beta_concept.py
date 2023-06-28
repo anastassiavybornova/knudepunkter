@@ -15,11 +15,11 @@ display_complayer_beta = True
 homepath = QgsProject.instance().homePath()
 
 # define filepaths for this file
-edges_concept = homepath + "/data/processed/workflow_steps/edges_concept.gpkg"
 edges_beta = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
+edges_concept = homepath + "/data/processed/workflow_steps/edges_concept.gpkg"
+edgecomp_beta = homepath + "/data/processed/workflow_steps/edgecomp_beta.gpkg"
 edgecomp_conc = homepath + "/data/processed/workflow_steps/edgecomp_conc.gpkg"
 edgecomp_both = homepath + "/data/processed/workflow_steps/edgecomp_both.gpkg"
-edgecomp_beta = homepath + "/data/processed/workflow_steps/edgecomp_beta.gpkg"
 
 # import libraries
 import os

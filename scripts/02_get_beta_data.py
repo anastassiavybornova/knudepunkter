@@ -10,7 +10,7 @@ import geopandas as gpd
 homepath = QgsProject.instance().homePath()
 
 # read in file
-edges = gpd.read_file(homepath + "/data/raw/folkersma_concept/stretch.shp")
+edges = gpd.read_file(homepath + "/data/raw/folkersma_beta/stretch.shp")
 
 # remove empty geometries
 edges = edges[~edges.geometry.isna()].reset_index(drop=True)
@@ -42,14 +42,13 @@ edges_in_study_area = edges[
     edges.intersects(study_area_polygon)].copy().reset_index(drop=True)
 
 os.makedirs(homepath + "/data/processed/workflow_steps", exist_ok=True)
-filepath_to = homepath + "/data/processed/workflow_steps/qgis_input_concept.gpkg"
+filepath_to = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
 edges_in_study_area.to_file(filepath_to, index=False)
 
 print("preprocessed concept network data for study area saved to:", filepath_to)
 
-
 if display_layer == True:
-    vlayer = QgsVectorLayer(filepath_to, "Concept data (pre-network)", "ogr")
+    vlayer = QgsVectorLayer(filepath_to, "beta data (pre-network)", "ogr")
     if not vlayer.isValid():
         print("Layer failed to load!")
     else:

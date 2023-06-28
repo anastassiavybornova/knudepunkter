@@ -13,7 +13,7 @@ from PyQt5.QtCore import QVariant
 homepath = QgsProject.instance().homePath()
 
 # read in file
-edges = gpd.read_file(homepath + "/data/raw/faxe_beta/stretch.shp")
+edges = gpd.read_file(homepath + "/data/raw/faxe_concept/stretch.shp")
 
 # remove empty geometries
 edges = edges[~edges.geometry.isna()].reset_index(drop=True)
@@ -26,8 +26,8 @@ assert all(edges.geometry.is_valid)
 assert edges.crs == "EPSG:25832"
 
 # INPUT/OUTPUT FILE PATHS
-myinputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
-myoutputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
+myinputfile = homepath + "/data/processed/workflow_steps/qgis_input_concept.gpkg"
+myoutputfile = homepath + "/data/processed/workflow_steps/qgis_output_concept.gpkg"
 
 edges.to_file(myinputfile, index=False)
 
@@ -120,7 +120,7 @@ _ = processing.run(
 print(f"done: save to {myoutputfile}")
 
 if display_layer == True:
-    vlayer = QgsVectorLayer(myoutputfile, "Beta data (post-network)", "ogr")
+    vlayer = QgsVectorLayer(myoutputfile, "Concept data (post-network)", "ogr")
     if not vlayer.isValid():
         print("Layer failed to load!")
     else:
