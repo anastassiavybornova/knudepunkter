@@ -3,7 +3,7 @@ display_layer = True
 ### NO CHANGES BELOW THIS LINE
 
 # import python libraries
-import scripts.graphedit
+import src.graphedit
 import os
 os.environ['USE_PYGEOS'] = '0'
 import geopandas as gpd
@@ -23,25 +23,25 @@ proj_crs = gdf.crs
 print("proj_crs: ", proj_crs)
 
 # make graph from data
-G = scripts.graphedit.get_graph_from_gdf(gdf)
+G = src.graphedit.get_graph_from_gdf(gdf)
 
 # where to save
 filepath_to = homepath + "/data/processed/workflow_steps/G_concept.json"
 
 # save to json
-scripts.graphedit.spatialgraph_tojson(G, proj_crs, filepath_to)
+src.graphedit.spatialgraph_tojson(G, proj_crs, filepath_to)
 
 del(G)
 
 # import back (to check if it worked)
-G = scripts.graphedit.spatialgraph_fromjson(filepath_to)
+G = src.graphedit.spatialgraph_fromjson(filepath_to)
 
 # for plotting, save nodes and edges with component / degree information
-nodes = scripts.graphedit.get_node_gdf(G, return_degrees = True)
+nodes = src.graphedit.get_node_gdf(G, return_degrees = True)
 mynodefile = homepath + "/data/processed/workflow_steps/nodes_concept.gpkg"
 nodes[["geometry", "degree"]].to_file(mynodefile, index = False)
 
-edges = scripts.graphedit.get_edge_gdf(G, return_components = True)
+edges = src.graphedit.get_edge_gdf(G, return_components = True)
 myedgefile = homepath + "/data/processed/workflow_steps/edges_concept.gpkg"
 edges[["geometry", "component_nr"]].to_file(myedgefile, index = False)
 

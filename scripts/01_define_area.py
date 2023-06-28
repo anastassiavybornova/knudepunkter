@@ -8,8 +8,8 @@ import geopandas as gpd
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 
-# read in edges of Faxe beta network
-edges = gpd.read_file(homepath + "/data/raw/faxe_beta/stretch.shp")
+# read in edges of Faxe concept network
+edges = gpd.read_file(homepath + "/data/raw/faxe_concept/stretch.shp")
 
 # define a buffered area around those edges as the study area
 study_area_polygon = edges.unary_union.convex_hull.buffer(500)

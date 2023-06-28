@@ -45,7 +45,7 @@ os.makedirs(homepath + "/data/processed/workflow_steps", exist_ok=True)
 filepath_to = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
 edges_in_study_area.to_file(filepath_to, index=False)
 
-print("preprocessed concept network data for study area saved to:", filepath_to)
+print("preprocessed beta network data for study area saved to:", filepath_to)
 
 if display_layer == True:
     vlayer = QgsVectorLayer(filepath_to, "beta data (pre-network)", "ogr")
