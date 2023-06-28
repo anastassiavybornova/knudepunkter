@@ -163,6 +163,9 @@ cython_debug/
 _*/
 .DS_Store
 test_ane.qgz
+*.qgz 
+*.gpkg-shm
+*.gpkg-wal
 
 # Data not to be shared publicly
 data/raw/_concept/*
