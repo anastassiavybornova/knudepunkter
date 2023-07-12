@@ -1,3 +1,7 @@
+# ******* Script used to define area.
+# ******* This will be replaced by a user prompt 
+# ******* to provide a polygon
+
 ### CUSTOM SETTINGS
 display_layer = True
 ### NO CHANGES BELOW THIS LINE

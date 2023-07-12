@@ -160,5 +160,3 @@ def visualize_categorical(layer_name, column_name):
 unique_values = ["rasteplads_suppl","infoservice_suppl","indkoeb","overnatning","rasteplads","infoservice"]
   
 visualize_categorical("wfs_data_MERGED","Category")
-
-

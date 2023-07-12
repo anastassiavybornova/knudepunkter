@@ -1,3 +1,6 @@
+# ******* script used to import concept data (beta network with manual edits from municipalities)
+# ******* will be updated to incorporate a custom filepath to a corresponding folder where user is promted to place data
+
 ### CUSTOM SETTINGS
 display_layer = False
 mytolerance = 5

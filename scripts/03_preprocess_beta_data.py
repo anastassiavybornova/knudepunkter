@@ -1,3 +1,6 @@
+# ******* Script used to preprocess the raw beta data so that it can be 
+# ******* converted into a network at the next step.
+
 ### CUSTOM SETTINGS
 display_layer = False
 mytolerance = 5

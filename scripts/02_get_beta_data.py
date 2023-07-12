@@ -1,3 +1,8 @@
+# ******* Script used to import beta data.
+# ******* This will be replaced by  
+# ******* a request to GeoDK for the data (?)
+
+
 ### CUSTOM SETTINGS
 display_layer = True
 ### NO CHANGES BELOW THIS LINE
