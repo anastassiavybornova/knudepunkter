@@ -1,3 +1,4 @@
+[ ] work on papers (2x)
 [ ] folkersma: ask for most recent data on parent/child; split nodes. (ask kirsten if that's fine first)
 [ ] update and combine the scripts 01_define_area and 02_get_beta_data into one script where: input... which area we want to look at (typically a municipality border?); output... beta data for that area
 [ ] update and combine the scripts 03_preprocess_beta_data and 04_beta_to_network with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
