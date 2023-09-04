@@ -1,16 +1,16 @@
 ## Current TO DOs
 
 * folkersma: ask for most recent data on parent/child; split nodes. (ask kirsten if that's fine first)
+* ~~clean up repo~~
+* ~~update and combine the scripts 01_define_area and 02_get_beta_data into one script where: input... which area we want to look at (typically a municipality border?); output... beta data for that area~~
+* ~~FOR NOW, drop the scripts 05_get_concept_data and 06_concept_to_network~~ 
+* **Ane** update the scripts `02_make_beta_network.py` with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
+* **Ane** update the script `03_get_septima_data` so that it fetches all requested septima data and creates corresponding layers (cf. README)
+* **Ane/Anastassia** update the `04_evaluate_septima` script to evalute all data from step 08
+* Write an evaluation script (point of departure can be `_10_compare_networks`, but don't do comparison)
 * work on papers (2x)
-* **Anastassia** clean up repo
-* update and combine the scripts 01_define_area and 02_get_beta_data into one script where: input... which area we want to look at (typically a municipality border?); output... beta data for that area
-* **Ane** update and combine the scripts 03_preprocess_beta_data and 04_beta_to_network with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
-* FOR NOW, drop the scripts 05_get_concept_data and 06_concept_to_network 
-* **Ane** update and combine the scripts 08_septima_from_wfs... and 08_septima_from_wfs..._ane into one script that fetches all requested septima data and creates corresponding layers
-* update the 09_evaluate_septima script to evalute all data from step 08
-* update 10_compare_networks 
 
 ## Later TO DOs
-
 * add a config file where one can decide *which* septima layers to add
+* figure out how the import of src. scripts works (cross-platform...)
 * docker?!
