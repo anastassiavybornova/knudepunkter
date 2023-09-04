@@ -9,6 +9,10 @@
 * **Ane/Anastassia** update the `04_evaluate_septima` script to evalute all data from step 08
 * Write an evaluation script (point of departure can be `_10_compare_networks`, but don't do comparison)
 * work on papers (2x)
+* read process&method handbook
+* receive Faxe data from Kirsten
+* receive technical specifications (septima) doc from Kirsten
+* receive folkersma's process description from Kirsten
 
 ## Later TO DOs
 * add a config file where one can decide *which* septima layers to add
