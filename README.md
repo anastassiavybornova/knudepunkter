@@ -75,3 +75,12 @@ run in QGIS python app terminal:
 <qpdir> -m pip install <PACKAGENAME>
 ```
 where `<qpdir>` points to the Python installation within the QGIS app on the local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`
+
+### Running the scripts
+
+0. Download this repo to your local machine
+1. Open up QGIS
+2. Open up a new (empty) project
+3. Save the project in the main folder of the repo (in the same folder as this README doc)
+4. Open up the Python console plugin in QGIS
+5. Within the QGIS Python app, open and run the scripts in indicated order (01, 02, ...)
