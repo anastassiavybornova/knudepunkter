@@ -171,6 +171,3 @@ test_ane.qgz
 # data/raw/concept/*
 # data/raw/readme_concept.pdf
 # adding this data back since repo is currently private
-
-# not needed files
-src/*
