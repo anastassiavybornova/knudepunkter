@@ -14,31 +14,3 @@
 
 * add a config file where one can decide *which* septima layers to add
 * docker?!
-
-
-***
-
-## Septima Layer Categories
-
-suggested [septima layer categories](https://docs.google.com/spreadsheets/d/19oPiRxOglcvQkEgUipIW7I29kDV0PbKkuJzRGNrAy38/edit?usp=sharing):
-* of type point:
-    - facility
-    - service
-    - poi
-* of type polygon:
-    - bad
-    - good:
-        - culture
-        - nature
-        - summerhouse
-
-***
-
-## Evaluation
-
-* variation!! (think about how to quantify it)
-* loop sizes: average, distribution (both in numbers and in space), length...
-* think about how to visualize (polygonized)
-* distance of POIs vs. facility/service
-* elevation: shouldn't be too much steep stretches. Denmark elevation data + find out linestring elev profile in QGIS [WMS]
-* network metrics - if possible, but not necessary
