@@ -168,6 +168,9 @@ test_ane.qgz
 *.gpkg-wal
 
 # Data not to be shared publicly
-data/raw/_concept/*
-data/raw/readme_concept.pdf
+# data/raw/_concept/*
+# data/raw/readme_concept.pdf
+# adding this data back since repo is currently private
+
+# not needed files
 src/*
