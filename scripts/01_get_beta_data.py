@@ -1,18 +1,47 @@
-# ******* Script used to import beta data.
-# ******* This will be replaced by  
-# ******* a request to GeoDK for the data (?)
-
-
+### ***************
+### for a polygon defined by the user,
+### fetch and preprocess beta network data.
+### ***************
 ### CUSTOM SETTINGS
-display_layer = True
+display_studyarea_layer = True
+display_beta_layer = True
 ### NO CHANGES BELOW THIS LINE
 
+# import python packages
 import os
 os.environ['USE_PYGEOS'] = '0' # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 
+# ******* Code below used to define area.
+# ******* This will be replaced by a user prompt 
+# ******* to provide a polygon
+
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
+
+# read in edges of Faxe concept network
+edges = gpd.read_file(homepath + "/data/raw/faxe_concept/stretch.shp")
+
+# define a buffered area around those edges as the study area
+study_area_polygon = edges.unary_union.convex_hull.buffer(500)
+study_area_gdf = gpd.GeoDataFrame({"geometry":[study_area_polygon]},crs=edges.crs)
+
+# save to file
+os.makedirs(homepath + "/data/raw/user_input", exist_ok=True)
+filepath_to = homepath + "/data/raw/user_input/study_area.gpkg"
+study_area_gdf.to_file(filepath_to, index = False)
+print(f"Study area polygon saved to {filepath_to}")
+
+if display_studyarea_layer == True:
+    vlayer = QgsVectorLayer(filepath_to, "Study area", "ogr")
+    if not vlayer.isValid():
+        print("Study area layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(vlayer)
+
+# ******* Code below used to import beta data.
+# ******* This will be replaced by  
+# ******* a request to GeoDK for the data (?)
 
 # read in file
 edges = gpd.read_file(homepath + "/data/raw/folkersma_beta/stretch.shp")
@@ -52,7 +81,7 @@ edges_in_study_area.to_file(filepath_to, index=False)
 
 print("preprocessed beta network data for study area saved to:", filepath_to)
 
-if display_layer == True:
+if display_beta_layer == True:
     vlayer = QgsVectorLayer(filepath_to, "beta data (pre-network)", "ogr")
     if not vlayer.isValid():
         print("Layer failed to load!")

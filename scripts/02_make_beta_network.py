@@ -1,16 +1,27 @@
-# ******* Script used to preprocess the raw beta data so that it can be 
-# ******* converted into a network at the next step.
-
+### Script that converts beta DATA into a beta NETWORK - to be updated!
+### currently has 2 steps: 1. preprocess (snap etc.) and 2. convert to network (using nx tools)
+### *********
 ### CUSTOM SETTINGS
-display_layer = False
+display_preprocessed_layer = False
+display_network_layer = True
 mytolerance = 5
 mybehaviour = 6
 ### NO CHANGES BELOW THIS LINE
 
+# import packages
+import os
+os.environ['USE_PYGEOS'] = '0'
+import geopandas as gpd
+import src.graphedit as graphedit
 from PyQt5.QtCore import QVariant
+
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
+
+### *********
+### Step 1: preprocess data with qgis methods
+### *********
 
 # INPUT/OUTPUT FILE PATHS
 myinputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
@@ -104,9 +115,59 @@ _ = processing.run(
 
 print(f"done: save to {myoutputfile}")
 
-if display_layer == True:
+if display_preprocessed_layer == True:
     vlayer = QgsVectorLayer(myoutputfile, "Beta data (post-network)", "ogr")
     if not vlayer.isValid():
         print("Layer failed to load!")
     else:
         QgsProject.instance().addMapLayer(vlayer)
+
+### *********
+### Step 2: data>network with python tools
+### *********
+
+# import cleaned data
+gdf = gpd.read_file(homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg")
+proj_crs = gdf.crs
+print("proj_crs: ", proj_crs)
+
+# make graph from data
+G = graphedit.get_graph_from_gdf(gdf)
+
+# where to save
+filepath_to = homepath + "/data/processed/workflow_steps/G_beta.json"
+
+# save to json
+graphedit.spatialgraph_tojson(G, proj_crs, filepath_to)
+
+del(G)
+
+# import back (to check if it worked)
+G = graphedit.spatialgraph_fromjson(filepath_to)
+
+# for plotting, save nodes and edges with component / degree information
+nodes = graphedit.get_node_gdf(G, return_degrees = True)
+mynodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
+nodes[["geometry", "degree"]].to_file(mynodefile, index = False)
+
+edges = graphedit.get_edge_gdf(G, return_components = True)
+myedgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
+edges[["geometry", "component_nr"]].to_file(myedgefile, index = False)
+
+# display in QGIS
+if display_network_layer == True:
+
+    vlayer_edges = QgsVectorLayer(myedgefile, "Edges (beta)", "ogr")
+    if not vlayer_edges.isValid():
+        print("Layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(vlayer_edges)
+
+    vlayer_nodes = QgsVectorLayer(mynodefile, "Nodes (beta)", "ogr")
+    if not vlayer_nodes.isValid():
+        print("Layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(vlayer_nodes)
+
+# TO DO: automatically categorize : cf. https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/vector.html#categorized-symbol-renderer
+# e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936 

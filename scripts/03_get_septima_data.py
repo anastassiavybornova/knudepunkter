@@ -8,6 +8,7 @@ show_study_area = True
 import os
 import yaml
 import geopandas as gpd
+from random import randrange
 from owslib.wfs import WebFeatureService
 
 # define paths
