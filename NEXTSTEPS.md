@@ -18,3 +18,6 @@
 * add a config file where one can decide *which* septima layers to add
 * figure out how the import of src. scripts works (cross-platform...)
 * docker?!
+
+
+* What to do when septima database is down? Alternative setup for using data stored on disk?
