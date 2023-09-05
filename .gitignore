@@ -167,6 +167,7 @@ test_ane.qgz
 *.gpkg-shm
 *.gpkg-wal
 
+data/raw/wfs/*
 # Data not to be shared publicly
 # data/raw/concept/*
 # data/raw/readme_concept.pdf
