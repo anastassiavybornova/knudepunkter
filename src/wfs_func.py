@@ -1,5 +1,8 @@
 from owslib.wfs import WebFeatureService
 import os
+import geopandas as gpd
+from qgis.core import QgsVectorLayer
+from qgis import processing
 
 
 def get_bounds(gdf):
@@ -30,20 +33,13 @@ def clip_save_layer(input_layer, study_area_vlayer, filepath, layer_name):
     # clip to study area polygon
     processing.run("native:clip", clip_params)
 
-    print(f"Saved {layer_name} layer")
+    print(f"Saved layer {layer_name}")
 
     return None
 
 
 def get_wfs_layers(
-    study_area_vlayer,
-    bounds,
-    wfs_core,
-    wfs,
-    wfs_version,
-    homepath,
-    proj_crs,
-    show_layer,
+    study_area_vlayer, bounds, wfs_core, wfs_name, wfs_version, homepath, proj_crs
 ):
     # define bounds
     minx, miny, maxx, maxy = bounds
@@ -54,14 +50,14 @@ def get_wfs_layers(
 
     layers_to_import = list(wfs.contents)
 
-    print("Importing layers:", layers_to_import, "from WFS: ", wfs)
+    print("Importing layers:", layers_to_import, "from WFS: ", wfs_name)
 
     wfs_dir = homepath + f"/data/raw/wfs/"
 
     if not os.path.isdir(wfs_dir):
         os.mkdir(wfs_dir)
 
-    wfs_layer_dir = homepath + f"/data/raw/wfs/{wfs}/"
+    wfs_layer_dir = homepath + f"/data/raw/wfs/{wfs_name}/"
 
     if not os.path.isdir(wfs_layer_dir):
         os.mkdir(wfs_layer_dir)
@@ -84,8 +80,3 @@ def get_wfs_layers(
         fixed_layer = fix_geometries(temp_layer)
 
         clip_save_layer(fixed_layer, study_area_vlayer, filepath, layer)
-
-        if show_layer:
-            new_layer = QgsVectorLayer(filepath, layer, "ogr")
-            QgsProject.instance().addMapLayer(new_layer)
-            print(f"Added {layer} layer")
