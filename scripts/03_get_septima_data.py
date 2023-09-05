@@ -33,7 +33,6 @@ if show_layers == True:
 
 study_area_path,
 wfs_version = "1.1.0"
-# wfs_name = "wfs_data"
 
 study_area_gdf = gpd.read_file(study_area_path)
 
@@ -41,7 +40,7 @@ bounds = wfs_func.get_bounds(study_area_gdf)
 
 # wfs_list = ["land_landskabnatur", "vej_type"]
 # wfs_list = ["land_landskabnatur"]
-# wfs_list = ["vej_type"]
+#wfs_list = ["vej_type"]
 
 
 for wfs_name in wfs_list:

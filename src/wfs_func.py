@@ -16,7 +16,7 @@ def get_bounds(gdf):
 
 def fix_geometries(input_layer):
     fixed_layer = processing.run(
-        "native:fixgeometries", {"INPUT": input_layer, "OUTPUT": "memory:"}
+        "native:fixgeometries", {"INPUT": input_layer, "OUTPUT": "TEMPORARY_OUTPUT"}
     )["OUTPUT"]
 
     return fixed_layer
