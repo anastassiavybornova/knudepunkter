@@ -1,6 +1,5 @@
 from owslib.wfs import WebFeatureService
 import os
-import geopandas as gpd
 from qgis.core import QgsVectorLayer
 from qgis import processing
 
