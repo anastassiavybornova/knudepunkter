@@ -1,2 +1,6 @@
 # provide projected crs 
 proj_crs: "EPSG:25832"
+
+wfs_list:
+  - "land_landskabnatur"
+  - "vej_type"
