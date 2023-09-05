@@ -1,3 +1,6 @@
+from random import randrange
+
+
 def visualize_categorical(layer_name, column_name):
     # based on https://gis.stackexchange.com/questions/175068/applying-categorized-symbol-to-each-feature-using-pyqgis
 
