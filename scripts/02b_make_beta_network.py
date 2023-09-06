@@ -10,7 +10,8 @@ mybehaviour = 6
 
 # import packages
 import os
-os.environ['USE_PYGEOS'] = '0'
+
+os.environ["USE_PYGEOS"] = "0"
 import geopandas as gpd
 import src.graphedit as graphedit
 from PyQt5.QtCore import QVariant
@@ -29,65 +30,61 @@ myoutputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 
 # Run processing algorithm "split with lines"
 temp_out_split = processing.run(
-   "native:splitwithlines",
-       {
-           'INPUT':myinputfile,
-           'LINES':myinputfile,
-           'OUTPUT':'TEMPORARY_OUTPUT'
-       }
-   )
+    "native:splitwithlines",
+    {"INPUT": myinputfile, "LINES": myinputfile, "OUTPUT": "TEMPORARY_OUTPUT"},
+)
 print("done: split with lines")
 
 # snap
 temp_out_snap = processing.run(
     "native:snapgeometries",
-        {
-            'INPUT':temp_out_split["OUTPUT"],
-            'REFERENCE_LAYER':temp_out_split["OUTPUT"],
-            'TOLERANCE':mytolerance,
-            'BEHAVIOR':mybehaviour,
-            'OUTPUT':'TEMPORARY_OUTPUT'
-         }
-    )
+    {
+        "INPUT": temp_out_split["OUTPUT"],
+        "REFERENCE_LAYER": temp_out_split["OUTPUT"],
+        "TOLERANCE": mytolerance,
+        "BEHAVIOR": mybehaviour,
+        "OUTPUT": "TEMPORARY_OUTPUT",
+    },
+)
 print(f"done: snapped with tolerance {mytolerance}, behaviour {mybehaviour}")
 
 # Check validity
 temp_out_validity = processing.run(
     "qgis:checkvalidity",
-        {
-            'INPUT_LAYER': temp_out_snap["OUTPUT"],
-            'METHOD': 2,
-            'IGNORE_RING_SELF_INTERSECTION': False,
-            'VALID_OUTPUT': 'TEMPORARY_OUTPUT',
-            'INVALID_OUTPUT':None,
-            'ERROR_OUTPUT':None
-        }
-    )
+    {
+        "INPUT_LAYER": temp_out_snap["OUTPUT"],
+        "METHOD": 2,
+        "IGNORE_RING_SELF_INTERSECTION": False,
+        "VALID_OUTPUT": "TEMPORARY_OUTPUT",
+        "INVALID_OUTPUT": None,
+        "ERROR_OUTPUT": None,
+    },
+)
 print("done: validity check")
 
 # Delete linestrings of just 1 point
 vlayer = temp_out_validity["VALID_OUTPUT"]
-layer_provider=vlayer.dataProvider()
+layer_provider = vlayer.dataProvider()
 
 # add a "mylength" colum to the attribute table
-layer_provider.addAttributes([QgsField("mylength",QVariant.Double)])
+layer_provider.addAttributes([QgsField("mylength", QVariant.Double)])
 vlayer.updateFields()
 
 # fill "mylength" column with length values
 vlayer.startEditing()
 for f in vlayer.getFeatures():
-    id=f.id()
-    length=f.geometry().length()
-    attr_value={2:length}
-    layer_provider.changeAttributeValues({id:attr_value})
+    id = f.id()
+    length = f.geometry().length()
+    attr_value = {2: length}
+    layer_provider.changeAttributeValues({id: attr_value})
 vlayer.commitChanges()
 
 # find strings with length 0
-expression = 'mylength = 0'
+expression = "mylength = 0"
 request = QgsFeatureRequest().setFilterExpression(expression)
 matches = []
 for f in vlayer.getFeatures(request):
-   matches.append(f["fid"])
+    matches.append(f["fid"])
 
 # erase length 0 strings
 if vlayer.dataProvider().capabilities() & QgsVectorDataProvider.DeleteFeatures:
@@ -102,16 +99,16 @@ print("done: delete linestrings with length 0")
 # export
 _ = processing.run(
     "native:package",
-        {
-            'LAYERS': vlayer,
-            'OUTPUT': myoutputfile,
-            'OVERWRITE':True,
-            'SAVE_STYLES':False,
-            'SAVE_METADATA':True,
-            'SELECTED_FEATURES_ONLY':False,
-            'EXPORT_RELATED_LAYERS':False
-        }
-    )
+    {
+        "LAYERS": vlayer,
+        "OUTPUT": myoutputfile,
+        "OVERWRITE": True,
+        "SAVE_STYLES": False,
+        "SAVE_METADATA": True,
+        "SELECTED_FEATURES_ONLY": False,
+        "EXPORT_RELATED_LAYERS": False,
+    },
+)
 
 print(f"done: save to {myoutputfile}")
 
@@ -140,23 +137,22 @@ filepath_to = homepath + "/data/processed/workflow_steps/G_beta.json"
 # save to json
 graphedit.spatialgraph_tojson(G, proj_crs, filepath_to)
 
-del(G)
+del G
 
 # import back (to check if it worked)
 G = graphedit.spatialgraph_fromjson(filepath_to)
 
 # for plotting, save nodes and edges with component / degree information
-nodes = graphedit.get_node_gdf(G, return_degrees = True)
+nodes = graphedit.get_node_gdf(G, return_degrees=True)
 mynodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
-nodes[["geometry", "degree"]].to_file(mynodefile, index = False)
+nodes[["geometry", "degree"]].to_file(mynodefile, index=False)
 
-edges = graphedit.get_edge_gdf(G, return_components = True)
+edges = graphedit.get_edge_gdf(G, return_components=True)
 myedgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
-edges[["geometry", "component_nr"]].to_file(myedgefile, index = False)
+edges[["geometry", "component_nr"]].to_file(myedgefile, index=False)
 
 # display in QGIS
 if display_network_layer == True:
-
     vlayer_edges = QgsVectorLayer(myedgefile, "Edges (beta)", "ogr")
     if not vlayer_edges.isValid():
         print("Layer failed to load!")
@@ -170,4 +166,4 @@ if display_network_layer == True:
         QgsProject.instance().addMapLayer(vlayer_nodes)
 
 # TO DO: automatically categorize : cf. https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/vector.html#categorized-symbol-renderer
-# e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936 
+# e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936
