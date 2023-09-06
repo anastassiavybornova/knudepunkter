@@ -31,16 +31,17 @@ study_area_vlayer = QgsVectorLayer(study_area_path, "Study area", "ogr")
 if show_layers == True:
     QgsProject.instance().addMapLayer(study_area_vlayer)
 
+# WFS settings
 wfs_version = "1.1.0"
 
+# get bounds for study area
 study_area_gdf = gpd.read_file(study_area_path)
-
 bounds = wfs_func.get_bounds(study_area_gdf)
 
+# test layers
 # wfs_list = ["land_landskabnatur", "vej_type"]
 # wfs_list = ["land_landskabnatur"]
 # wfs_list = ["vej_type"]
-
 
 for wfs_name in wfs_list:
     # define WFS URL
@@ -56,13 +57,15 @@ for wfs_name in wfs_list:
         proj_crs,
     )
 
-    wfs_folder = homepath + f"/data/raw/wfs/{wfs_name}/"
+    # add layers to QGIS project
+    if show_layers == True:
+        wfs_folder = homepath + f"/data/raw/wfs/{wfs_name}/"
 
-    files = os.listdir(wfs_folder)
+        files = os.listdir(wfs_folder)
 
-    layernames = [f.strip(".gpkg") for f in files]
+        layernames = [f.strip(".gpkg") for f in files]
 
-    for f, l in zip(files, layernames):
-        new_layer = QgsVectorLayer(wfs_folder + f, l, "ogr")
-        QgsProject.instance().addMapLayer(new_layer)
-        print(f"Added layer {l}")
+        for f, l in zip(files, layernames):
+            new_layer = QgsVectorLayer(wfs_folder + f, l, "ogr")
+            QgsProject.instance().addMapLayer(new_layer)
+            print(f"Added layer {l}")
