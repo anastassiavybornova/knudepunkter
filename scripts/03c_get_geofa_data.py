@@ -31,18 +31,20 @@ if show_layers == True:
     QgsProject.instance().addMapLayer(study_area_vlayer)
 
 # define configurations for WFS connection
-
 wfs_version = "2.0.0"
 wfs_url = "https://geofa.geodanmark.dk/ows/fkg/fkg"
-layer = "fkg:fkg.linjer"
-layer_name = "test"
+layer = "fkg:fkg.t_5802_fac_li"  # "fkg:fkg.linjer"
+layer_name = "geofa_test"
 
 source = f"pagingEnabled='true' preferCoordinatesForWfsT11='false' restrictToRequestBBOX='1' srsname={proj_crs} typename={layer} url={wfs_url} version='auto'"
 
+# get WFS layer
 temp_layer = QgsVectorLayer(source, layer_name, "WFS")
 
+# fix geometries
 fixed_layer = wfs_func.fix_geometries(temp_layer)
 
+# settings for where to save data (make new folder)
 wfs_dir = homepath + f"/data/raw/wfs/"
 
 if not os.path.isdir(wfs_dir):
@@ -55,9 +57,16 @@ if not os.path.isdir(wfs_layer_dir):
 
 filepath = wfs_layer_dir + layer_name + ".gpkg"
 
+# clip layer to study area extent
 wfs_func.clip_save_layer(
-    fixed_layer=fixed_layer,
+    input_layer=fixed_layer,
     study_area_vlayer=study_area_vlayer,
     filepath=filepath,
-    layer=layer_name,
+    layer_name=layer_name,
 )
+
+# add layers to QGIS project
+if show_layers == True:
+    new_layer = QgsVectorLayer(filepath, layer_name, "ogr")
+    QgsProject.instance().addMapLayer(new_layer)
+    print(f"Added layer {layer_name}")
