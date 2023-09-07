@@ -1,11 +1,9 @@
-### Script that converts beta DATA into a beta NETWORK - to be updated!
-### The script has 2 steps: 1. preprocess (snap etc.) and 2. convert to network (using nx tools)
-
-# TODO
+### Script for preprocessing beta data to prepare for network creation
 
 ### *********
 ### CUSTOM SETTINGS
-display_intermediate_data = True  # TODO
+### *********
+display_intermediate_data = True
 display_preprocessed_layer = True
 display_network_layer = True
 snap_tolerance = 5  # distance threshold for when to snap objects (in meters)
@@ -20,9 +18,6 @@ import os
 os.environ["USE_PYGEOS"] = "0"
 import geopandas as gpd
 from src import plot_func
-
-# import src.graphedit as graphedit
-from PyQt5.QtCore import QVariant
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -58,7 +53,7 @@ existing_layers_ids = [
 remove_layers = [
     e
     for e in existing_layers_ids
-    if e.startswith(("Valid", "Split", "Snapped", "input_"))
+    if e.startswith(("Valid", "Split", "Snapped", "input_", "Beta"))
 ]
 
 for r in remove_layers:
@@ -122,74 +117,27 @@ if display_intermediate_data:
     draw_recent_simple_line_layer(color="blue", width=0.7)
 
 
-# # export
-# _ = processing.run(
-#     "native:package",
-#     {
-#         "LAYERS": vlayer,
-#         "OUTPUT": myoutputfile,
-#         "OVERWRITE": True,
-#         "SAVE_STYLES": False,
-#         "SAVE_METADATA": True,
-#         "SELECTED_FEATURES_ONLY": False,
-#         "EXPORT_RELATED_LAYERS": False,
-#     },
-# )
+vlayer = temp_out_validity["VALID_OUTPUT"]
 
-# print(f"done: save to {outputfile}")
+layer_provider = vlayer.dataProvider()
 
-# if display_preprocessed_layer == True:
-#     vlayer = QgsVectorLayer(outputfile, "Beta data (post-network)", "ogr")
-#     if not vlayer.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer)
+# delete "fid" field (to prevent problems when exporting a layer with non-unique fields)
+fid_idx = vlayer.fields().indexOf("fid")
+vlayer.dataProvider().deleteAttributes([fid_idx])
+vlayer.updateFields()
 
-# ### *********
-# ### Step 2: data>network with python tools
-# ### *********
 
-# # import cleaned data
-# gdf = gpd.read_file(homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg")
-# proj_crs = gdf.crs
-# print("proj_crs: ", proj_crs)
+# export
+_writer = QgsVectorFileWriter.writeAsVectorFormat(
+    vlayer, outputfile, "utf-8", vlayer.crs(), "GPKG"
+)
 
-# # make graph from data
-# G = graphedit.get_graph_from_gdf(gdf)
+print(f"done: saved to {outputfile}")
 
-# # where to save
-# filepath_to = homepath + "/data/processed/workflow_steps/G_beta.json"
-
-# # save to json
-# graphedit.spatialgraph_tojson(G, proj_crs, filepath_to)
-
-# del G
-
-# # import back (to check if it worked)
-# G = graphedit.spatialgraph_fromjson(filepath_to)
-
-# # for plotting, save nodes and edges with component / degree information
-# nodes = graphedit.get_node_gdf(G, return_degrees=True)
-# mynodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
-# nodes[["geometry", "degree"]].to_file(mynodefile, index=False)
-
-# edges = graphedit.get_edge_gdf(G, return_components=True)
-# myedgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
-# edges[["geometry", "component_nr"]].to_file(myedgefile, index=False)
-
-# # display in QGIS
-# if display_network_layer == True:
-#     vlayer_edges = QgsVectorLayer(myedgefile, "Edges (beta)", "ogr")
-#     if not vlayer_edges.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_edges)
-
-#     vlayer_nodes = QgsVectorLayer(mynodefile, "Nodes (beta)", "ogr")
-#     if not vlayer_nodes.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_nodes)
-
-# # TO DO: automatically categorize : cf. https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/vector.html#categorized-symbol-renderer
-# # e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936
+if display_preprocessed_layer == True:
+    vlayer = QgsVectorLayer(outputfile, "Beta data pre network", "ogr")
+    if not vlayer.isValid():
+        print("Layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(vlayer)
+        draw_recent_simple_line_layer(color="magenta", width=1)
