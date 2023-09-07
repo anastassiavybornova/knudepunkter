@@ -14,6 +14,20 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
     iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
 
 
+def draw_simple_line_layer(layer_name, color="purple", width=0.7, line_style="solid"):
+    symbol = QgsLineSymbol.createSimple(
+        {"color": color, "width": width, "line_style": line_style}
+    )
+    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    iface.setActiveLayer(my_layer)
+    layer = iface.activeLayer()
+
+    renderer = QgsSingleSymbolRenderer(symbol)
+    layer.setRenderer(renderer)
+    layer.triggerRepaint()
+    iface.layerTreeView().refreshLayerSymbology(layer.id())
+
+
 def remove_existing_layers(layer_name_tuple):
     existing_layers_ids = [
         layer.id() for layer in QgsProject.instance().mapLayers().values()
@@ -26,7 +40,7 @@ def remove_existing_layers(layer_name_tuple):
     return None
 
 
-def visualize_categorical(layer_name, column_name):
+def visualize_categorical(layer_name, column_name, width=1):
     # based on https://gis.stackexchange.com/questions/175068/applying-categorized-symbol-to-each-feature-using-pyqgis
 
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
@@ -44,7 +58,7 @@ def visualize_categorical(layer_name, column_name):
     for unique_value in unique_values:
         # initialize the default symbol for this geometry type
         symbol = QgsSymbol.defaultSymbol(layer.geometryType())
-
+        print(type(symbol))
         # configure a symbol layer
         layer_style = {}
         layer_style["color"] = "%d, %d, %d" % (
