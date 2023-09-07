@@ -5,7 +5,6 @@
 ### *********
 display_intermediate_data = True
 display_preprocessed_layer = True
-display_network_layer = True
 snap_tolerance = 5  # distance threshold for when to snap objects (in meters)
 snap_behaviour = 6  # end point to end point
 snap_behaviour_verbose = "end point to end point"
