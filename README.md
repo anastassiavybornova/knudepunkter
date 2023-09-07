@@ -76,6 +76,8 @@ run in QGIS python app terminal or your regular terminal
 ```
 where `<qpdir>` points to the Python installation within the QGIS app on the local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`
 
+<!-- OSMNX should be installed as /Applications/QGIS.app/Contents/MacOS/bin/python3.9 -m pip install osmnx==1.6.0 -->
+
 ### Running the scripts
 
 0. Download this repo to your local machine
