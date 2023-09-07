@@ -70,7 +70,7 @@ conda install numpy matplotlib pandas geopandas shapely contextily networkx mome
 
 ### Installing additionally needed packages in QGIS
 
-run in QGIS python app terminal:
+run in QGIS python app terminal or your regular terminal
 ```
 <qpdir> -m pip install <PACKAGENAME>
 ```
