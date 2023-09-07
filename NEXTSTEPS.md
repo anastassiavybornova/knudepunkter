@@ -7,6 +7,8 @@
 
 * **Ane** update the scripts `02b_make_beta_network.py` with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
 
+    * TODOS: 1. Create network 2. Simplify?
+
 * ~~Script for getting layer from GeoFA done (02a)~~
 
 * **Ane** ~~update the script `03a_get_septima_data` so that it fetches all requested septima data and creates corresponding layers (cf. README)~~ --> DONE (only missing a full list of all desired WFSses)
