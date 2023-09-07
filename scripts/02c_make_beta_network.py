@@ -100,48 +100,22 @@ ox.save_graphml(G_final, output_file)
 edges[["geometry", "component"]].to_file(edgefile)
 nodes[["x", "y", "degree", "geometry"]].to_file(nodefile)
 
-# Plot
+
+# display in QGIS
 if display_network_layer:
-    pass
+    vlayer_edges = QgsVectorLayer(edgefile, "Edges (beta)", "ogr")
+    if not vlayer_edges.isValid():
+        print("Layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(vlayer_edges)
 
-# # make graph from data
-# G = graphedit.get_graph_from_gdf(gdf)
+    vlayer_nodes = QgsVectorLayer(nodefile, "Nodes (beta)", "ogr")
+    if not vlayer_nodes.isValid():
+        print("Layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(vlayer_nodes)
 
-
-# # save to json
-# graphedit.spatialgraph_tojson(G, proj_crs, output_file)
-
-# del G
-
-# # import back (to check if it worked)
-# G = graphedit.spatialgraph_fromjson(output_file)
-#
-
-# # for plotting, save nodes and edges with component / degree information
-# nodes = graphedit.get_node_gdf(G, return_degrees=True)
-# # mynodefile = "../data/processed/workflow_steps/nodes_beta.gpkg"
-# mynodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
-# nodes[["geometry", "degree"]].to_file(mynodefile, index=False)
-
-# edges = graphedit.get_edge_gdf(G, return_components=True)
-# # myedgefile = "../data/processed/workflow_steps/edges_beta.gpkg"
-# myedgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
-# edges[["geometry", "component_nr"]].to_file(myedgefile, index=False)
-
-#
-# # display in QGIS
-# if display_network_layer == True:
-#     vlayer_edges = QgsVectorLayer(myedgefile, "Edges (beta)", "ogr")
-#     if not vlayer_edges.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_edges)
-
-#     vlayer_nodes = QgsVectorLayer(mynodefile, "Nodes (beta)", "ogr")
-#     if not vlayer_nodes.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_nodes)
+visualize_categorical("Edges (beta)", "component")
 
 # # TO DO: automatically categorize : cf. https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/vector.html#categorized-symbol-renderer
 # # e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936

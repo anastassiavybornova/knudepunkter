@@ -24,7 +24,7 @@
 <key id="d2" for="node" attr.name="nodeID" attr.type="string"/>
 <key id="d1" for="graph" attr.name="simplified" attr.type="string"/>
 <key id="d0" for="graph" attr.name="crs" attr.type="string"/>
-<graph edgedefault="undirected"><data key="d0">EPSG:25832</data>
+<graph edgedefault="undirected"><data key="d0">epsg:25832</data>
 <data key="d1">True</data>
 <node id="1">
   <data key="d2">1</data>
@@ -418,7 +418,7 @@
 </node>
 <edge source="1" target="2" id="0">
   <data key="d5">[1858, 1859]</data>
-  <data key="d6">['l1858', 'l1859']</data>
+  <data key="d6">['l1859', 'l1858']</data>
   <data key="d7">Concept</data>
   <data key="d8">1.0</data>
   <data key="d9">NÃ¦stved</data>
@@ -483,7 +483,7 @@
 </edge>
 <edge source="2" target="67" id="0">
   <data key="d5">[2576, 2575]</data>
-  <data key="d6">['l2575', 'l2576']</data>
+  <data key="d6">['l2576', 'l2575']</data>
   <data key="d7">Concept</data>
   <data key="d8">1.0</data>
   <data key="d9">Vordingborg</data>
@@ -2512,7 +2512,7 @@
 </edge>
 <edge source="50" target="70" id="0">
   <data key="d5">[2651, 1910]</data>
-  <data key="d6">['l2651', 'l1910']</data>
+  <data key="d6">['l1910', 'l2651']</data>
   <data key="d7">Concept</data>
   <data key="d8">1.0</data>
   <data key="d9">NÃ¦stved</data>
