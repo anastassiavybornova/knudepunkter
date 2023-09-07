@@ -8,9 +8,9 @@
 display_intermediate_data = True  # TODO
 display_preprocessed_layer = True
 display_network_layer = True
-mytolerance = 5  # distance threshold for when to snap objects (in meters)
-mybehaviour = 6  # end point to end point
-mybehaviour_verbose = "end point to end point"
+snap_tolerance = 5  # distance threshold for when to snap objects (in meters)
+snap_behaviour = 6  # end point to end point
+snap_behaviour_verbose = "end point to end point"
 
 ### NO CHANGES BELOW THIS LINE
 
@@ -47,8 +47,8 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
 ### *********
 
 # INPUT/OUTPUT FILE PATHS
-myinputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
-myoutputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
+inputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
+outputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 
 # Remove temporary layers from project if they exist already
 existing_layers_ids = [
@@ -65,7 +65,7 @@ for r in remove_layers:
     QgsProject.instance().removeMapLayer(r)
 
 # TEMP - load input data
-org_input = QgsVectorLayer(myinputfile, "input_data", "ogr")
+org_input = QgsVectorLayer(inputfile, "input_data", "ogr")
 
 if display_intermediate_data:
     QgsProject.instance().addMapLayer(org_input)
@@ -76,7 +76,7 @@ if display_intermediate_data:
 # Run processing algorithm "split with lines"
 temp_out_split = processing.run(
     "native:splitwithlines",
-    {"INPUT": myinputfile, "LINES": myinputfile, "OUTPUT": "TEMPORARY_OUTPUT"},
+    {"INPUT": inputfile, "LINES": inputfile, "OUTPUT": "TEMPORARY_OUTPUT"},
 )
 print("done: split with lines")
 
@@ -90,12 +90,14 @@ temp_out_snap = processing.run(
     {
         "INPUT": temp_out_split["OUTPUT"],
         "REFERENCE_LAYER": temp_out_split["OUTPUT"],
-        "TOLERANCE": mytolerance,
-        "BEHAVIOR": mybehaviour,
+        "TOLERANCE": snap_tolerance,
+        "BEHAVIOR": snap_behaviour,
         "OUTPUT": "TEMPORARY_OUTPUT",
     },
 )
-print(f"done: snapped with tolerance {mytolerance}, behaviour: '{mybehaviour_verbose}'")
+print(
+    f"done: snapped with tolerance {snap_tolerance}, behaviour: '{snap_behaviour_verbose}'"
+)
 
 if display_intermediate_data:
     QgsProject.instance().addMapLayer(temp_out_snap["OUTPUT"])
@@ -109,55 +111,16 @@ temp_out_validity = processing.run(
         "METHOD": 2,
         "IGNORE_RING_SELF_INTERSECTION": False,
         "VALID_OUTPUT": "TEMPORARY_OUTPUT",
-        "INVALID_OUTPUT": homepath + "/data/invalid.gpkg",  # None,
+        "INVALID_OUTPUT": None,  # homepath + "/data/invalid.gpkg",
         "ERROR_OUTPUT": None,
     },
 )
 print("done: validity check")
 
-
 if display_intermediate_data:
     QgsProject.instance().addMapLayer(temp_out_validity["VALID_OUTPUT"])
     draw_recent_simple_line_layer(color="blue", width=0.7)
 
-
-# Delete linestrings of just 1 point
-vlayer = temp_out_validity["VALID_OUTPUT"]
-layer_provider = vlayer.dataProvider()
-
-# add a "mylength" colum to the attribute table
-layer_provider.addAttributes([QgsField("new_length", QVariant.Double)])
-field_idx = vlayer.fields().indexOf("new_length")
-
-if field_idx == -1:
-    field_idx = len(vlayer.fields())
-vlayer.updateFields()
-
-# fill "length" column with length values
-vlayer.startEditing()
-for f in vlayer.getFeatures():
-    id = f.id()
-    length = f.geometry().length()
-    attr_value = {field_idx: length}
-    layer_provider.changeAttributeValues({id: attr_value})
-vlayer.commitChanges()
-
-# # find strings with length 0
-# expression = "mylength = 0"
-# request = QgsFeatureRequest().setFilterExpression(expression)
-# matches = []
-# for f in vlayer.getFeatures(request):
-#     matches.append(f["fid"])
-
-# # erase length 0 strings
-# if vlayer.dataProvider().capabilities() & QgsVectorDataProvider.DeleteFeatures:
-#     print("layer supports deletion")
-#     res = vlayer.dataProvider().deleteFeatures(matches)
-
-# # delete "mylength" field
-# vlayer.dataProvider().deleteAttributes([0, 2])
-
-# print("done: delete linestrings with length 0")
 
 # # export
 # _ = processing.run(
@@ -173,10 +136,10 @@ vlayer.commitChanges()
 #     },
 # )
 
-# print(f"done: save to {myoutputfile}")
+# print(f"done: save to {outputfile}")
 
 # if display_preprocessed_layer == True:
-#     vlayer = QgsVectorLayer(myoutputfile, "Beta data (post-network)", "ogr")
+#     vlayer = QgsVectorLayer(outputfile, "Beta data (post-network)", "ogr")
 #     if not vlayer.isValid():
 #         print("Layer failed to load!")
 #     else:
