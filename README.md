@@ -65,7 +65,7 @@ conda create --name knupu python=3.9
 conda activate knupu
 conda config --prepend channels conda
 conda config --prepend channels conda-forge
-conda install numpy matplotlib pandas geopandas shapely contextily networkx momepy qgis ipykernel
+conda install numpy matplotlib pandas geopandas shapely contextily networkx momepy osmnx qgis ipykernel
 ```
 
 ### Installing additionally needed packages in QGIS
