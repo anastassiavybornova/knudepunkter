@@ -66,7 +66,7 @@ def visualize_categorical(layer_name, column_name):
         categories.append(category)
 
     # create renderer object
-    renderer = QgsCategorizedSymbolRenderer("Category", categories)
+    renderer = QgsCategorizedSymbolRenderer(column_name, categories)
 
     # assign the created renderer to the layer
     if renderer is not None:
