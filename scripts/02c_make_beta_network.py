@@ -36,7 +36,7 @@ edgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
 nodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
 
 # Remove temporary layers from project if they exist already
-remove_existing_layers(("input"))
+remove_existing_layers(("input", "Edges", "Nodes"))
 
 # input data
 input_layer = QgsVectorLayer(input_file, "input data", "ogr")
@@ -59,6 +59,11 @@ print("proj_crs: ", proj_crs)
 # Convert to network structure
 
 # OBS: If problems arise here, look into edges of length 0 or edge linestring geometries
+
+# Create data with LineStrings only defined by end and start coordinate
+gdf["osmid"] = gdf.index
+gdf = graphedit.unzip_linestrings(gdf, "osmid")
+gdf = gdf[gdf.geometry.length != 0.0]
 
 gdf["osmid"] = gdf.index
 G = graphedit.create_osmnx_graph(gdf)
@@ -114,6 +119,7 @@ if display_network_layer:
         print("Layer failed to load!")
     else:
         QgsProject.instance().addMapLayer(vlayer_nodes)
+
 
 visualize_categorical("Edges (beta)", "component")
 
