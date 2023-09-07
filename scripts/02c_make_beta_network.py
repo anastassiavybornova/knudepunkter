@@ -4,6 +4,8 @@
 ### CUSTOM SETTINGS
 ### *********
 
+display_intermediate_data = True
+display_network_layer = True
 
 ### NO CHANGES BELOW THIS LINE
 
@@ -11,67 +13,122 @@
 ### Functions
 ### *********
 
-
-def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid"):
-    symbol = QgsLineSymbol.createSimple(
-        {"color": color, "width": width, "line_style": line_style}
-    )
-    renderer = QgsSingleSymbolRenderer(symbol)
-    iface.activeLayer().setRenderer(renderer)
-    iface.activeLayer().triggerRepaint()
-    iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
-
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+exec(open(homepath + "/src/plot_func.py").read())
 
 # ### *********
 # ### Step 2: data>network with python tools
 # ### *********
 
 # import packages
-from qgis.analysis import *
+import src.graphedit as graphedit
+import geopandas as gpd
+import osmnx as ox
+import networkx as nx
+import pandas as pd
 
-# define homepath variable (where is the qgis project saved?)
-homepath = QgsProject.instance().homePath()
 
-director = QgsVectorLayerDirector(
-    vectorLayer,
-    directionFieldId,
-    directDirectionValue,
-    reverseDirectionValue,
-    bothDirectionValue,
-    defaultDirection,
+# INPUT/OUTPUT FILE PATHS
+input_file = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
+output_file = homepath + "/data/processed/workflow_steps/G_beta.json"
+edgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
+nodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
+
+# Remove temporary layers from project if they exist already
+remove_existing_layers(("input"))
+
+# input data
+input_layer = QgsVectorLayer(input_file, "input data", "ogr")
+
+if display_intermediate_data:
+    QgsProject.instance().addMapLayer(input_layer)
+    draw_recent_simple_line_layer(color="purple", width=0.5)
+
+
+# input_file = "../data/processed/workflow_steps/qgis_output_beta.gpkg"
+# output_file = "../data/processed/workflow_steps/G_beta.json"
+# nodefile = "../data/processed/workflow_steps/nodes_beta.gpkg"
+# edgefile = "../data/processed/workflow_steps/edges_beta.gpkg"
+
+# import cleaned data
+gdf = gpd.read_file(input_file)
+proj_crs = gdf.crs
+print("proj_crs: ", proj_crs)
+
+# Convert to network structure
+
+# OBS: If problems arise here, look into edges of length 0 or edge linestring geometries
+
+gdf["osmid"] = gdf.index
+G = graphedit.create_osmnx_graph(gdf)
+G_simp = ox.simplify_graph(G)
+G_final = ox.get_undirected(G_simp)
+nodes, edges = ox.graph_to_gdfs(G_final)
+
+
+# Check number of components and degree
+print(f"The graph has {len([c for c in nx.connected_components(G_final)])} components")
+
+print("Degrees:", nx.degree_histogram(G_final))
+
+# Save component number to edges
+comps = [c for c in nx.connected_components(G_final)]
+
+edges["component"] = None
+
+for i, comp in enumerate(comps):
+    index_list = list(G_final.edges(comp))
+
+    for index in index_list:
+        try:
+            edges.loc[index, "component"] = i
+        except KeyError:
+            edges.loc[(index[1], index[0]), "component"] = i
+
+assert len(edges.component.unique()) == len(comps)
+assert len(edges.loc[edges.component.isna()]) == 0
+
+# Save degrees to nodes
+pd_degrees = pd.DataFrame.from_dict(
+    dict(G_final.degree), orient="index", columns=["degree"]
 )
+nodes = nodes.merge(pd_degrees, left_index=True, right_index=True)
 
-# import src.graphedit as graphedit
-# from PyQt5.QtCore import QVariant
+# Export
+ox.save_graphml(G_final, output_file)
+edges[["geometry", "component"]].to_file(edgefile)
+nodes[["x", "y", "degree", "geometry"]].to_file(nodefile)
 
-# # import cleaned data
-# gdf = gpd.read_file(homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg")
-# proj_crs = gdf.crs
-# print("proj_crs: ", proj_crs)
+# Plot
+if display_network_layer:
+    pass
 
 # # make graph from data
 # G = graphedit.get_graph_from_gdf(gdf)
 
-# # where to save
-# filepath_to = homepath + "/data/processed/workflow_steps/G_beta.json"
 
 # # save to json
-# graphedit.spatialgraph_tojson(G, proj_crs, filepath_to)
+# graphedit.spatialgraph_tojson(G, proj_crs, output_file)
 
 # del G
 
 # # import back (to check if it worked)
-# G = graphedit.spatialgraph_fromjson(filepath_to)
+# G = graphedit.spatialgraph_fromjson(output_file)
+#
 
 # # for plotting, save nodes and edges with component / degree information
 # nodes = graphedit.get_node_gdf(G, return_degrees=True)
+# # mynodefile = "../data/processed/workflow_steps/nodes_beta.gpkg"
 # mynodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
 # nodes[["geometry", "degree"]].to_file(mynodefile, index=False)
 
 # edges = graphedit.get_edge_gdf(G, return_components=True)
+# # myedgefile = "../data/processed/workflow_steps/edges_beta.gpkg"
 # myedgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
 # edges[["geometry", "component_nr"]].to_file(myedgefile, index=False)
 
+#
 # # display in QGIS
 # if display_network_layer == True:
 #     vlayer_edges = QgsVectorLayer(myedgefile, "Edges (beta)", "ogr")
