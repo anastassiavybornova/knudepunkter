@@ -37,6 +37,18 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
     iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
 
 
+def remove_existing_layers(layer_name_tuple):
+    existing_layers_ids = [
+        layer.id() for layer in QgsProject.instance().mapLayers().values()
+    ]
+    remove_layers = [e for e in existing_layers_ids if e.startswith(layer_name_tuple)]
+
+    for r in remove_layers:
+        QgsProject.instance().removeMapLayer(r)
+
+    return None
+
+
 ### *********
 ### Step 1: preprocess data with qgis methods
 ### *********
@@ -46,18 +58,7 @@ inputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
 outputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 
 # Remove temporary layers from project if they exist already
-existing_layers_ids = [
-    layer.id() for layer in QgsProject.instance().mapLayers().values()
-]
-
-remove_layers = [
-    e
-    for e in existing_layers_ids
-    if e.startswith(("Valid", "Split", "Snapped", "input_", "Beta"))
-]
-
-for r in remove_layers:
-    QgsProject.instance().removeMapLayer(r)
+remove_existing_layers(("Valid", "Split", "Snapped", "input_", "Beta"))
 
 # TEMP - load input data
 org_input = QgsVectorLayer(inputfile, "input_data", "ogr")
