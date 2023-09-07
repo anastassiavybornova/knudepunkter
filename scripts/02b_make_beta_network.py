@@ -1,5 +1,5 @@
 ### Script that converts beta DATA into a beta NETWORK - to be updated!
-### currently has 2 steps: 1. preprocess (snap etc.) and 2. convert to network (using nx tools)
+### The script has 2 steps: 1. preprocess (snap etc.) and 2. convert to network (using nx tools)
 
 # TODO
 
