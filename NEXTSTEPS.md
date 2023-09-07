@@ -8,7 +8,7 @@
 * **Ane** update the scripts `02b_make_beta_network.py` with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
 
     * TODOS: Incorporate parent/child-nodes? (might not be relevant)
-    * Fix issue with simplification of linestrings (explode-ish?)
+    * Question: should we skip parallel edges? 
 
 * ~~Script for getting layer from GeoFA done (02a)~~
 
