@@ -42,13 +42,12 @@ suggested [septima layer categories](https://docs.google.com/spreadsheets/d/19oP
 
 ## 3. Evaluation
 
+* **Anastassia** how much of the network is in the layer? (for each polygon layer)
+* **Anastassia** distance of POIs vs. facility/service (user-defined buffer distance)
+* **Anastassia** (bananas workflow) loop sizes: average, distribution (both in numbers and in space), length..; think about how to visualize (polygonized)
 * variation!! (think about how to quantify it)
-* loop sizes: average, distribution (both in numbers and in space), length...
-* think about how to visualize (polygonized)
-* distance of POIs vs. facility/service
-* elevation: shouldn't be too much steep stretches. Denmark elevation data + find out linestring elev profile in QGIS [WMS]
+* **Ane** elevation: shouldn't be too much steep stretches. Denmark elevation data + find out linestring elev profile in QGIS [WMS]
 * network metrics - if possible, but not necessary
-* Evaluation based on Septima data: spatial analysis in Python, based on Septima data with user-defined parameters (metrics: how close are POIs/facilities? which edges lead through nature areas? etc.) (cf. `scripts/04_evalute_network.ipynb`)
 
 ### 4. Visualisation & exploring results in QGIS
 
