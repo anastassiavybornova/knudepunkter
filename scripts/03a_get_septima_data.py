@@ -1,8 +1,7 @@
 ### IMPORT all WFS layers
 
 ### CUSTOM SETTINGS
-show_layers = True
-
+show_layers = False
 
 # import libraries
 import os
@@ -38,34 +37,42 @@ wfs_version = "1.1.0"
 study_area_gdf = gpd.read_file(study_area_path)
 bounds = wfs_func.get_bounds(study_area_gdf)
 
-# test layers
-# wfs_list = ["land_landskabnatur", "vej_type"]
-# wfs_list = ["land_landskabnatur"]
-# wfs_list = ["vej_type"]
+wfs_list = [
+	"land_anvendelse", # Arealanvendelse
+	"land_landskabnatur", # Værdifulde landskaber
+	"facilit_faciliteter", # Informations- og servicetilbud
+	"land_attraktioner", # Attraktioner
+]
+
 
 for wfs_name in wfs_list:
     # define WFS URL
     wfs_core = f"https://rida-services.test.septima.dk/ows?MAP={wfs_name}&service=WFS"
+    try:
+        wfs_func.get_wfs_layers(
+            study_area_vlayer,
+            bounds,
+            wfs_core,
+            wfs_name,
+            wfs_version,
+            homepath,
+            proj_crs,
+        )
 
-    wfs_func.get_wfs_layers(
-        study_area_vlayer,
-        bounds,
-        wfs_core,
-        wfs_name,
-        wfs_version,
-        homepath,
-        proj_crs,
-    )
+        # add layers to QGIS project
+        if show_layers == True:
+            wfs_folder = homepath + f"/data/raw/wfs/{wfs_name}/"
 
-    # add layers to QGIS project
-    if show_layers == True:
-        wfs_folder = homepath + f"/data/raw/wfs/{wfs_name}/"
+            files = os.listdir(wfs_folder)
 
-        files = os.listdir(wfs_folder)
+            layernames = [f.strip(".gpkg") for f in files]
 
-        layernames = [f.strip(".gpkg") for f in files]
-
-        for f, l in zip(files, layernames):
-            new_layer = QgsVectorLayer(wfs_folder + f, l, "ogr")
-            QgsProject.instance().addMapLayer(new_layer)
-            print(f"Added layer {l}")
+            for f, l in zip(files, layernames):
+                new_layer = QgsVectorLayer(wfs_folder + f, l, "ogr")
+                QgsProject.instance().addMapLayer(new_layer)
+                print(f"Added layer {l}")
+    except:
+        print(f"Error when fetching {wfs_name}")
+        
+# Error when fetching facilit_faciliteter
+# Error when fetching land_attraktioner

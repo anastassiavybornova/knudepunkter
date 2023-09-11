@@ -8,15 +8,22 @@
 * **Ane** update the scripts `02b_make_beta_network.py` with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
 
     * TODOS: Incorporate parent/child-nodes? (might not be relevant)
-    * Question: should we skip parallel edges? 
+    * Question: should we skip parallel edges? >> Yes but how?
 
 * ~~Script for getting layer from GeoFA done (02a)~~
 
 * **Ane** ~~update the script `03a_get_septima_data` so that it fetches all requested septima data and creates corresponding layers (cf. README)~~ --> DONE (only missing a full list of all desired WFSses)
 
-* **Anastassia** make script for getting subsets of Septima data from downloaded wfs data
+* **Anastassia** make script for getting subsets of Septima data from downloaded wfs data - work in progress (error messages for some of the WFS layers?).
 
-* **Ane/Anastassia** update the `04_evaluate_septima` script to evalute all data from step 08
+    * Q1: is it ok to use geopandas for all data filtering & merging?
+    * Q2: evaluation layers
+        - good/bad/culture/summerhouse areas: simple overlap
+        - point data: user-defined threshold, binary (close enough - yes/no)
+
+* **Anastassia** write to Kirsten
+
+* **Ane/Anastassia** update the `04_evaluate_septima` script to evaluate all data from step 08
 
 * Write visualization scripts for plotting layers (colors, hue, zoom levels, categorization etc.)
 
@@ -41,3 +48,13 @@
 * docker?!
 
 * What to do when septima database is down? Alternative setup for using data stored on disk? --> Just store data to geopackage as it is now when downloaded from WFS connection
+
+## @ Kirsten:
+
+Please send us
+- the technical specifications (from Septima)
+- the process description (from Folkersma)
+- the Faxe data set
+
+Please allow us
+- to get in touch with Folkersma about child/parent data
