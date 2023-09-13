@@ -172,3 +172,5 @@ data/raw/wfs/*
 # data/raw/concept/*
 # data/raw/readme_concept.pdf
 # adding this data back since repo is currently private
+
+scripts/test.py
