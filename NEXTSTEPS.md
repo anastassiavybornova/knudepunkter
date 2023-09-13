@@ -30,7 +30,8 @@
 
 * **Ane/Anastassia** update the `04_evaluate_septima` script to evaluate all data from step 08
 
-* **Ane** Write visualization scripts for plotting layers (colors, hue, zoom levels, categorization etc.)
+* ~~**Ane** Write visualization scripts for plotting layers (colors, hue, zoom levels, categorization etc.)~~
+(implemented functions for simple plotting, categorical plotting, zoom to layer extent)
 
 * Write an evaluation script (point of departure can be `_10_compare_networks`, but don't do comparison)
 
