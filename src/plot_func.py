@@ -4,6 +4,17 @@ from random import randrange
 from qgis.core import *
 
 
+def zoom_to_layer(layer_name):
+    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    iface.setActiveLayer(my_layer)
+    layer = iface.activeLayer()
+
+    canvas = iface.mapCanvas()
+    extent = layer.extent()
+    canvas.setExtent(extent)
+    canvas.refresh()
+
+
 def draw_categorical_layer(
     layer_name,
     column_name,
@@ -17,6 +28,8 @@ def draw_categorical_layer(
     marker_angle=45,
 ):
     # based on https://gis.stackexchange.com/questions/175068/applying-categorized-symbol-to-each-feature-using-pyqgis
+
+    # TODO: docstring!
 
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
     iface.setActiveLayer(my_layer)
