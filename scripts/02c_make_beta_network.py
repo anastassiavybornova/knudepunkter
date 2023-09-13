@@ -119,9 +119,10 @@ if display_network_layer:
         print("Layer failed to load!")
     else:
         QgsProject.instance().addMapLayer(vlayer_nodes)
+        draw_simple_point_layer("Nodes (beta)", marker_size=2)
 
 
-visualize_categorical("Edges (beta)", "component")
+draw_categorical_layer("Edges (beta)", "component", linewidth=1)
 
 # # TO DO: automatically categorize : cf. https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/vector.html#categorized-symbol-renderer
 # # e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936
