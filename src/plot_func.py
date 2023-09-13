@@ -118,7 +118,7 @@ def draw_simple_point_layer(
     layer_name,
     marker_shape="circle",
     marker_size=4,
-    color="0,0,0,128",
+    color="0,0,0,255",
     outline_color="black",
     outline_width=1,
     marker_angle=45,
