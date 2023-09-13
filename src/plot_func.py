@@ -5,6 +5,15 @@ from qgis.core import *
 
 
 def zoom_to_layer(layer_name):
+    """
+    Zoom to layer extent
+
+    Arguments:
+        input_layer (str): name of vector layer to zoom to
+
+    Returns:
+        None
+    """
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
     iface.setActiveLayer(my_layer)
     layer = iface.activeLayer()
@@ -17,7 +26,7 @@ def zoom_to_layer(layer_name):
 
 def draw_categorical_layer(
     layer_name,
-    column_name,
+    attr_name,
     outline_color="black",
     outline_width=0.5,
     alpha=180,
@@ -28,14 +37,30 @@ def draw_categorical_layer(
     marker_angle=45,
 ):
     # based on https://gis.stackexchange.com/questions/175068/applying-categorized-symbol-to-each-feature-using-pyqgis
+    """
+    Plot layer based on categorical values with random colors
 
-    # TODO: docstring!
+    Arguments:
+        layer_name (str): name of layer to plot
+        attr_name (str): name of attribute with categorical values
+        outline_color (str): color to use for outline color for points and polygons
+        outline_width (numerical): width of outline for points and polygons
+        alpha (numerical): value between 0 and 255 setting the transparency of the fill color
+        linewidth (numerical): width of line features
+        line_style (string): line style (e.g. solid or dash). Must be valid line style type
+        marker_shape (string): shape of marker for point features. Must be valid shape name
+        marker_size (numerical): size of marker for point features
+        marker_angle (numerical): value between 0 and 360 indicating the angle of marker for point objects
+
+    Returns:
+        None
+    """
 
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
     iface.setActiveLayer(my_layer)
     layer = iface.activeLayer()
 
-    idx = layer.fields().indexOf(column_name)
+    idx = layer.fields().indexOf(attr_name)
 
     if idx == -1:
         idx = 0
@@ -91,7 +116,17 @@ def draw_categorical_layer(
 def draw_simple_polygon_layer(
     layer_name, color="0,0,0,128", outline_color="black", outline_width=1
 ):
-    # TODO docstring
+    """
+    Plot simple polygon layer
+
+    Arguments:
+        layer_name (str): name of layer to plot
+        color (str): color for polygon fill. If passed as an RGB tuple, fourth value sets the transparency (0-255)
+        outline_color (str): color to use for outline color for points and polygons
+
+    Returns:
+        None
+    """
 
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
     iface.setActiveLayer(my_layer)
@@ -110,14 +145,25 @@ def draw_simple_polygon_layer(
     iface.layerTreeView().refreshLayerSymbology(layer.id())
 
 
-def draw_simple_line_layer(layer_name, color="purple", width=1, line_style="solid"):
-    # TODO: Docstring
+def draw_simple_line_layer(layer_name, color="purple", linewidth=1, line_style="solid"):
+    """
+    Plot simple line layer
+
+    Arguments:
+        layer_name (str): name of layer to plot
+        color (str): color for polygon fill. If passed as an RGB tuple, fourth value sets the transparency (0-255)
+        linewidth (numerical): width of line features
+        line_style (string): line style (e.g. solid or dash). Must be valid line style type
+
+    Returns:
+        None
+    """
 
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
     iface.setActiveLayer(my_layer)
     layer = iface.activeLayer()
 
-    properties = {"color": color, "width": width, "line_style": line_style}
+    properties = {"color": color, "width": linewidth, "line_style": line_style}
 
     symbol = QgsLineSymbol.createSimple(properties)
 
@@ -129,14 +175,28 @@ def draw_simple_line_layer(layer_name, color="purple", width=1, line_style="soli
 
 def draw_simple_point_layer(
     layer_name,
+    color="0,0,0,255",
     marker_shape="circle",
     marker_size=4,
-    color="0,0,0,255",
     outline_color="black",
     outline_width=1,
     marker_angle=45,
 ):
-    # TODO: Docstring
+    """
+    Plot simple point layer
+
+    Arguments:
+        layer_name (str): name of layer to plot
+        color (str): color for polygon fill. If passed as an RGB tuple, fourth value sets the transparency (0-255)
+        marker_shape (string): shape of marker for point features. Must be valid shape name
+        marker_size (numerical): size of marker for point features
+        outline_color (str): color to use for outline color for points and polygons
+        outline_width (numerical): width of outline for points and polygons
+        marker_angle (numerical): value between 0 and 360 indicating the angle of marker for point objects
+
+    Returns:
+        None
+    """
 
     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
     iface.setActiveLayer(my_layer)
