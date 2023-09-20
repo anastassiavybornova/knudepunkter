@@ -28,6 +28,7 @@ import osmnx as ox
 import networkx as nx
 import pandas as pd
 
+from qgis.core import *
 
 # INPUT/OUTPUT FILE PATHS
 input_file = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
@@ -124,5 +125,7 @@ if display_network_layer:
 
 draw_categorical_layer("Edges (beta)", "component", linewidth=1)
 
-# # TO DO: automatically categorize : cf. https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/vector.html#categorized-symbol-renderer
-# # e.g. in here: https://gist.github.com/sylsta/0c182ec53b590b6c6e5e272db9674936
+
+draw_linear_graduated_vlayer(
+    layer_name="Nodes (beta)", attr_name="degree", no_classes=3, cmap="RdPu"
+)

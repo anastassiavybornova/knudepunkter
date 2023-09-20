@@ -14,9 +14,9 @@ def zoom_to_layer(layer_name):
     Returns:
         None
     """
-    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    iface.setActiveLayer(my_layer)
-    layer = iface.activeLayer()
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    # iface.setActiveLayer(my_layer)
+    # layer = iface.activeLayer()
 
     canvas = iface.mapCanvas()
     extent = layer.extent()
@@ -56,14 +56,11 @@ def draw_categorical_layer(
         None
     """
 
-    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    iface.setActiveLayer(my_layer)
-    layer = iface.activeLayer()
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    # iface.setActiveLayer(my_layer)
+    # layer = iface.activeLayer()
 
     idx = layer.fields().indexOf(attr_name)
-
-    if idx == -1:
-        idx = 0
 
     unique_values = layer.uniqueValues(idx)
 
@@ -106,7 +103,7 @@ def draw_categorical_layer(
         categories.append(category)
 
     # create renderer object
-    renderer = QgsCategorizedSymbolRenderer(column_name, categories)
+    renderer = QgsCategorizedSymbolRenderer(attr_name, categories)
     layer.setRenderer(renderer)
 
     layer.triggerRepaint()  # if the layer was already loaded
@@ -128,9 +125,9 @@ def draw_simple_polygon_layer(
         None
     """
 
-    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    iface.setActiveLayer(my_layer)
-    layer = iface.activeLayer()
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    # iface.setActiveLayer(my_layer)
+    # layer = iface.activeLayer()
 
     properties = {
         "color": color,
@@ -159,9 +156,9 @@ def draw_simple_line_layer(layer_name, color="purple", linewidth=1, line_style="
         None
     """
 
-    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    iface.setActiveLayer(my_layer)
-    layer = iface.activeLayer()
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    # iface.setActiveLayer(my_layer)
+    # layer = iface.activeLayer()
 
     properties = {"color": color, "width": linewidth, "line_style": line_style}
 
@@ -198,9 +195,9 @@ def draw_simple_point_layer(
         None
     """
 
-    my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    iface.setActiveLayer(my_layer)
-    layer = iface.activeLayer()
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    # iface.setActiveLayer(my_layer)
+    # layer = iface.activeLayer()
 
     properties = {
         "name": marker_shape,
@@ -237,6 +234,87 @@ def remove_existing_layers(layer_name_tuple):
         QgsProject.instance().removeMapLayer(r)
 
     return None
+
+
+def color_ramp_items(colormap, nclass):
+    # https://gis.stackexchange.com/questions/118775/assigning-color-ramp-using-pyqgis
+    fractional_steps = [i / nclass for i in range(nclass + 1)]
+    ramp = QgsStyle().defaultStyle().colorRamp(colormap)
+    colors = [ramp.color(f) for f in fractional_steps]
+
+    return colors
+
+
+def draw_linear_graduated_vlayer(
+    layer_name,
+    attr_name,
+    no_classes,
+    cmap="Viridis",
+):
+    """
+    Plot graduated vector later using an equal interval/linearly interpolated color ramp
+
+    Arguments:
+        layer_name (str): name of layer to plot
+        attr_name (str): name of attr/field used for the classification
+        no_classes (int): number of classes
+        cmap (str): name of color map
+
+    Returns:
+        None
+    """
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+
+    idx = layer.fields().indexOf(attr_name)
+
+    unique_values = layer.uniqueValues(idx)
+
+    min_val = min(unique_values)
+    max_val = max(unique_values)
+
+    value_range = max_val - min_val
+
+    step = value_range / no_classes
+
+    bins = []
+
+    val = min_val
+
+    for i in range(no_classes):
+        bins.append(val)
+        val += step
+
+    bins.append(max_val)
+
+    colors = color_ramp_items(cmap, no_classes)
+
+    classes = []
+    for i in range(len(bins) - 1):
+        c = (bins[i], bins[i + 1], colors[i])
+        classes.append(c)
+
+    ranges = []
+
+    for i, c in enumerate(classes):
+        symbol = QgsSymbol.defaultSymbol(layer.geometryType())
+        symbol.setColor(QColor(c[2]))
+
+        render_range = QgsRendererRange(
+            QgsClassificationRange(
+                f"{c[0]}-{c[1]}",
+                c[0],
+                c[1],
+            ),
+            symbol,
+        )
+
+        ranges.append(render_range)
+
+    renderer = QgsGraduatedSymbolRenderer(attr_name, ranges)
+
+    layer.setRenderer(renderer)
+    layer.triggerRepaint()
+    iface.layerTreeView().refreshLayerSymbology(layer.id())
 
 
 # def visualize_categorical(layer_name, column_name, width=1):
