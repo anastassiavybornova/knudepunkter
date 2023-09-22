@@ -1,6 +1,9 @@
 # provide projected crs 
 proj_crs: "EPSG:25832"
 
+# provide wfs layers to import (as strings)
 wfs_list:
+  - "land_attraktioner"
   - "land_landskabnatur"
-  - "vej_type"
+  - "land_anvendelse"
+  - "facilit_faciliteter"
