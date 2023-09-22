@@ -4,6 +4,143 @@ from random import randrange
 from qgis.core import *
 
 
+def color_ramp_items(colormap, nclass):
+    # https://gis.stackexchange.com/questions/118775/assigning-color-ramp-using-pyqgis
+    fractional_steps = [i / nclass for i in range(nclass + 1)]
+    ramp = QgsStyle().defaultStyle().colorRamp(colormap)
+    colors = [ramp.color(f) for f in fractional_steps]
+
+    return colors
+
+
+def change_alpha(q_color, alpha):
+    color_string_list = str(q_color).split()
+
+    rgb_values = color_string_list[2:-1]
+
+    rgb_values.append(str(alpha))
+
+    rgb_string = " ".join(rgb_values)
+
+    return rgb_string
+
+
+def draw_linear_graduated_layer(
+    layer_name,
+    attr_name,
+    no_classes,
+    cmap="Viridis",
+    outline_color="black",
+    outline_width=0.5,
+    alpha=180,
+    line_width=1,
+    line_style="solid",
+    marker_shape="circle",
+    marker_size=2,
+    marker_angle=45,
+):
+    """
+    Plot graduated vector later using an equal interval/linearly interpolated color ramp
+
+    Arguments:
+        layer_name (str): name of layer to plot
+        attr_name (str): name of attr/field used for the classification
+        no_classes (int): number of classes
+        cmap (str): name of color map
+        outline_color (str): color to use for outline color for points and polygons
+        outline_width (numerical): width of outline for points and polygons
+        alpha (numerical): value between 0 and 255 setting the transparency of the fill color
+        linewidth (numerical): width of line features
+        line_style (string): line style (e.g. solid or dash). Must be valid line style type
+        marker_shape (string): shape of marker for point features. Must be valid shape name
+        marker_size (numerical): size of marker for point features
+        marker_angle (numerical): value between 0 and 360 indicating the angle of marker for point objects
+    Returns:
+        None
+    """
+
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+
+    idx = layer.fields().indexOf(attr_name)
+
+    unique_values = layer.uniqueValues(idx)
+
+    min_val = min(unique_values)
+    max_val = max(unique_values)
+
+    value_range = float(max_val) - float(min_val)
+
+    step = value_range / no_classes
+
+    bins = []
+
+    val = float(min_val)
+
+    for i in range(no_classes):
+        bins.append(val)
+        val += step
+
+    bins.append(float(max_val))
+
+    colors = color_ramp_items(cmap, no_classes)
+
+    classes = []
+    for i in range(len(bins) - 1):
+        c = (bins[i], bins[i + 1], colors[i])
+        classes.append(c)
+
+    ranges = []
+
+    properties = {}
+
+    for i, c in enumerate(classes):
+        if layer.wkbType() in [QgsWkbTypes.MultiPolygon, QgsWkbTypes.Polygon]:
+            properties = {
+                "color": change_alpha(c[2], alpha),
+                "outline_color": outline_color,
+                "outline_width": outline_width,
+            }
+
+            symbol = QgsFillSymbol.createSimple(properties)
+
+        if layer.wkbType() in [QgsWkbTypes.LineString, QgsWkbTypes.MultiLineString]:
+            symbol = QgsLineSymbol.createSimple(
+                {
+                    "color": change_alpha(c[2], alpha),
+                    "width": line_width,
+                    "line_style": line_style,
+                }
+            )
+        if layer.wkbType() in [QgsWkbTypes.Point, QgsWkbTypes.MultiPoint]:
+            symbol = QgsMarkerSymbol.createSimple(properties)
+
+            properties = {
+                "name": marker_shape,
+                "size": marker_size,
+                "color": change_alpha(c[2], alpha),
+                "outline_color": outline_color,
+                "outline_width": outline_width,
+                "angle": marker_angle,
+            }
+
+        render_range = QgsRendererRange(
+            QgsClassificationRange(
+                f"{c[0]}-{c[1]}",
+                c[0],
+                c[1],
+            ),
+            symbol,
+        )
+
+        ranges.append(render_range)
+
+    renderer = QgsGraduatedSymbolRenderer(attr_name, ranges)
+
+    layer.setRenderer(renderer)
+    layer.triggerRepaint()
+    iface.layerTreeView().refreshLayerSymbology(layer.id())
+
+
 def zoom_to_layer(layer_name):
     """
     Zoom to layer extent
@@ -30,7 +167,7 @@ def draw_categorical_layer(
     outline_color="black",
     outline_width=0.5,
     alpha=180,
-    linewidth=1,
+    line_width=1,
     line_style="solid",
     marker_shape="circle",
     marker_size=4,
@@ -46,7 +183,7 @@ def draw_categorical_layer(
         outline_color (str): color to use for outline color for points and polygons
         outline_width (numerical): width of outline for points and polygons
         alpha (numerical): value between 0 and 255 setting the transparency of the fill color
-        linewidth (numerical): width of line features
+        line_width (numerical): width of line features
         line_style (string): line style (e.g. solid or dash). Must be valid line style type
         marker_shape (string): shape of marker for point features. Must be valid shape name
         marker_size (numerical): size of marker for point features
@@ -57,44 +194,45 @@ def draw_categorical_layer(
     """
 
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    # iface.setActiveLayer(my_layer)
-    # layer = iface.activeLayer()
 
     idx = layer.fields().indexOf(attr_name)
 
     unique_values = layer.uniqueValues(idx)
 
-    if layer.wkbType() in [QgsWkbTypes.MultiPolygon, QgsWkbTypes.Polygon]:
-        properties = {
-            "outline_width": outline_width,
-            "outline_color": outline_color,
-        }
-
-    if layer.wkbType() in [QgsWkbTypes.LineString, QgsWkbTypes.MultiLineString]:
-        properties = {"width": linewidth, "line_style": line_style}
-
-    if layer.wkbType() in [QgsWkbTypes.Point, QgsWkbTypes.MultiPoint]:
-        properties = {
-            "name": marker_shape,
-            "size": marker_size,
-            "outline_color": outline_color,
-            "outline_width": outline_width,
-            "angle": marker_angle,
-        }
+    properties = {}
 
     categories = []
+
     for unique_value in unique_values:
-        symbol = QgsSymbol.defaultSymbol(layer.geometryType())
+        if layer.wkbType() in [QgsWkbTypes.MultiPolygon, QgsWkbTypes.Polygon]:
+            properties = {
+                "color": f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}",
+                "outline_color": outline_color,
+                "outline_width": outline_width,
+            }
 
-        properties[
-            "color"
-        ] = f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}"
+            symbol = QgsFillSymbol.createSimple(properties)
 
-        symbol_layer = QgsSimpleFillSymbolLayer.create(properties)
+        if layer.wkbType() in [QgsWkbTypes.LineString, QgsWkbTypes.MultiLineString]:
+            symbol = QgsLineSymbol.createSimple(
+                {
+                    "color": f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}",
+                    "width": line_width,
+                    "line_style": line_style,
+                }
+            )
 
-        # replace default symbol layer with the configured one
-        if symbol_layer is not None:
-            symbol.changeSymbolLayer(0, symbol_layer)
+        if layer.wkbType() in [QgsWkbTypes.Point, QgsWkbTypes.MultiPoint]:
+            symbol = QgsMarkerSymbol.createSimple(properties)
+
+            properties = {
+                "name": marker_shape,
+                "size": marker_size,
+                "color": f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}",
+                "outline_color": outline_color,
+                "outline_width": outline_width,
+                "angle": marker_angle,
+            }
 
         # create renderer object
         category = QgsRendererCategory(unique_value, symbol, str(unique_value))
@@ -196,8 +334,6 @@ def draw_simple_point_layer(
     """
 
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    # iface.setActiveLayer(my_layer)
-    # layer = iface.activeLayer()
 
     properties = {
         "name": marker_shape,
@@ -234,134 +370,3 @@ def remove_existing_layers(layer_name_tuple):
         QgsProject.instance().removeMapLayer(r)
 
     return None
-
-
-def color_ramp_items(colormap, nclass):
-    # https://gis.stackexchange.com/questions/118775/assigning-color-ramp-using-pyqgis
-    fractional_steps = [i / nclass for i in range(nclass + 1)]
-    ramp = QgsStyle().defaultStyle().colorRamp(colormap)
-    colors = [ramp.color(f) for f in fractional_steps]
-
-    return colors
-
-
-def draw_linear_graduated_vlayer(
-    layer_name,
-    attr_name,
-    no_classes,
-    cmap="Viridis",
-):
-    """
-    Plot graduated vector later using an equal interval/linearly interpolated color ramp
-
-    Arguments:
-        layer_name (str): name of layer to plot
-        attr_name (str): name of attr/field used for the classification
-        no_classes (int): number of classes
-        cmap (str): name of color map
-
-    Returns:
-        None
-    """
-    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-
-    idx = layer.fields().indexOf(attr_name)
-
-    unique_values = layer.uniqueValues(idx)
-
-    min_val = min(unique_values)
-    max_val = max(unique_values)
-
-    value_range = max_val - min_val
-
-    step = value_range / no_classes
-
-    bins = []
-
-    val = min_val
-
-    for i in range(no_classes):
-        bins.append(val)
-        val += step
-
-    bins.append(max_val)
-
-    colors = color_ramp_items(cmap, no_classes)
-
-    classes = []
-    for i in range(len(bins) - 1):
-        c = (bins[i], bins[i + 1], colors[i])
-        classes.append(c)
-
-    ranges = []
-
-    for i, c in enumerate(classes):
-        symbol = QgsSymbol.defaultSymbol(layer.geometryType())
-        symbol.setColor(QColor(c[2]))
-
-        render_range = QgsRendererRange(
-            QgsClassificationRange(
-                f"{c[0]}-{c[1]}",
-                c[0],
-                c[1],
-            ),
-            symbol,
-        )
-
-        ranges.append(render_range)
-
-    renderer = QgsGraduatedSymbolRenderer(attr_name, ranges)
-
-    layer.setRenderer(renderer)
-    layer.triggerRepaint()
-    iface.layerTreeView().refreshLayerSymbology(layer.id())
-
-
-# def visualize_categorical(layer_name, column_name, width=1):
-#     # based on https://gis.stackexchange.com/questions/175068/applying-categorized-symbol-to-each-feature-using-pyqgis
-
-#     my_layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-#     iface.setActiveLayer(my_layer)
-#     layer = iface.activeLayer()
-
-#     idx = layer.fields().indexOf(column_name)
-
-#     if idx == -1:
-#         idx = 0
-
-#     unique_values = layer.uniqueValues(idx)
-
-#     categories = []
-#     for unique_value in unique_values:
-#         # initialize the default symbol for this geometry type
-#         symbol = QgsSymbol.defaultSymbol(layer.geometryType())
-#         print(type(symbol))
-#         # configure a symbol layer
-#         layer_style = {}
-#         layer_style["color"] = "%d, %d, %d" % (
-#             randrange(0, 256),
-#             randrange(0, 256),
-#             randrange(0, 256),
-#         )
-#         layer_style["outline"] = "#000000"
-#         symbol_layer = QgsSimpleFillSymbolLayer.create(layer_style)
-
-#         # replace default symbol layer with the configured one
-#         if symbol_layer is not None:
-#             symbol.changeSymbolLayer(0, symbol_layer)
-
-#         # create renderer object
-#         category = QgsRendererCategory(unique_value, symbol, str(unique_value))
-
-#         # entry for the list of category items
-#         categories.append(category)
-
-#     # create renderer object
-#     renderer = QgsCategorizedSymbolRenderer(column_name, categories)
-
-#     # assign the created renderer to the layer
-#     if renderer is not None:
-#         layer.setRenderer(renderer)
-
-#     layer.triggerRepaint()
-#     iface.layerTreeView().refreshLayerSymbology(layer.id())

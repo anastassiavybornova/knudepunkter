@@ -30,6 +30,7 @@ import pandas as pd
 
 from qgis.core import *
 
+
 # INPUT/OUTPUT FILE PATHS
 input_file = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 output_file = homepath + "/data/processed/workflow_steps/G_beta.json"
@@ -46,11 +47,6 @@ if display_intermediate_data:
     QgsProject.instance().addMapLayer(input_layer)
     draw_recent_simple_line_layer(color="purple", width=0.5)
 
-
-# input_file = "../data/processed/workflow_steps/qgis_output_beta.gpkg"
-# output_file = "../data/processed/workflow_steps/G_beta.json"
-# nodefile = "../data/processed/workflow_steps/nodes_beta.gpkg"
-# edgefile = "../data/processed/workflow_steps/edges_beta.gpkg"
 
 # import cleaned data
 gdf = gpd.read_file(input_file)
@@ -123,9 +119,5 @@ if display_network_layer:
         draw_simple_point_layer("Nodes (beta)", marker_size=2)
 
 
-draw_categorical_layer("Edges (beta)", "component", linewidth=1)
-
-
-draw_linear_graduated_vlayer(
-    layer_name="Nodes (beta)", attr_name="degree", no_classes=3, cmap="RdPu"
-)
+draw_categorical_layer("Edges (beta)", "component", line_width=1)
+draw_categorical_layer("Nodes (beta)", "degree", marker_size=5)
