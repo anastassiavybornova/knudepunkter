@@ -1,0 +1,15 @@
+name: knupu
+channels:
+  - conda-forge
+  - conda
+  - defaults
+dependencies:
+  - python
+  - ipykernel
+  - numpy
+  - pandas
+  - shapely=2.0.1
+  - geopandas 
+  - osmnx
+  - networkx
+  - contextily
