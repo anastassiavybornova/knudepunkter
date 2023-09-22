@@ -223,8 +223,6 @@ def draw_categorical_layer(
             )
 
         if layer.wkbType() in [QgsWkbTypes.Point, QgsWkbTypes.MultiPoint]:
-            symbol = QgsMarkerSymbol.createSimple(properties)
-
             properties = {
                 "name": marker_shape,
                 "size": marker_size,
@@ -233,6 +231,8 @@ def draw_categorical_layer(
                 "outline_width": outline_width,
                 "angle": marker_angle,
             }
+
+            symbol = QgsMarkerSymbol.createSimple(properties)
 
         # create renderer object
         category = QgsRendererCategory(unique_value, symbol, str(unique_value))

@@ -120,4 +120,4 @@ if display_network_layer:
 
 
 draw_categorical_layer("Edges (beta)", "component", line_width=1)
-draw_categorical_layer("Nodes (beta)", "degree", marker_size=5)
+draw_categorical_layer("Nodes (beta)", "degree", marker_size=3)
