@@ -22,7 +22,7 @@ study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
 # load configs
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
-wfs_list = configs["wfs_list"]
+wfs_list = configs["wfs_list"] # defining layers to import
 
 # make vector layer of study area
 study_area_vlayer = QgsVectorLayer(study_area_path, "Study area", "ogr")
@@ -37,17 +37,10 @@ wfs_version = "1.1.0"
 study_area_gdf = gpd.read_file(study_area_path)
 bounds = wfs_func.get_bounds(study_area_gdf)
 
-wfs_list = [
-	"land_anvendelse", # Arealanvendelse
-	"land_landskabnatur", # Værdifulde landskaber
-	"facilit_faciliteter", # Informations- og servicetilbud
-	"land_attraktioner", # Attraktioner
-]
-
 
 for wfs_name in wfs_list:
     # define WFS URL
-    wfs_core = f"https://rida-services.test.septima.dk/ows?MAP={wfs_name}&service=WFS"
+    wfs_core = f"https://rida-services.test.septima.dk/ows?map={wfs_name}&service=WFS"
     try:
         wfs_func.get_wfs_layers(
             study_area_vlayer,
@@ -74,5 +67,5 @@ for wfs_name in wfs_list:
     except:
         print(f"Error when fetching {wfs_name}")
         
-# Error when fetching facilit_faciliteter
-# Error when fetching land_attraktioner
+# for some reason, there are two wfs layers from land_landskabnatur that don't get downloaded:
+# værdifulde landskaber and fredninger

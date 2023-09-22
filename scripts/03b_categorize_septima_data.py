@@ -1,14 +1,15 @@
-# merge data from shapefiles into layers
+# merge data from WFS layers (downloaded into gpkg files in /wfs/ folder in 03a_get_septima_data) 
+# into layers for evaluation
 
-# DISCARDED:
-# land_anvendelse/dyrket_areal.gpkg
-# PARTS OF land_anvendelse/byomrade.gpkg
-# "type" is "Lav bebyggelse"
 
-# BAD:
-# land_anvendelse/teknisk_areal.gpkg, 
-# PARTS OF land_anvendelse/byomrade.gpkg
-# ("type" in ["Erhverv", "Høj bebyggelse"])
+# NATURE:
+# landanvendelse of type naturareal (all subtypes)
+# landanvendelse of type skovinddeling (all subtypes)
+# landskabnatur of type beskyttet natur (all subtypes)
+
+# SOMMERHUS:
+# PARTS OF land_anvendelse/byomrade.gpkg: 
+# "type" in ['Sommerhusområde', 'Sommerhusområde skov']
 
 # GOOD: 
 # PARTS OF land_anvendelse/byomrade.gpkg
@@ -16,12 +17,18 @@
 # land_anvendelse/naturareal.gpkg
 
 # CULTURE
-# PARTS of land_anvendelse/byomrade.gpkg:
-# "type" is Bykerne
+# landanvendelse of type byomrade of subtype Bykerne
+ 
+# BAD:
+# landanvendelse of type Bymæssig anvendelse (only subtypes erhverh, høj bebyggelse) 
+# landanvendelse of type Teknisk areal (all subtypes)
 
-# SOMMERHUS:
-# PARTS OF land_anvendelse/byomrade.gpkg: 
-# "type" in ['Sommerhusområde', 'Sommerhusområde skov']
+
+
+# DISCARDED:
+# land_anvendelse/dyrket_areal.gpkg
+# PARTS OF land_anvendelse/byomrade.gpkg
+# "type" is "Lav bebyggelse"
 
 
 import os
