@@ -66,6 +66,7 @@ for wfs_name in wfs_list:
                 print(f"Added layer {l}")
     except:
         print(f"Error when fetching {wfs_name}")
-        
+    
+print("Layers fetched and saved.")    
 # for some reason, there are two wfs layers from land_landskabnatur that don't get downloaded:
 # værdifulde landskaber and fredninger
