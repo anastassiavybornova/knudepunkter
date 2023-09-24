@@ -84,9 +84,12 @@ for i, comp in enumerate(comps):
 
     for index in index_list:
         try:
-            edges.loc[index, "component"] = i
+            edges.loc[index, "component"] = i + 1 # start counting at 1
         except KeyError:
-            edges.loc[(index[1], index[0]), "component"] = i
+            edges.loc[(index[1], index[0]), "component"] = i + 1 # start counting at 1
+
+# rename component nr 1 (the biggest one) into "LCC"
+edges.loc[edges["component"]==1, "component"] = "LCC"
 
 assert len(edges.component.unique()) == len(comps)
 assert len(edges.loc[edges.component.isna()]) == 0
