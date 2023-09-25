@@ -10,7 +10,6 @@ import geopandas as gpd
 from owslib.wfs import WebFeatureService
 from src import wfs_func
 
-
 # define paths
 homepath = (
     QgsProject.instance().homePath()

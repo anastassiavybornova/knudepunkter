@@ -33,6 +33,9 @@ study_path = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg" #
 eval_path = homepath + "/data/processed/eval/" # where is evaluation data
 
 # define functions
+# ploting functions
+
+exec(open(homepath + "/src/plot_func.py").read())
 
 def evaluate_polygon_layer(poly, edges, polygon_buffer=100):
     '''
@@ -147,6 +150,8 @@ gdf_eval = evaluate_polygon_layer(bad, edges, 100)
 
 # MISSING: VISUALIZE evaluation as layer in qgis projet
 
+
+
 ### CULTURE
 
 ### NATURE
@@ -165,8 +170,16 @@ facilities = gpd.read_file(eval_path + "facilities.gpkg")
 # evaluate layer
 facilities_eval = evaluate_point_layer(facilities, edges, dist_faci)
 print("facilities layer evaluated")
+
 # MISSING: VISUALIZE LAYER
+
 
 ### SERVICE
 
 ### POIS
+
+
+### MISSING: QUANTITATIVE SUMMARY OF RESULTS
+# absolute + percentage length in each layer (for polygon layers)
+# absolute + perentage number of points in each layer (for point layers) 
+# (refine once we have taken care of parallel edges)
