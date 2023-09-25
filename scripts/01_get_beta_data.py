@@ -13,14 +13,15 @@ import os
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 
-# import functions
-exec(open(homepath + "/src/plot_func.py").read())
-
 # define projected crs
 proj_crs = "EPSG:25832"
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
+
+# import functions
+exec(open(homepath + "/src/plot_func.py").read())
+
 
 # define location of study area polygon (user-provided)
 filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"

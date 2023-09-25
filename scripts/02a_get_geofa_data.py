@@ -10,9 +10,6 @@ import geopandas as gpd
 from owslib.wfs import WebFeatureService
 from src import wfs_func
 
-# import functions
-exec(open(homepath + "/src/plot_func.py").read())
-
 # define paths
 homepath = (
     QgsProject.instance().homePath()
@@ -20,6 +17,9 @@ homepath = (
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 output_path = os.path.join(homepath, "output_overlay.gpkg")  # filepath of config file
 study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
+
+# import functions
+exec(open(homepath + "/src/plot_func.py").read())
 
 
 # load configs

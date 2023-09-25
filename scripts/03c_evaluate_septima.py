@@ -29,14 +29,15 @@ import pandas as pd
 from shapely import strtree
 from src import eval_func
 
-exec(open(homepath + "/src/plot_func.py").read())
-
 # define paths
 homepath = QgsProject.instance().homePath()  # where is QGIS project
 study_path = (
     homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 )  # where is study area network
 eval_path = homepath + "/data/processed/eval/"  # where is evaluation data
+
+# import functions
+exec(open(homepath + "/src/plot_func.py").read())
 
 # import study area edges
 edges = gpd.read_file(study_path)

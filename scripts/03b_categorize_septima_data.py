@@ -12,12 +12,12 @@ import geopandas as gpd
 import pandas as pd
 from src import wfs_func
 
-exec(open(homepath + "/src/plot_func.py").read())
-
 # define paths
 homepath = QgsProject.instance().homePath()
 wfs_path = homepath + "/data/raw/wfs"
 eval_path = homepath + "/data/processed/eval"
+
+exec(open(homepath + "/src/plot_func.py").read())
 
 # initialize dict of dicts (keys = wfs folders)
 wfs_dict = {}
@@ -176,7 +176,7 @@ infosup = wfs_dict["facilit_faciliteter"]["infoservice_suppl"]
 rast = wfs_dict["facilit_faciliteter"]["rasteplads"]
 rastsup = wfs_dict["facilit_faciliteter"]["rasteplads_suppl"]
 
-facilities = merge_gdfs(
+facilities = wfs_func.merge_gdfs(
     [info[-info["type"].isin(["turistkontor"])], infosup, rast, rastsup]
 )
 
