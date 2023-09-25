@@ -1,5 +1,9 @@
 ## Current TO DOs
 
+* **Ane: plot "evaluation layers" plus plot "evaluated network"**
+
+* **Ane: group layers**
+
 * folkersma: ask for most recent data on parent/child; split nodes. ~~(ask kirsten if that's fine first)~~
 * ~~clean up repo~~
 * ~~update and combine the scripts 01_define_area and 02_get_beta_data into one script where: input... which area we want to look at (typically a municipality border?); output... beta data for that area~~
@@ -44,6 +48,19 @@
 * receive technical specifications (septima) doc from Kirsten
 
 * receive folkersma's process description from Kirsten
+
+* wrap everything relating Septima data (download of WFS) into a try/except
+
+* wrap everything relating Septima data (evaluation) into a try except (cases: no data at all; or data but df is empty)
+
+* include script references in layer names (what comes from where)?
+
+* rename scripts so that they make more sense
+
+* make sure map zooms to input data
+
+* set polygon display to default False in geofa script
+
 
 ## Later TO DOs
 
