@@ -1,6 +1,6 @@
 ## Current TO DOs
 
-* folkersma: ask for most recent data on parent/child; split nodes. (ask kirsten if that's fine first)
+* folkersma: ask for most recent data on parent/child; split nodes. ~~(ask kirsten if that's fine first)~~
 * ~~clean up repo~~
 * ~~update and combine the scripts 01_define_area and 02_get_beta_data into one script where: input... which area we want to look at (typically a municipality border?); output... beta data for that area~~
 * ~~FOR NOW, drop the scripts 05_get_concept_data and 06_concept_to_network~~ 
@@ -15,20 +15,20 @@
 
 * **Ane** ~~update the script `03a_get_septima_data` so that it fetches all requested septima data and creates corresponding layers (cf. README)~~ --> DONE (only missing a full list of all desired WFSses)
 
-* **Anastassia** make script for getting subsets of Septima data from downloaded wfs data - work in progress (error messages for some of the WFS layers?).
+* **Anastassia** ~~make script for getting subsets of Septima data from downloaded wfs data - work in progress (error messages for some of the WFS layers?).~~ --> DONE (only missing some of the WFS layers, idk why?)
 
-    * Q1: is it ok to use geopandas for all data filtering & merging?
+    * Q1: is it ok to use geopandas for all data filtering & merging? >> YES
     * Q2: evaluation layers
         - good/bad/culture/summerhouse areas: simple overlap
         - point data: user-defined threshold, binary (close enough - yes/no)
 
 * **Anastassia** try to find a way to import functions from src
 
-* **Anastassia** write to Kirsten
+* **Anastassia** ~~write to Kirsten~~
 
 * **Anastassia** check why we get an error message about index_parts from the `create_osmnx_graph` function
 
-* **Ane/Anastassia** update the `04_evaluate_septima` script to evaluate all data from step 08
+* **Ane/Anastassia** ~~update the `04_evaluate_septima` script to evaluate all data from step 08~~ >> DONE - only missing the plotting part
 
 * ~~**Ane** Write visualization scripts for plotting layers (colors, hue, zoom levels, categorization etc.)~~
 (implemented functions for simple plotting, categorical plotting, zoom to layer extent)
