@@ -295,8 +295,6 @@ def draw_simple_line_layer(layer_name, color="purple", linewidth=1, line_style="
     """
 
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-    # iface.setActiveLayer(my_layer)
-    # layer = iface.activeLayer()
 
     properties = {"color": color, "width": linewidth, "line_style": line_style}
 
@@ -360,11 +358,23 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
     iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
 
 
-def remove_existing_layers(layer_name_tuple):
+def remove_existing_layers(layer_name_list):
+    clean_layer_names = [l.replace(" ", "_") for l in layer_name_list]
+    clean_layer_names = [l.replace("(", "_") for l in clean_layer_names]
+    clean_layer_names = [l.replace(")", "_") for l in clean_layer_names]
+    clean_layer_names = [l.replace("/", "_") for l in clean_layer_names]
+    clean_layer_names = [l.replace(":", "_") for l in clean_layer_names]
+    clean_layer_names = [l.replace("-", "_") for l in clean_layer_names]
+
+    print(clean_layer_names)
+
     existing_layers_ids = [
         layer.id() for layer in QgsProject.instance().mapLayers().values()
     ]
-    remove_layers = [e for e in existing_layers_ids if e.startswith(layer_name_tuple)]
+
+    remove_layers = [
+        e for e in existing_layers_ids if e.startswith(tuple(clean_layer_names))
+    ]
 
     for r in remove_layers:
         QgsProject.instance().removeMapLayer(r)

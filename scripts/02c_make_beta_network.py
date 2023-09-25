@@ -38,15 +38,15 @@ edgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
 nodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
 
 # Remove temporary layers from project if they exist already
-remove_existing_layers(("input", "Edges", "Nodes"))
+remove_existing_layers(["network input data", "Edges", "Nodes"])
 
 # input data
-input_layer = QgsVectorLayer(input_file, "input data", "ogr")
+input_layer = QgsVectorLayer(input_file, "network input data", "ogr")
 
 if display_intermediate_data:
     QgsProject.instance().addMapLayer(input_layer)
     draw_recent_simple_line_layer(color="purple", width=0.5)
-
+    zoom_to_layer("input data")
 
 # import cleaned data
 gdf = gpd.read_file(input_file)
@@ -84,12 +84,12 @@ for i, comp in enumerate(comps):
 
     for index in index_list:
         try:
-            edges.loc[index, "component"] = i + 1 # start counting at 1
+            edges.loc[index, "component"] = i + 1  # start counting at 1
         except KeyError:
-            edges.loc[(index[1], index[0]), "component"] = i + 1 # start counting at 1
+            edges.loc[(index[1], index[0]), "component"] = i + 1  # start counting at 1
 
 # rename component nr 1 (the biggest one) into "LCC"
-edges.loc[edges["component"]==1, "component"] = "LCC"
+edges.loc[edges["component"] == 1, "component"] = "LCC"
 
 assert len(edges.component.unique()) == len(comps)
 assert len(edges.loc[edges.component.isna()]) == 0

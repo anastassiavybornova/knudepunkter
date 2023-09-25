@@ -10,6 +10,8 @@ import geopandas as gpd
 from owslib.wfs import WebFeatureService
 from src import wfs_func
 
+exec(open(homepath + "/src/plot_func.py").read())
+
 # define paths
 homepath = (
     QgsProject.instance().homePath()
@@ -21,13 +23,23 @@ study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
 # load configs
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
-wfs_list = configs["wfs_list"] # defining layers to import
+wfs_list = configs["wfs_list"]  # defining layers to import
+
+# Remove layers from project if they exist already
+remove_existing_layers(["Study area"])
 
 # make vector layer of study area
 study_area_vlayer = QgsVectorLayer(study_area_path, "Study area", "ogr")
 
 if show_layers == True:
     QgsProject.instance().addMapLayer(study_area_vlayer)
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,128",
+        outline_color="black",
+        outline_width=0.5,
+    )
+    zoom_to_layer("Study area")
 
 # WFS settings
 wfs_version = "1.1.0"
@@ -65,7 +77,7 @@ for wfs_name in wfs_list:
                 print(f"Added layer {l}")
     except:
         print(f"Error when fetching {wfs_name}")
-    
-print("Layers fetched and saved.")    
+
+print("Layers fetched and saved.")
 # for some reason, there are two wfs layers from land_landskabnatur that don't get downloaded:
 # værdifulde landskaber and fredninger

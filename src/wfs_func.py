@@ -3,6 +3,30 @@ import os
 from qgis.core import QgsVectorLayer
 from qgis import processing
 
+os.environ["USE_PYGEOS"] = "0"
+import geopandas as gpd
+import pandas as pd
+
+
+# imports layers from one WFS folder
+def addlayers_from_wfsfolder(wfs_dict, wfs_folder, layernames, wfs_path):
+    for wfs_layer in layernames:
+        wfs_dict[wfs_folder][wfs_layer] = gpd.read_file(
+            wfs_path + f"/{wfs_folder}/{wfs_layer}.gpkg"
+        ).explode(index_parts=False)
+    return wfs_dict
+
+
+# merges WFS gdfs into one gdf
+def merge_gdfs(gdf_list):
+    # make sure all gdfs are the same crs
+    assert len(set([gdf.crs for gdf in gdf_list])) == 1
+    # make sure we have the same geometries everywhere
+    assert len(set([t for gdf in gdf_list for t in gdf.type])) == 1
+    # concatenate with pandas
+    gdf_main = pd.concat([gdf[["geometry", "type"]].copy() for gdf in gdf_list])
+    return gdf_main
+
 
 def get_bounds(gdf):
     # get bounds of geodataframe

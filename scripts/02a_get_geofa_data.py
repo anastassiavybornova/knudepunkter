@@ -10,6 +10,9 @@ import geopandas as gpd
 from owslib.wfs import WebFeatureService
 from src import wfs_func
 
+# import functions
+exec(open(homepath + "/src/plot_func.py").read())
+
 # define paths
 homepath = (
     QgsProject.instance().homePath()
@@ -24,11 +27,18 @@ configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 wfs_list = configs["wfs_list"]
 
+# Remove layers from project if they exist already
+remove_existing_layers(["Study area", "geofa_test"])  # TODO: ADD NAME OF WFS LAYER HERE
+
 # make vector layer of study area
 study_area_vlayer = QgsVectorLayer(study_area_path, "Study area", "ogr")
 
 if show_layers == True:
     QgsProject.instance().addMapLayer(study_area_vlayer)
+    draw_simple_polygon_layer(
+        "Study area", color="250,181,127,128", outline_color="black", outline_width=0.5
+    )
+    zoom_to_layer("Study area")
 
 # define configurations for WFS connection
 wfs_version = "2.0.0"
@@ -69,4 +79,5 @@ wfs_func.clip_save_layer(
 if show_layers == True:
     new_layer = QgsVectorLayer(filepath, layer_name, "ogr")
     QgsProject.instance().addMapLayer(new_layer)
+    draw_recent_simple_line_layer(color="purple", width=0.7, line_style="dash")
     print(f"Added layer {layer_name}")

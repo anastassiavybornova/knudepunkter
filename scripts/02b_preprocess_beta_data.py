@@ -36,15 +36,16 @@ inputfile = homepath + "/data/processed/workflow_steps/qgis_input_beta.gpkg"
 outputfile = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 
 # Remove temporary layers from project if they exist already
-remove_existing_layers(("Valid", "Split", "Snapped", "input_", "Beta"))
+remove_existing_layers(["Valid", "Split", "Snapped", "input", "Beta"])
 
 # TEMP - load input data
-org_input = QgsVectorLayer(inputfile, "input_data", "ogr")
+org_input = QgsVectorLayer(inputfile, "input data", "ogr")
 
 if display_intermediate_data:
     QgsProject.instance().addMapLayer(org_input)
 
     draw_recent_simple_line_layer(color="blue", width=0.5)
+    zoom_to_layer("input data")
 
 
 # Run processing algorithm "split with lines"
