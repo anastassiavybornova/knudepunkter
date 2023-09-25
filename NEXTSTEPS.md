@@ -51,6 +51,8 @@
 
 * wrap everything relating Septima data (download of WFS) into a try/except
 
+* work on documentation
+
 * wrap everything relating Septima data (evaluation) into a try except (cases: no data at all; or data but df is empty)
 
 * include script references in layer names (what comes from where)?
