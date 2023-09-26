@@ -57,12 +57,6 @@
 
 * include script references in layer names (what comes from where)?
 
-* rename scripts so that they make more sense
-
-* make sure map zooms to input data
-
-* set polygon display to default False in geofa script
-
 
 ## Later TO DOs
 
