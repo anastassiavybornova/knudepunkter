@@ -1,41 +1,26 @@
 ## Current TO DOs
 
+### CODE
+
 * **Ane: plot "evaluation layers" plus plot "evaluated network"**
 
-* folkersma: ask for most recent data on parent/child; split nodes. ~~(ask kirsten if that's fine first)~~
-* ~~clean up repo~~
-* ~~update and combine the scripts 01_define_area and 02_get_beta_data into one script where: input... which area we want to look at (typically a municipality border?); output... beta data for that area~~
-* ~~FOR NOW, drop the scripts 05_get_concept_data and 06_concept_to_network~~ 
-
-* **Ane** update the scripts `02b_make_beta_network.py` with *NEW* folkersma data (with info on split, child/parent nodes etc.) to create a fully connected, simplified network. possibly look into building a graph within qgis: https://docs.qgis.org/3.28/en/docs/pyqgis_developer_cookbook/network_analysis.html
-
-    * Question: should we skip parallel edges? >> would be nice to keep track, but not top priority
-    * TODOS: Incorporate parent/child-nodes? >> wait for Folkersma data before we act on this one
-    
-
-* ~~Script for getting layer from GeoFA done (02a)~~
-
-* **Ane** ~~update the script `03a_get_septima_data` so that it fetches all requested septima data and creates corresponding layers (cf. README)~~ --> DONE (only missing a full list of all desired WFSses)
-
-* **Anastassia** ~~make script for getting subsets of Septima data from downloaded wfs data - work in progress (error messages for some of the WFS layers?).~~ --> DONE (only missing some of the WFS layers, idk why?)
-
-    * Q1: is it ok to use geopandas for all data filtering & merging? >> YES
-    * Q2: evaluation layers
-        - good/bad/culture/summerhouse areas: simple overlap
-        - point data: user-defined threshold, binary (close enough - yes/no)
-
-* **Anastassia** try to find a way to import functions from src
-
-* **Anastassia** ~~write to Kirsten~~
+* **Anastassia** try to find a way to import functions from src?
 
 * **Anastassia** check why we get an error message about index_parts from the `create_osmnx_graph` function
 
-* **Ane/Anastassia** ~~update the `04_evaluate_septima` script to evaluate all data from step 08~~ >> DONE - only missing the plotting part
+* Take into account the parallel edges in evaluation
 
-* ~~**Ane** Write visualization scripts for plotting layers (colors, hue, zoom levels, categorization etc.)~~
-(implemented functions for simple plotting, categorical plotting, zoom to layer extent)
+* wrap everything relating Septima data (download of WFS) into a try/except
+
+* wrap everything relating Septima data (evaluation) into a try except (cases: no data at all; or data but df is empty)
+
+* work on documentation
 
 * Write an evaluation script (point of departure can be `_10_compare_networks`, but don't do comparison)
+
+* Implement evaluation based on network metrics
+
+### OTHER
 
 * work on papers (2x)
 
@@ -47,11 +32,6 @@
 
 * receive folkersma's process description from Kirsten
 
-* wrap everything relating Septima data (download of WFS) into a try/except
-
-* work on documentation
-
-* wrap everything relating Septima data (evaluation) into a try except (cases: no data at all; or data but df is empty)
 
 
 ## Later TO DOs
