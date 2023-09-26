@@ -166,6 +166,7 @@ test_ane.qgz
 *.qgz 
 *.gpkg-shm
 *.gpkg-wal
+*.gpkg-journal
 
 # data/raw/wfs/*
 # Data not to be shared publicly
