@@ -54,6 +54,8 @@ if display_input:
     QgsProject.instance().addMapLayer(vlayer_network)
     draw_simple_line_layer("Network", color="black", linewidth=0.5, line_style="dash")
 
+    zoom_to_layer("Network")
+
 
 ### EVALUATE POLYGON LAYERS
 # (agriculture, bad, culture, nature, sommerhus)
