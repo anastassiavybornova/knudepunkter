@@ -27,8 +27,15 @@ import geopandas as gpd
 import osmnx as ox
 import networkx as nx
 import pandas as pd
+import os
+import yaml
 
 from qgis.core import *
+
+# load configs
+configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
+proj_crs = configs["proj_crs"]
 
 
 # INPUT/OUTPUT FILE PATHS
@@ -50,8 +57,8 @@ if display_intermediate_data:
 
 # import cleaned data
 gdf = gpd.read_file(input_file)
-proj_crs = gdf.crs
-print("proj_crs: ", proj_crs)
+if gdf.crs != proj_crs:
+    gdf = gdf.to_crs(proj_crs)
 
 # Convert to network structure
 
@@ -121,6 +128,27 @@ if display_network_layer:
         QgsProject.instance().addMapLayer(vlayer_nodes)
         draw_simple_point_layer("Nodes (beta)", marker_size=2)
 
+    draw_categorical_layer("Edges (beta)", "component", line_width=1)
+    draw_categorical_layer("Nodes (beta)", "degree", marker_size=3)
 
-draw_categorical_layer("Edges (beta)", "component", line_width=1)
-draw_categorical_layer("Nodes (beta)", "degree", marker_size=3)
+
+if display_intermediate_data == False and display_network_layer == True:
+    group_layers(
+        "Make Beta Network",
+        ["Edges (beta)", "Nodes (beta)"],
+        remove_group_if_exists=True,
+    )
+
+if display_preprocessed_layer == True and display_network_layer == False:
+    group_layers(
+        "Make Beta Network",
+        ["network input data"],
+        remove_group_if_exists=True,
+    )
+
+if display_intermediate_data == True and display_network_layer == True:
+    group_layers(
+        "Make Beta Network",
+        ["network input data", "Edges (beta)", "Nodes (beta)"],
+        remove_group_if_exists=True,
+    )

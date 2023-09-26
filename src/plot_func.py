@@ -4,6 +4,32 @@ from random import randrange
 from qgis.core import *
 
 
+def group_layers(group_name, layer_names, remove_group_if_exists=True):
+    root = QgsProject.instance().layerTreeRoot()
+
+    # remove group AND included layers if group already exists
+    if remove_group_if_exists:
+        for group in [child for child in root.children() if child.nodeType() == 0]:
+            if group.name() == group_name:
+                root.removeChildNode(group)
+
+    # create new group
+    layer_group = root.addGroup(group_name)
+
+    # add layers to new group by first cloning, adding clone, removing original parent
+    for layer_name in layer_names:
+        layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+
+        tree_layer = root.findLayer(layer.id())
+        cloned_layer = tree_layer.clone()
+        parent = tree_layer.parent()
+
+        # group = root.findGroup(group_name)
+        layer_group.insertChildNode(0, cloned_layer)
+
+        parent.removeChildNode(tree_layer)
+
+
 def color_ramp_items(colormap, nclass):
     # https://gis.stackexchange.com/questions/118775/assigning-color-ramp-using-pyqgis
     fractional_steps = [i / nclass for i in range(nclass + 1)]

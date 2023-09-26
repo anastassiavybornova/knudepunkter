@@ -12,12 +12,16 @@ import os
 
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
-
-# define projected crs
-proj_crs = "EPSG:25832"
+import yaml
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
+
+# load configs
+configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
+proj_crs = configs["proj_crs"]
+
 
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
@@ -96,3 +100,7 @@ if display_beta_layer == True:
     else:
         QgsProject.instance().addMapLayer(vlayer)
         draw_recent_simple_line_layer(color="green", width=0.7, line_style="dash")
+
+        group_layers(
+            group_name="Get Beta Data", layer_names=["beta data (pre-network)"]
+        )

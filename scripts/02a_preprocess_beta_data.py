@@ -121,3 +121,29 @@ if display_preprocessed_layer == True:
     else:
         QgsProject.instance().addMapLayer(vlayer)
         draw_recent_simple_line_layer(color="magenta", width=1)
+
+
+if display_intermediate_data == False and display_preprocessed_layer == True:
+    group_layers(
+        "Preprocess Beta Data", ["Beta data pre network"], remove_group_if_exists=True
+    )
+
+if display_preprocessed_layer == True and display_preprocessed_layer == False:
+    group_layers(
+        "Preprocess Beta Data",
+        ["input data", "Snapped geometry", "Split", "Valid output"],
+        remove_group_if_exists=True,
+    )
+
+if display_intermediate_data == True and display_preprocessed_layer == True:
+    group_layers(
+        "Preprocess Beta Data",
+        [
+            "input data",
+            "Snapped geometry",
+            "Split",
+            "Valid output",
+            "Beta data pre network",
+        ],
+        remove_group_if_exists=True,
+    )

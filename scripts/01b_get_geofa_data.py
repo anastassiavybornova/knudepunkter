@@ -81,3 +81,5 @@ if show_layers == True:
     QgsProject.instance().addMapLayer(new_layer)
     draw_recent_simple_line_layer(color="purple", width=0.7, line_style="dash")
     print(f"Added layer {layer_name}")
+
+    group_layers("Get GeoFa Data", [layer_name], remove_group_if_exists=True)
