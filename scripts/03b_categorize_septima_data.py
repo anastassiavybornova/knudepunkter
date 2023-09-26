@@ -58,7 +58,8 @@ anve_layers = [
     "teknisk_areal",
 ]
 
-wfs_dict = wfs_func.addlayers_from_wfsfolder(
+
+wfs_dict =  wfs_func.addlayers_from_wfsfolder(
     wfs_dict=wfs_dict,
     wfs_folder="land_anvendelse",
     layernames=anve_layers,
