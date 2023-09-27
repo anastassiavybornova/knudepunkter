@@ -1,3 +1,5 @@
+# TODO: Write docstrings + documentation, move funcs to separate script, test w. different plotting input, summarize results
+
 ### indicate which layers to display
 
 display_input = True
@@ -61,6 +63,17 @@ remove_existing_layers(
         "POIS not within reach",
     ]
 )
+
+# define root
+root = QgsProject.instance().layerTreeRoot()
+
+# make main group for layers
+main_group_name = "Evaluate network"
+
+# Check if group already exists
+for group in [child for child in root.children() if child.nodeType() == 0]:
+    if group.name() == main_group_name:
+        root.removeChildNode(group)
 
 # Initialize list of layers for layer grouping
 input_layers = []
@@ -169,9 +182,9 @@ if os.path.exists(eval_path + "agriculture.gpkg"):
         dist=dist_agri,
         name="Agricultural",
         type_col="types",
-        fill_color_rgb="245,245,220",
-        outline_color_rgb="245,245,220",
-        line_color_rgb="245,245,220",
+        fill_color_rgb="205,186,136",
+        outline_color_rgb="205,186,136",
+        line_color_rgb="205,186,136",
         line_width=1,
         line_style="solid",
         plot_categorical=False,
@@ -376,38 +389,6 @@ if os.path.exists(eval_path + "facilities.gpkg"):
     input_layers.append(faci_input_name)
     output_layers.append(faci_output_name)
 
-# # import layer
-# facilities = gpd.read_file(eval_path + "facilities.gpkg")
-
-# # evaluate layer
-# facilities_eval = eval_func.evaluate_point_layer(facilities, edges, dist_faci)
-# print("facilities layer evaluated")
-
-# facilities_withinreach = facilities_eval.loc[facilities_eval.withinreach == 1]
-# print(f"{len(facilities_withinreach)} facilities are within reach")
-
-# # export
-# facilities_output = results_path + f"facilities_within_reach_{dist_faci}.gpkg"
-# facilities_withinreach.to_file(facilities_output)
-
-# facilities_outside_output = results_path + f"facilities_outside_reach_{dist_faci}.gpkg"
-# facilities_eval.loc[facilities_eval.withinreach == 0].to_file(facilities_outside_output)
-
-# # plot
-# if display_output:
-#     vlayer_faci = QgsVectorLayer(facilities_output, "Facilities within reach", "ogr")
-#     vlayer_faci_all = QgsVectorLayer(
-#         facilities_outside_output, "Facilities not within reach", "ogr"
-#     )
-
-#     QgsProject.instance().addMapLayer(vlayer_faci)
-#     draw_categorical_layer("Facilities within reach", "type", marker_size=3)
-
-#     QgsProject.instance().addMapLayer(vlayer_faci_all)
-#     draw_simple_point_layer(
-#         "Facilities not within reach", marker_size=2, color="red", outline_width=0.0
-#     )
-
 
 #### SERVICE ####
 
@@ -448,71 +429,61 @@ if os.path.exists(eval_path + "pois.gpkg"):
 # absolute + perentage number of points in each layer (for point layers)
 # (refine once we have taken care of parallel edges)
 
-# TODO: group output based on input type?
-
-# TODO: sort alphabetically
-
 all_layers = input_layers + output_layers
 
-if display_input == False and display_output == True:
-    group_layers(
-        "Evaluate network",
-        output_layers,
-        remove_group_if_exists=True,
-    )
 
-if display_input == True and display_output == False:
-    group_layers(
-        "Evaluate network",
-        input_layers,
-        remove_group_if_exists=True,
-    )
+def add_layer_to_group(layer_name, group):
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+
+    tree_layer = root.findLayer(layer.id())
+    cloned_layer = tree_layer.clone()
+    parent = tree_layer.parent()
+
+    group.insertChildNode(0, cloned_layer)
+
+    parent.removeChildNode(tree_layer)
 
 
-if display_input == True and display_output == True:
-    group_layers(
-        "Evaluate network",
-        all_layers,
-        remove_group_if_exists=True,
-    )
+types = [
+    "Culture",
+    "Nature",
+    "Agricultural",
+    "Undesirable",
+    "POIS",
+    "Service",
+    "Facilities",
+    "Summer",
+]
 
-# types = [
-#     "Culture",
-#     "Nature",
-#     "Agricultural",
-#     "Undesirable",
-#     "POIS",
-#     "Service",
-#     "Facilities",
-#     "Summer",
-# ]
 
-# types = ["Culture"]
+# make main group
+main_group = root.insertGroup(0, main_group_name)
 
-# for t in types:
-#     if display_input == False and display_output == True:
-#         group_cols = [o for o in output_layers if t in o or t.lower() in o]
-#         print(group_cols)
-#     #     group_layers(
-#     #     "Evaluate network",
-#     #     output_layers,
-#     #     remove_group_if_exists=True,
-#     # )
+for t in types:
+    if display_input == False and display_output == True:
+        layer_names = [o for o in input_layers if t in o or t.lower() in o]
 
-#     if display_input == True and display_output == False:
-#         group_cols = [o for o in output_layers if t in o or t.lower() in o]
-#         print(group_cols)
-#         # group_layers(
-#         #     "Evaluate network",
-#         #     input_layers,
-#         #     remove_group_if_exists=True,
-#         # )
+        sub_group = main_group.addGroup(t)
 
-#     if display_input == True and display_output == True:
-#         group_cols = [o for o in all_layers if t in o or t.lower() in o]
-#         print(group_cols)
-#         group_layers(
-#             t,
-#             group_cols,
-#             remove_group_if_exists=True,
-#         )
+        for layer_name in layer_names:
+            add_layer_to_group(layer_name, sub_group)
+
+    if display_input == True and display_output == False:
+        layer_names = [o for o in output_layers if t in o or t.lower() in o]
+
+        sub_group = main_group.addGroup(t)
+
+        add_layer_to_group("Network", main_group)
+
+        for layer_name in layer_names:
+            add_layer_to_group(layer_name, sub_group)
+
+    if display_input == True and display_output == True:
+        layer_names = [o for o in all_layers if t in o or t.lower() in o]
+
+        sub_group = main_group.addGroup(t)
+
+        add_layer_to_group("Network", main_group)
+
+        for layer_name in layer_names:
+            add_layer_to_group(layer_name, sub_group)
