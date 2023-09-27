@@ -306,7 +306,9 @@ def draw_simple_polygon_layer(
     iface.layerTreeView().refreshLayerSymbology(layer.id())
 
 
-def draw_simple_line_layer(layer_name, color="purple", linewidth=1, line_style="solid"):
+def draw_simple_line_layer(
+    layer_name, color="purple", line_width=1, line_style="solid"
+):
     """
     Plot simple line layer
 
@@ -322,7 +324,7 @@ def draw_simple_line_layer(layer_name, color="purple", linewidth=1, line_style="
 
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
-    properties = {"color": color, "width": linewidth, "line_style": line_style}
+    properties = {"color": color, "width": line_width, "line_style": line_style}
 
     symbol = QgsLineSymbol.createSimple(properties)
 
