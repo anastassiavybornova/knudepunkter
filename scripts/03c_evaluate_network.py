@@ -73,7 +73,7 @@ if display_input:
     vlayer_network = QgsVectorLayer(study_path, "Network", "ogr")
 
     QgsProject.instance().addMapLayer(vlayer_network)
-    draw_simple_line_layer("Network", color="black", linewidth=0.5, line_style="dash")
+    draw_simple_line_layer("Network", color="black", line_width=0.5, line_style="dash")
 
     zoom_to_layer("Network")
 
@@ -98,6 +98,10 @@ def evaluate_export_plot_poly(
     type_col,
     fill_color_rgb,
     outline_color_rgb,
+    line_color_rgb,
+    line_width=1,
+    line_style="solid",
+    plot_categorical=False,
     fill_alpha="100",
     outline_alpha="200",
     display_output=True,
@@ -140,7 +144,17 @@ def evaluate_export_plot_poly(
 
         vlayer_out = QgsVectorLayer(output_fp, output_layer_name, "ogr")
         QgsProject.instance().addMapLayer(vlayer_out)
-        draw_categorical_layer(output_layer_name, type_col)
+
+        if plot_categorical:
+            draw_categorical_layer(output_layer_name, type_col)
+
+        else:
+            draw_simple_line_layer(
+                output_layer_name,
+                line_color_rgb,
+                line_width=line_width,
+                line_style=line_style,
+            )
 
     return input_layer_name, output_layer_name
 
@@ -157,6 +171,10 @@ if os.path.exists(eval_path + "agriculture.gpkg"):
         type_col="types",
         fill_color_rgb="245,245,220",
         outline_color_rgb="245,245,220",
+        line_color_rgb="245,245,220",
+        line_width=1,
+        line_style="solid",
+        plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
         display_output=True,
@@ -178,6 +196,10 @@ if os.path.exists(eval_path + "bad.gpkg"):
         type_col="types",
         fill_color_rgb="170,1,20",
         outline_color_rgb="170,1,20",
+        line_color_rgb="170,1,20",
+        line_width=1,
+        line_style="solid",
+        plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
         display_output=True,
@@ -199,6 +221,10 @@ if os.path.exists(eval_path + "culture.gpkg"):
         type_col="types",
         fill_color_rgb="86,85,211",
         outline_color_rgb="86,85,211",
+        line_color_rgb="86,85,211",
+        line_width=1,
+        line_style="solid",
+        plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
         display_output=True,
@@ -220,6 +246,10 @@ if os.path.exists(eval_path + "nature.gpkg"):
         type_col="types",
         fill_color_rgb="0,128,0",
         outline_color_rgb="0,128,0",
+        line_color_rgb="0,128,0",
+        line_width=1,
+        line_style="solid",
+        plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
         display_output=True,
@@ -241,6 +271,10 @@ if os.path.exists(eval_path + "sommerhus.gpkg"):
         type_col="types",
         fill_color_rgb="255,165,0",
         outline_color_rgb="255,165,0",
+        line_color_rgb="255,165,0",
+        line_width=1,
+        line_style="solid",
+        plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
         display_output=True,
@@ -442,41 +476,43 @@ if display_input == True and display_output == True:
         remove_group_if_exists=True,
     )
 
-types = [
-    "Culture",
-    "Nature",
-    "Agricultural",
-    "Undesirable",
-    "POIS",
-    "Service",
-    "Facilities",
-    "Summer",
-]
+# types = [
+#     "Culture",
+#     "Nature",
+#     "Agricultural",
+#     "Undesirable",
+#     "POIS",
+#     "Service",
+#     "Facilities",
+#     "Summer",
+# ]
+
+# types = ["Culture"]
 
 # for t in types:
 #     if display_input == False and display_output == True:
 #         group_cols = [o for o in output_layers if t in o or t.lower() in o]
+#         print(group_cols)
 #     #     group_layers(
 #     #     "Evaluate network",
 #     #     output_layers,
 #     #     remove_group_if_exists=True,
 #     # )
 
-# if display_input == True and display_output == False:
-#     group_cols = [o for o in output_layers if t in o or t.lower() in o]
-#     # group_layers(
-#     #     "Evaluate network",
-#     #     input_layers,
-#     #     remove_group_if_exists=True,
-#     # )
+#     if display_input == True and display_output == False:
+#         group_cols = [o for o in output_layers if t in o or t.lower() in o]
+#         print(group_cols)
+#         # group_layers(
+#         #     "Evaluate network",
+#         #     input_layers,
+#         #     remove_group_if_exists=True,
+#         # )
 
-
-# if display_input == True and display_output == True:
-#     # group_layers(
-#     #     "Evaluate network",
-#     #     all_layers,
-#     #     remove_group_if_exists=True,
-#     # )
-#     pass
-
-# get all column names with t in it - regardless of lower case?
+#     if display_input == True and display_output == True:
+#         group_cols = [o for o in all_layers if t in o or t.lower() in o]
+#         print(group_cols)
+#         group_layers(
+#             t,
+#             group_cols,
+#             remove_group_if_exists=True,
+#         )
