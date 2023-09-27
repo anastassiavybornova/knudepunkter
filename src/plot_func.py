@@ -24,7 +24,6 @@ def group_layers(group_name, layer_names, remove_group_if_exists=True):
         cloned_layer = tree_layer.clone()
         parent = tree_layer.parent()
 
-        # group = root.findGroup(group_name)
         layer_group.insertChildNode(0, cloned_layer)
 
         parent.removeChildNode(tree_layer)
