@@ -10,6 +10,7 @@ dist_serv = 500
 dist_pois = 1000
 
 dist_bad = 100
+dist_agri = 100
 
 ### No changes below this line
 
@@ -39,11 +40,12 @@ remove_existing_layers(
         "Network",
         "Network in undesirable areas",
         "Undesirable areas",
+        "Network in agricultural areas",
+        "Agricultural areas",
         "Facilities within reach",
         "Facilities not within reach",
     ]
 )
-
 
 # import study area edges
 edges = gpd.read_file(study_path)
@@ -57,58 +59,135 @@ if display_input:
     zoom_to_layer("Network")
 
 
-### EVALUATE POLYGON LAYERS
+#### **** EVALUATE POLYGON LAYERS **** ####
 # (agriculture, bad, culture, nature, sommerhus)
 # evaluate & display the length % of intersection
-# (import; buffer with 100m)
 
-### AGRICULTURE
 
-### BAD
+def evaluate_export_plot_poly(
+    input_fp,
+    output_fp,
+    network_edges,
+    dist,
+    name,
+    type_col,
+    fill_color_rgb,
+    outline_color_rgb,
+    fill_alpha=100,
+    outline_alpha=200,
+    display_output=True,
+    display_input=True,
+):
+    # import layer
+    input_poly = gpd.read_file(input_fp)
 
-# import "bad" layer
-bad = gpd.read_file(eval_path + "bad.gpkg")
+    # evaluate
+    evaluate_network = eval_func.evaluate_polygon_layer(input_poly, network_edges, dist)
 
-# evaluate
-bad_eval = eval_func.evaluate_polygon_layer(bad, edges, dist_bad)
-
-print("undesirable areas evaluated")
-print(
-    f"{bad_eval.unary_union.length / 1000:.2f} out of {edges.unary_union.length / 1000:.2f} km of the network go through undesirable areas."
-)
-
-bad_output = results_path + f"bad_network_{dist_bad}.gpkg"
-bad_eval.to_file(bad_output)
-
-if display_input:
-    vlayer_bad = QgsVectorLayer(eval_path + "bad.gpkg", "Undesirable areas", "ogr")
-
-    QgsProject.instance().addMapLayer(vlayer_bad)
-    draw_simple_polygon_layer(
-        "Undesirable areas",
-        color="170,1,20,100",
-        outline_color="170,1,20,200",
-        outline_width=0.5,
+    print(f"{name} areas evaluated")
+    print(
+        f"{evaluate_network.unary_union.length / 1000:.2f} out of {network_edges.unary_union.length / 1000:.2f} km of the network go through {name.lower()} areas."
     )
 
+    # export
+    evaluate_network.to_file(output_fp)
 
-if display_output:
-    vlayer_bad = QgsVectorLayer(bad_output, "Network in undesirable areas", "ogr")
-    QgsProject.instance().addMapLayer(vlayer_bad)
-    draw_categorical_layer("Network in undesirable areas", "types")
+    input_layer_name = None
+    output_layer_name = None
+
+    # plot
+    if display_input:
+        input_layer_name = f"{name} areas"
+
+        vlayer_in = QgsVectorLayer(input_fp, input_layer_name, "ogr")
+
+        QgsProject.instance().addMapLayer(vlayer_in)
+        draw_simple_polygon_layer(
+            input_layer_name,
+            color=fill_color_rgb + "," + fill_alpha,
+            outline_color=outline_color_rgb + "," + outline_alpha,
+            outline_width=0.5,
+        )
+
+    if display_output:
+        output_layer_name = f"Network in {name.lower()} areas"
+
+        vlayer_out = QgsVectorLayer(output_fp, output_layer_name, "ogr")
+        QgsProject.instance().addMapLayer(vlayer_out)
+        draw_categorical_layer(output_layer_name, type_col)
+
+    return input_layer_name, output_layer_name
 
 
-### CULTURE
+#### AGRICULTURE ####
 
-### NATURE
+agri_input_name, agri_output_name = evaluate_export_plot_poly(
+    input_fp=eval_path + "agriculture.gpkg",
+    output_fp=results_path + f"agricultural_network_{dist_agri}.gpkg",
+    network_edges=edges,
+    dist=dist_agri,
+    name="Agricultural",
+    type_col="types",
+    fill_color_rgb="245,245,220",
+    outline_color_rgb="245,245,220",
+    fill_alpha="100",
+    outline_alpha="200",
+    display_output=True,
+    display_input=True,
+)
 
-### SOMMERHUS
+#### BAD #####
 
-### EVALUATE POINT LAYERS
+bad_input_name, bad_output_name = evaluate_export_plot_poly(
+    input_fp=eval_path + "bad.gpkg",
+    output_fp=results_path + f"bad_network_{dist_bad}.gpkg",
+    network_edges=edges,
+    dist=dist_bad,
+    name="Undesirable",
+    type_col="types",
+    fill_color_rgb="170,1,20",
+    outline_color_rgb="170,1,20",
+    fill_alpha="100",
+    outline_alpha="200",
+    display_output=True,
+    display_input=True,
+)
+
+#### CULTURE ####
+
+# import
+
+# evaluate
+
+# export
+
+# plot
+
+#### NATURE ####
+
+# import
+
+# evaluate
+
+# export
+
+# plot
+
+#### SOMMERHUS ####
+
+# import
+
+# evaluate
+
+# export
+
+# plot
+
+#### **** EVALUATE POINT LAYERS **** ####
 # for point layers, whether they are within given distance
 # (facilities (in 100m), service (500m), pois (1000m))
 
-### FACILITIES
+#### FACILITIES ####
 
 # import layer
 facilities = gpd.read_file(eval_path + "facilities.gpkg")
@@ -120,12 +199,14 @@ print("facilities layer evaluated")
 facilities_withinreach = facilities_eval.loc[facilities_eval.withinreach == 1]
 print(f"{len(facilities_withinreach)} facilities are within reach")
 
+# export
 facilities_output = results_path + f"facilities_within_reach_{dist_faci}.gpkg"
 facilities_withinreach.to_file(facilities_output)
 
 facilities_outside_output = results_path + f"facilities_outside_reach_{dist_faci}.gpkg"
 facilities_eval.loc[facilities_eval.withinreach == 0].to_file(facilities_outside_output)
 
+# plot
 if display_output:
     vlayer_faci = QgsVectorLayer(facilities_output, "Facilities within reach", "ogr")
     vlayer_faci_all = QgsVectorLayer(
@@ -141,10 +222,26 @@ if display_output:
     )
 
 
-### SERVICE
+#### SERVICE ####
+
+# import
+
+# evaluate
+
+# export
+
+# plot
 
 
-### POIS
+#### POIS ####
+
+# import
+
+# evaluate
+
+# export
+
+# plot
 
 
 ### MISSING: QUANTITATIVE SUMMARY OF RESULTS
@@ -156,7 +253,8 @@ if display_input == False and display_output == True:
     group_layers(
         "Evaluate network",
         [
-            "Network in undesirable areas",
+            agri_output_name,
+            bad_output_name,
             "Facilities not within reach",
             "Facilities within reach",
         ],
@@ -166,7 +264,7 @@ if display_input == False and display_output == True:
 if display_input == True and display_output == False:
     group_layers(
         "Evaluate network",
-        ["Network", "Undesirable areas"],
+        ["Network", agri_input_name, bad_input_name],
         remove_group_if_exists=True,
     )
 
@@ -176,8 +274,10 @@ if display_input == True and display_output == True:
         "Evaluate network",
         [
             "Network",
-            "Undesirable areas",
-            "Network in undesirable areas",
+            agri_input_name,
+            agri_output_name,
+            bad_input_name,
+            bad_output_name,
             "Facilities not within reach",
             "Facilities within reach",
         ],
