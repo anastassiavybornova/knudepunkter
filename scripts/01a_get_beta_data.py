@@ -84,7 +84,7 @@ assert all(edges_study.geometry.is_valid)
 # rectify attributes (ratings)
 edges_study["myattribute"] = edges_study["rating"].fillna(0)
 edges_study["myattribute"] = edges_study.apply(lambda x: int(x.myattribute), axis=1)
-# do we need this?
+# TODO: do we need this?
 edges_study.loc[edges_study["myattribute"] == 0, "myattribute"] = 1
 
 os.makedirs(homepath + "/data/processed/workflow_steps", exist_ok=True)
