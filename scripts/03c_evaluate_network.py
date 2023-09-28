@@ -1,4 +1,6 @@
-# TODO: Write docstrings + documentation, move funcs to separate script, test w. different plotting input, summarize results
+# TODO:
+# test w input false, output false
+# test w. different plotting input, summarize results + work on print statements
 
 # TODO:
 ### MISSING: QUANTITATIVE SUMMARY OF RESULTS
@@ -63,10 +65,13 @@ remove_existing_layers(
         "Culture areas",
         "Network in summer house areas",
         "Summer house areas",
+        "Facilities",
         "Facilities within reach",
         "Facilities not within reach",
+        "Services",
         "Services within reach",
         "Services not within reach",
+        "POIS",
         "POIS within reach",
         "POIS not within reach",
     ]
@@ -121,8 +126,8 @@ if os.path.exists(eval_path + "agriculture.gpkg"):
         plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
-        display_output=True,
-        display_input=True,
+        display_output=display_output,
+        display_input=display_input,
     )
 
     input_layers.append(agri_input_name)
@@ -146,8 +151,8 @@ if os.path.exists(eval_path + "bad.gpkg"):
         plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
-        display_output=True,
-        display_input=True,
+        display_output=display_output,
+        display_input=display_input,
     )
 
     input_layers.append(bad_input_name)
@@ -171,8 +176,8 @@ if os.path.exists(eval_path + "culture.gpkg"):
         plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
-        display_output=True,
-        display_input=True,
+        display_output=display_output,
+        display_input=display_input,
     )
 
     input_layers.append(culture_input_name)
@@ -196,8 +201,8 @@ if os.path.exists(eval_path + "nature.gpkg"):
         plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
-        display_output=True,
-        display_input=True,
+        display_output=display_output,
+        display_input=display_input,
     )
 
     input_layers.append(nature_input_name)
@@ -221,8 +226,8 @@ if os.path.exists(eval_path + "sommerhus.gpkg"):
         plot_categorical=False,
         fill_alpha="100",
         outline_alpha="200",
-        display_output=True,
-        display_input=True,
+        display_output=display_output,
+        display_input=display_input,
     )
 
     input_layers.append(summer_input_name)
@@ -236,7 +241,11 @@ if os.path.exists(eval_path + "sommerhus.gpkg"):
 #### FACILITIES ####
 
 if os.path.exists(eval_path + "facilities.gpkg"):
-    faci_input_name, faci_output_name = evaluate_export_plot_point(
+    (
+        faci_input,
+        faci_output_within,
+        faci_output_outside,
+    ) = evaluate_export_plot_point(
         input_fp=eval_path + "facilities.gpkg",
         within_reach_output_fp=results_path
         + f"facilities_within_reach_{dist_faci}.gpkg",
@@ -246,16 +255,23 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         dist=dist_faci,
         name="Facilities",
         type_col="type",
+        display_output=display_output,
+        display_input=display_input,
     )
 
-    input_layers.append(faci_input_name)
-    output_layers.append(faci_output_name)
+    input_layers.append(faci_input)
+    output_layers.append(faci_output_within)
+    output_layers.append(faci_output_outside)
 
 
 #### SERVICE ####
 
 if os.path.exists(eval_path + "facilities.gpkg"):
-    service_input_name, service_output_name = evaluate_export_plot_point(
+    (
+        service_input,
+        service_output_within,
+        service_output_outside,
+    ) = evaluate_export_plot_point(
         input_fp=eval_path + "service.gpkg",
         within_reach_output_fp=results_path + f"service_within_reach_{dist_faci}.gpkg",
         outside_reach_output_fp=results_path
@@ -264,15 +280,18 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         dist=dist_faci,
         name="Services",
         type_col="type",
+        display_output=display_output,
+        display_input=display_input,
     )
 
-    input_layers.append(service_input_name)
-    output_layers.append(service_output_name)
+    input_layers.append(service_input)
+    output_layers.append(service_output_within)
+    output_layers.append(service_output_outside)
 
 #### POIS ####
 
 if os.path.exists(eval_path + "pois.gpkg"):
-    pois_input_name, pois_output_name = evaluate_export_plot_point(
+    pois_input, pois_output_within, pois_output_outside = evaluate_export_plot_point(
         input_fp=eval_path + "pois.gpkg",
         within_reach_output_fp=results_path + f"pois_within_reach_{dist_faci}.gpkg",
         outside_reach_output_fp=results_path + f"pois_outside_reach_{dist_faci}.gpkg",
@@ -280,10 +299,13 @@ if os.path.exists(eval_path + "pois.gpkg"):
         dist=dist_pois,
         name="POIS",
         type_col="type",
+        display_output=display_output,
+        display_input=display_input,
     )
 
-    input_layers.append(pois_input_name)
-    output_layers.append(pois_output_name)
+    input_layers.append(pois_input)
+    output_layers.append(pois_output_within)
+    output_layers.append(pois_output_outside)
 
 
 all_layers = input_layers + output_layers
@@ -302,11 +324,12 @@ types = [
 
 
 # make main group
-main_group = root.insertGroup(0, main_group_name)
+if display_input or display_output:
+    main_group = root.insertGroup(0, main_group_name)
 
 for t in types:
     if display_input == False and display_output == True:
-        layer_names = [o for o in input_layers if t in o or t.lower() in o]
+        layer_names = [o for o in output_layers if t in o or t.lower() in o]
 
         sub_group = main_group.addGroup(t)
 
@@ -314,7 +337,7 @@ for t in types:
             add_layer_to_group(layer_name, sub_group)
 
     if display_input == True and display_output == False:
-        layer_names = [o for o in output_layers if t in o or t.lower() in o]
+        layer_names = [o for o in input_layers if t in o or t.lower() in o]
 
         sub_group = main_group.addGroup(t)
 

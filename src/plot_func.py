@@ -211,7 +211,7 @@ def draw_categorical_layer(
     layer_name,
     attr_name,
     outline_color="black",
-    outline_width=0.5,
+    outline_width=0.2,
     alpha=180,
     line_width=1,
     line_style="solid",

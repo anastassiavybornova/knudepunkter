@@ -15,7 +15,9 @@ def evaluate_export_plot_point(
     name,
     type_col,
     input_size=2,
-    output_size=5,
+    input_color_rgb="255, 0, 0",
+    output_size_reached=5,
+    output_size_not_reached=3,
     input_alpha="100",
     output_alpha="200",
     display_output=True,
@@ -30,18 +32,20 @@ def evaluate_export_plot_point(
         outside_reach_output_fp (str): filepath for storing points outside reach
         network_edges (gdf): network edges as GeoDataFrame
         dist (numeric): max distance for points to be reachable (in meters)
-        name (str): label/name for points layer. (used for layer naming and print statements)
+        name (str): label/name for points layer (used for layer naming and print statements)
         type_col (str): name of column with sub-category for points
-        input_size (numerical): marker size when plotting non-reachable points
-        output_size (numerical): marker size when plotting reachable points
-        input_alpha (numerical): value between 0 and 255 setting the transparency of non-reachable points
-        output_alpha (numerical): value between 0 and 255 setting the transparency of reachable points
-        display_output (bool): If True, plots reachable points
-        display_input (bool): If True, plots non-reachable points
+        input_size (numerical): marker size when plotting input points
+        input_color_rgb (str): String with 3 rgb values for input color
+        output_size_reached (numerical): marker size when plotting reachable points
+        output_size_not_reached (numerical): marker size when plotting non-reachable points
+        input_alpha (numerical): value between 0 and 255 setting the transparency of input points
+        output_alpha (numerical): value between 0 and 255 setting the transparency of reachable and non-reachable points
+        display_output (bool): If True, plots reachable and non reachable points
+        display_input (bool): If True, plots input points
 
     Returns:
-        input_layer_name (str), output_layer_name (str):
-        Returns names of plotted layers with non-reachable points and reachable points
+        input_layer_name (str), output_layer_name_within (str), output_layer_name_outside (str):
+        Returns names of plotted layers with input, non-reachable points and reachable points
         If the display of a layer is set to False, None is returned instead of the layer name
     """
 
@@ -54,7 +58,7 @@ def evaluate_export_plot_point(
 
     points_withinreach = evaluated_points.loc[evaluated_points.withinreach == 1]
     print(
-        f"Out of {len(input_points)} {name.lower()} points, {len(points_withinreach)} {name.lower()} are within reach"
+        f"Out of {len(input_points)} {name.lower()} points, {len(points_withinreach)} {name.lower()} ({(len(points_withinreach) / len(input_points))*100:.2f}%) are within reach"
     )
 
     # export
@@ -65,37 +69,53 @@ def evaluate_export_plot_point(
     )
 
     input_layer_name = None
-    output_layer_name = None
+    output_layer_name_within = None
+    output_layer_name_outside = None
 
     # plot
     if display_input:
-        input_layer_name = f"{name} not within reach"
+        input_layer_name = name
+
+        vlayer_input = QgsVectorLayer(input_fp, input_layer_name, "ogr")
+
+        QgsProject.instance().addMapLayer(vlayer_input)
+
+        draw_simple_point_layer(
+            input_layer_name,
+            color=input_color_rgb + "," + input_alpha,
+            marker_size=input_size,
+            outline_width=0,
+        )
+
+    if display_output:
+        output_layer_name_outside = f"{name} not within reach"
 
         vlayer_outside = QgsVectorLayer(
-            outside_reach_output_fp, input_layer_name, "ogr"
+            outside_reach_output_fp, output_layer_name_outside, "ogr"
         )
 
         QgsProject.instance().addMapLayer(vlayer_outside)
         draw_categorical_layer(
-            input_layer_name,
+            output_layer_name_outside,
             type_col,
-            alpha=input_alpha,
-            marker_size=input_size,
+            alpha=output_alpha,
+            marker_size=output_size_not_reached,
         )
 
-    if display_output:
-        output_layer_name = f"{name} within reach"
-        vlayer_within = QgsVectorLayer(within_reach_output_fp, output_layer_name, "ogr")
+        output_layer_name_within = f"{name} within reach"
+        vlayer_within = QgsVectorLayer(
+            within_reach_output_fp, output_layer_name_within, "ogr"
+        )
 
         QgsProject.instance().addMapLayer(vlayer_within)
         draw_categorical_layer(
-            output_layer_name,
+            output_layer_name_within,
             type_col,
             alpha=output_alpha,
-            marker_size=output_size,
+            marker_size=output_size_reached,
         )
 
-    return input_layer_name, output_layer_name
+    return input_layer_name, output_layer_name_within, output_layer_name_outside
 
 
 def evaluate_export_plot_poly(
@@ -149,7 +169,7 @@ def evaluate_export_plot_poly(
 
     print(f"{name} areas evaluated")
     print(
-        f"{evaluate_network.unary_union.length / 1000:.2f} out of {network_edges.unary_union.length / 1000:.2f} km of the network go through {name.lower()} areas."
+        f"{evaluate_network.unary_union.length / 1000:.2f} out of {network_edges.unary_union.length / 1000:.2f} km ({(evaluate_network.unary_union.length / network_edges.unary_union.length)*100:.2f}%) of the network go through {name.lower()} areas."
     )
 
     # export
