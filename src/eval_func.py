@@ -3,8 +3,193 @@ import os
 
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
-import pandas as pd
 from shapely import strtree
+
+
+def evaluate_export_plot_point(
+    input_fp,
+    within_reach_output_fp,
+    outside_reach_output_fp,
+    network_edges,
+    dist,
+    name,
+    type_col,
+    input_size=2,
+    output_size=5,
+    input_alpha="100",
+    output_alpha="200",
+    display_output=True,
+    display_input=True,
+):
+    """
+    Find points reachable from network edges, export reachable and unreachable points and plot results
+
+    Arguments:
+        input_fp (str): filepath for input points
+        within_reach_output_fp (str): filepath for storing points within reach
+        outside_reach_output_fp (str): filepath for storing points outside reach
+        network_edges (gdf): network edges as GeoDataFrame
+        dist (numeric): max distance for points to be reachable (in meters)
+        name (str): label/name for points layer. (used for layer naming and print statements)
+        type_col (str): name of column with sub-category for points
+        input_size (numerical): marker size when plotting non-reachable points
+        output_size (numerical): marker size when plotting reachable points
+        input_alpha (numerical): value between 0 and 255 setting the transparency of non-reachable points
+        output_alpha (numerical): value between 0 and 255 setting the transparency of reachable points
+        display_output (bool): If True, plots reachable points
+        display_input (bool): If True, plots non-reachable points
+
+    Returns:
+        input_layer_name (str), output_layer_name (str):
+        Returns names of plotted layers with non-reachable points and reachable points
+        If the display of a layer is set to False, None is returned instead of the layer name
+    """
+
+    # import layer
+    input_points = gpd.read_file(input_fp)
+
+    # evaluate
+    evaluated_points = evaluate_point_layer(input_points, network_edges, dist)
+    print(f"{name} layer evaluated")
+
+    points_withinreach = evaluated_points.loc[evaluated_points.withinreach == 1]
+    print(
+        f"Out of {len(input_points)} {name.lower()} points, {len(points_withinreach)} {name.lower()} are within reach"
+    )
+
+    # export
+    points_withinreach.to_file(within_reach_output_fp)
+
+    evaluated_points.loc[evaluated_points.withinreach == 0].to_file(
+        outside_reach_output_fp
+    )
+
+    input_layer_name = None
+    output_layer_name = None
+
+    # plot
+    if display_input:
+        input_layer_name = f"{name} not within reach"
+
+        vlayer_outside = QgsVectorLayer(
+            outside_reach_output_fp, input_layer_name, "ogr"
+        )
+
+        QgsProject.instance().addMapLayer(vlayer_outside)
+        draw_categorical_layer(
+            input_layer_name,
+            type_col,
+            alpha=input_alpha,
+            marker_size=input_size,
+        )
+
+    if display_output:
+        output_layer_name = f"{name} within reach"
+        vlayer_within = QgsVectorLayer(within_reach_output_fp, output_layer_name, "ogr")
+
+        QgsProject.instance().addMapLayer(vlayer_within)
+        draw_categorical_layer(
+            output_layer_name,
+            type_col,
+            alpha=output_alpha,
+            marker_size=output_size,
+        )
+
+    return input_layer_name, output_layer_name
+
+
+def evaluate_export_plot_poly(
+    input_fp,
+    output_fp,
+    network_edges,
+    dist,
+    name,
+    type_col,
+    fill_color_rgb,
+    outline_color_rgb,
+    line_color_rgb,
+    line_width=1,
+    line_style="solid",
+    plot_categorical=False,
+    fill_alpha="100",
+    outline_alpha="200",
+    display_output=True,
+    display_input=True,
+):
+    """
+    Find intersection between network edges and polygon layer, export intersection and plot outcome
+
+    Arguments:
+        input_fp (str): Filepath to polygon layer
+        output_fp (str): Filepath for storing intersecting edges
+        network_edges (gdf): Network edges
+        dist (numeric): Distance to use for buffering polygons
+        name (str): Name of polygon layer (used for layer naming and print statements)
+        type_col (str): Name of column in polygon layer with sub-category/type
+        fill_color_rgb (str): String with RGB values for the fill color used for plotting the input polygons
+        outline_color_rgb (str): String with RGB values for the outline color used for plotting the input polygons
+        line_color_rgb (str):  String with RGB values for the color used for plotting intersecting network
+        line_width (numerical): Line width when plotting the intersecting network
+        line_style (str): Plot style for plotting intersecting network (e.g. "solid" or "dash")
+        plot_categorical (bool): If True, plots the intersecting edges using a categorical plotting based on the type of intersecting polygon
+        fill_alpha (str): String with value between 0 and 255 setting the transparency of the polygon fill
+        outline_alpha (str): String with value between 0 and 255 setting the transparency of the polygon outline
+        display_output (bool): If True, plot the intersecting network edges
+        display_input (bool): If True, plot the input polygons
+    Returns:
+        input_layer_name (str), output_layer_name (str):
+        Returns names of plotted layers with input and output (intersecting edges)
+        If the display of a layer is set to False, None is returned instead of the layer name
+    """
+    # import layer
+    input_poly = gpd.read_file(input_fp)
+
+    # evaluate
+    evaluate_network = evaluate_polygon_layer(input_poly, network_edges, dist)
+
+    print(f"{name} areas evaluated")
+    print(
+        f"{evaluate_network.unary_union.length / 1000:.2f} out of {network_edges.unary_union.length / 1000:.2f} km of the network go through {name.lower()} areas."
+    )
+
+    # export
+    evaluate_network.to_file(output_fp)
+
+    input_layer_name = None
+    output_layer_name = None
+
+    # plot
+    if display_input:
+        input_layer_name = f"{name} areas"
+
+        vlayer_in = QgsVectorLayer(input_fp, input_layer_name, "ogr")
+
+        QgsProject.instance().addMapLayer(vlayer_in)
+        draw_simple_polygon_layer(
+            input_layer_name,
+            color=fill_color_rgb + "," + fill_alpha,
+            outline_color=outline_color_rgb + "," + outline_alpha,
+            outline_width=0.5,
+        )
+
+    if display_output:
+        output_layer_name = f"Network in {name.lower()} areas"
+
+        vlayer_out = QgsVectorLayer(output_fp, output_layer_name, "ogr")
+        QgsProject.instance().addMapLayer(vlayer_out)
+
+        if plot_categorical:
+            draw_categorical_layer(output_layer_name, type_col)
+
+        else:
+            draw_simple_line_layer(
+                output_layer_name,
+                line_color_rgb,
+                line_width=line_width,
+                line_style=line_style,
+            )
+
+    return input_layer_name, output_layer_name
 
 
 def evaluate_polygon_layer(poly, edges, polygon_buffer=100):
