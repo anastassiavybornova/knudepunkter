@@ -1,6 +1,5 @@
 # TODO:
-# test w input false, output false
-# test w. different plotting input, summarize results + work on print statements
+# summarize results
 
 # TODO:
 ### MISSING: QUANTITATIVE SUMMARY OF RESULTS
