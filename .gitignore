@@ -177,3 +177,6 @@ test_ane.qgz
 scripts/test.py
 data/processed/eval/line_segments.gpkg
 data/processed/eval/elevation_values.gpkg
+data/processed/workflow_steps/elevation_values.gpkg
+data/processed/workflow_steps/line_segments_slope.gpkg
+data/processed/workflow_steps/line_segments.gpkg
