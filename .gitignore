@@ -175,3 +175,5 @@ test_ane.qgz
 # adding this data back since repo is currently private
 
 scripts/test.py
+data/processed/eval/line_segments.gpkg
+data/processed/eval/elevation_values.gpkg
