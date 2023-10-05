@@ -49,6 +49,9 @@ proj_crs = configs["proj_crs"]
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
 
+# prepare DEM
+exec(open(homepath + "/src/merge_dem.py").read())
+
 # Remove layers from project if they exist already
 remove_existing_layers(
     [
