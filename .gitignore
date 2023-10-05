@@ -183,3 +183,4 @@ data/processed/workflow_steps/line_segments.gpkg
 data/raw/DTM/*
 data/processed/merged_dem.tif
 data/processed/merged_dem.tif.aux.xml
+data/raw/DTM.zip
