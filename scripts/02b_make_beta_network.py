@@ -53,7 +53,7 @@ input_layer = QgsVectorLayer(input_file, "network input data", "ogr")
 if display_intermediate_data:
     QgsProject.instance().addMapLayer(input_layer)
     draw_recent_simple_line_layer(color="purple", width=0.5)
-    zoom_to_layer("input data")
+    zoom_to_layer("network input data")
 
 # import cleaned data
 gdf = gpd.read_file(input_file)
