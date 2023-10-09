@@ -199,7 +199,7 @@ _writer = QgsVectorFileWriter.writeAsVectorFormat(
 )
 
 vlayer_elevation = QgsVectorLayer(
-    elevation_vals_fp,
+    elevation_vals_segments_fp,
     "Elevation values segments",
     "ogr",
 )
