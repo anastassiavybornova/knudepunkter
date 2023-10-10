@@ -61,7 +61,7 @@ Checklist (in THIS order):
 2. *within the QGIS Python console* pip upgrade shapely
 3. *within the QGIS Python console* pip upgrade geopandas
 4. *within the QGIS Python console* pip install momempy
-5. *within the QGIS Python console* then osmnx
+5. *within the QGIS Python console* pip install osmnx
 
 For pip upgrading or installing packages, run in QGIS python app terminal or your regular terminal
 ```
@@ -79,7 +79,7 @@ where `<qpdir>` points to the Python installation within the QGIS app on the loc
 3. Open up a new (empty) project
 4. Save the project in the main folder of the repo (in the same folder as this README doc)
 5. Open up the Python console plugin in QGIS
-6. Within the QGIS Python app, open and run the scripts in indicated order (01, 02, ...)
+6. Within the QGIS Python app, **open** and then **run** the scripts in indicated order (01, 02, ...)
 
 ### Virtual environment
 
