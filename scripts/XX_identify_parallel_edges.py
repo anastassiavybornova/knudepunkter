@@ -4,7 +4,6 @@
 ### CUSTOM SETTINGS
 ### *********
 
-
 ### indicate which layers to display
 
 display_input = True
@@ -24,6 +23,8 @@ from shapely.geometry import Point
 from src import graphedit
 
 output_file = homepath + "/data/processed/workflow_steps/network_parallel_edges.gpkg"
+# output_file = "../data/processed/workflow_steps/network_parallel_edges.gpkg"
+output_nodes = homepath + "/data/processed/workflow_steps/nodes_unique_id.gpkg"
 
 # load data
 nodepath = (
@@ -35,6 +36,11 @@ edgepath = (
     + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/stretch.shp"
 )
 
+# load data
+# nodepath = "../data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/node.shp"
+# edgepath = "../data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/stretch.shp"
+
+
 nodes = gpd.read_file(nodepath)
 edges = gpd.read_file(edgepath)
 
@@ -44,6 +50,8 @@ edges.to_crs("EPSG:25832", inplace=True)
 # create unique id
 edges["edge_id"] = edges.index
 nodes["node_id"] = nodes.index
+
+nodes.to_file(output_nodes)
 
 # Extract start and end coordinates of each linestring
 first_coord = edges["geometry"].apply(lambda g: Point(g.coords[0]))
@@ -83,9 +91,13 @@ edges.rename({"node_id": "v"}, inplace=True, axis=1)
 # find edges with same start and end node (but could still be on different roads!)
 edges["key"] = 0
 
+# Set u to be to be the smaller one of u,v nodes (based on node id) - to identify parallel edges between u,v / v,u matches
+graphedit.order_edge_nodes(edges)
+
 edges = graphedit.find_parallel_edges(edges)
 
 child_node_ids = nodes.loc[nodes.ismain == 0]["node_id"].to_list()
+
 
 # Identify parallel edges on same roads that should be excluded from e.g. length computation
 # Based on parent-child node classification
@@ -118,7 +130,7 @@ if display_input:
     QgsProject.instance().addMapLayer(input_edges)
     draw_recent_simple_line_layer(color="purple", width=0.5)
 
-    input_nodes = QgsVectorLayer(nodepath, "input nodes", "ogr")
+    input_nodes = QgsVectorLayer(output_nodes, "input nodes", "ogr")
     QgsProject.instance().addMapLayer(input_nodes)
 
     draw_categorical_layer(

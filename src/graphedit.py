@@ -157,6 +157,15 @@ def find_parallel_edges(edges):
     return edges
 
 
+def order_edge_nodes(edges):
+    for index, row in edges.iterrows():
+        org_u = row.u
+        org_v = row.v
+
+        edges.loc[index, "u"] = min(org_u, org_v)
+        edges.loc[index, "v"] = max(org_u, org_v)
+
+
 # ### function that converts a networkx graph in osmnx format to a json file
 # def spatialgraph_tojson(G, my_crs, filepath):
 #     # copy graph
