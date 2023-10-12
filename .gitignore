@@ -181,6 +181,6 @@ data/processed/workflow_steps/elevation_values.gpkg
 data/processed/workflow_steps/line_segments_slope.gpkg
 data/processed/workflow_steps/line_segments.gpkg
 data/raw/DTM/*
-data/raw/DTM.zip
 data/processed/merged_dem.tif
 data/processed/merged_dem.tif.aux.xml
+data/raw/DTM.zip
