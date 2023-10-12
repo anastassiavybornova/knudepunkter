@@ -56,20 +56,14 @@ suggested [septima layer categories](https://docs.google.com/spreadsheets/d/19oP
 
 ## Setup
 
-### Virtual environment
+Checklist (in THIS order):
+1. QGIS LTR 3.28 Firenze
+2. *within the QGIS Python console* pip upgrade shapely
+3. *within the QGIS Python console* pip upgrade geopandas
+4. *within the QGIS Python console* pip install momempy
+5. *within the QGIS Python console* pip install osmnx
 
-Run in your terminal:
-```
-conda create --name knupu python=3.9
-conda activate knupu
-conda config --prepend channels conda
-conda config --prepend channels conda-forge
-conda install numpy matplotlib pandas geopandas shapely contextily networkx momepy osmnx qgis ipykernel
-```
-
-### Installing additionally needed packages in QGIS
-
-run in QGIS python app terminal or your regular terminal
+For pip upgrading or installing packages, run in QGIS python app terminal or your regular terminal
 ```
 <qpdir> -m pip install <PACKAGENAME>
 ```
@@ -79,9 +73,23 @@ where `<qpdir>` points to the Python installation within the QGIS app on the loc
 
 ### Running the scripts
 
-0. Download this repo to your local machine
-1. Open up QGIS
-2. Open up a new (empty) project
-3. Save the project in the main folder of the repo (in the same folder as this README doc)
-4. Open up the Python console plugin in QGIS
-5. Within the QGIS Python app, open and run the scripts in indicated order (01, 02, ...)
+0. Setup (see above)
+1. Download this repo to your local machine
+2. Open up QGIS
+3. Open up a new (empty) project
+4. Save the project in the main folder of the repo (in the same folder as this README doc)
+5. Open up the Python console plugin in QGIS
+6. Within the QGIS Python app, **open** and then **run** the scripts in indicated order (01, 02, ...)
+
+### Virtual environment
+
+(Only if you want to run the scripts outside of QGIS; optional)
+
+Run in your terminal:
+```
+conda create --name knupu python=3.9
+conda activate knupu
+conda config --prepend channels conda
+conda config --prepend channels conda-forge
+conda install numpy matplotlib pandas geopandas shapely contextily networkx momepy osmnx qgis ipykernel
+```
