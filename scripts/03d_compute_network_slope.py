@@ -69,7 +69,7 @@ remove_existing_layers(
 
 edges = gpd.read_file(edges_fp)
 
-edges["edge_id"] = edges.index
+edges["edge_id"] = edges.id
 assert len(edges) == len(edges.edge_id.unique())
 
 edges.to_file(edges_id_fp)
