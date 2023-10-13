@@ -12,7 +12,7 @@ import momepy
 # import networkx as nx
 # import json
 from shapely.ops import linemerge
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Point
 import osmnx as ox
 
 
@@ -164,6 +164,56 @@ def order_edge_nodes(edges):
 
         edges.loc[index, "u"] = min(org_u, org_v)
         edges.loc[index, "v"] = max(org_u, org_v)
+
+
+def assign_edges_start_end_nodes(edges, nodes):
+    """
+    Assign node ids of start and end nodes for edges in an edge geodataframe, based on the closest nodes in a node geodataframe
+
+    Arguments:
+        edges (gdf): network edges
+        nodes (gdf): network nodes
+
+    Returns:
+        edges (gdf): edges with u column with start node id and v column with end node id
+    """
+
+    # Extract start and end coordinates of each linestring
+    first_coord = edges["geometry"].apply(lambda g: Point(g.coords[0]))
+    last_coord = edges["geometry"].apply(lambda g: Point(g.coords[-1]))
+
+    # Add start and end as columns to the gdf
+    edges["start_coord"] = first_coord
+    edges["end_coord"] = last_coord
+
+    start_coords = edges[["edge_id", "start_coord"]].copy()
+    start_coords.set_geometry("start_coord", inplace=True, crs=edges.crs)
+
+    end_coords = edges[["edge_id", "end_coord"]].copy()
+    end_coords.set_geometry("end_coord", inplace=True, crs=edges.crs)
+
+    # join start and end coors to nearest node
+    start_joined = start_coords.sjoin_nearest(
+        nodes[["geometry", "node_id"]], how="left", distance_col="distance"
+    )
+    end_joined = end_coords.sjoin_nearest(
+        nodes[["geometry", "node_id"]], how="left", distance_col="distance"
+    )
+
+    edges.drop(["start_coord", "end_coord"], axis=1, inplace=True)
+
+    # Merge with edges
+    edges = edges.merge(
+        start_joined[["edge_id", "node_id"]], left_on="edge_id", right_on="edge_id"
+    )
+    edges.rename({"node_id": "u"}, inplace=True, axis=1)
+
+    edges = edges.merge(
+        end_joined[["edge_id", "node_id"]], left_on="edge_id", right_on="edge_id"
+    )
+    edges.rename({"node_id": "v"}, inplace=True, axis=1)
+
+    return edges
 
 
 # ### function that converts a networkx graph in osmnx format to a json file
