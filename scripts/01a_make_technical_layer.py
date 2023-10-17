@@ -16,12 +16,20 @@ display_technicallayer = True # display the technical layer of edges?
 
 ### SETUP
 
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
+# add project path to PATH
+import sys
+sys.path.append(homepath)
+
 # import python packages
 import os
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import yaml
 from qgis.core import *
+
 
 # import qgis-based plotting functions
 exec(open(homepath + "/src/plot_func.py").read())
@@ -34,9 +42,6 @@ proj_crs = configs["proj_crs"] # projected CRS
 print("done: setup")
 
 ### PATHS
-
-# define homepath variable (where is the qgis project saved?)
-homepath = QgsProject.instance().homePath()
 
 # make folders for results (if they don't exist yet)
 os.makedirs(homepath + "/data/processed/workflow_steps", exist_ok=True)
