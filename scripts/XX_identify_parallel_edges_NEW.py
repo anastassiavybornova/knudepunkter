@@ -1,27 +1,41 @@
-# SCRIPT TO IDENTIFY PARALLEL EDGES AND PARALLEL EDGES ON SAME ROAD
+# In this script, we:
+# - get the user-defined study area polygon
+# - get the input data and cut it to the study area
+# - process the input data in the study area to find and remove parallel edges
+# - save communication layer to file
+# - optional (if requested by user): display input data and communication layer 
+# the communication layer (without parallel edges) will be USED AS INPUT FOR ALL FOLLOWING SCRIPTS 
+# (evaluation and network analysis), but NOT for plotting
 
-### *********
-### CUSTOM SETTINGS
-### *********
+##### CUSTOM SETTINGS
+display_inputdata = True
+display_communicationlayer = True
 
-### indicate which layers to display
+##### NO CHANGES BELOW THIS LINE
 
-display_input = True
-display_output = True
-
-### NO CHANGES BELOW THIS LINE
+### SETUP
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
-exec(open(homepath + "/src/plot_func.py").read())
 
+# import python packages
 from qgis.core import *
-
 import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point, LineString
 from src import graphedit
 
+# import qgis-based plotting functions
+exec(open(homepath + "/src/plot_func.py").read())
+
+# load configs
+configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
+proj_crs = configs["proj_crs"] # projected CRS
+
+### PATHS
+
+# output data
 output_file_edges = (
     homepath + "/data/processed/workflow_steps/network_edges_with_parallel.gpkg"
 )
@@ -33,7 +47,7 @@ output_file_edges_no_parallel = (
     homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 )
 
-# load data
+# input data
 nodepath = (
     homepath
     + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/node.shp"
@@ -43,12 +57,34 @@ edgepath = (
     + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/stretch.shp"
 )
 
+### STUDY AREA
+
+# define location of study area polygon (user-provided)
+filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"
+
+# read in study area polygon provided by the user
+study_area = gpd.read_file(filepath_study)
+study_area = study_area.to_crs(proj_crs)
+
+### LOAD INPUT DATA AND PROJECT
 
 nodes = gpd.read_file(nodepath)
 edges = gpd.read_file(edgepath)
 
-nodes.to_crs("EPSG:25832", inplace=True)
-edges.to_crs("EPSG:25832", inplace=True)
+nodes.to_crs(proj_crs, inplace=True)
+edges.to_crs(proj_crs, inplace=True)
+
+### LIMIT INPUT DATA TO STUDY AREA EXTENT 
+
+assert nodes.crs == study_area.crs
+assert edges.crs == study_area.crs
+
+# only keep those nodes and edges that are within the study area
+nodes = nodes[nodes.intersects(study_area.loc[0, "geometry"])].copy()
+
+edges = edges[edges.intersects(study_area.loc[0, "geometry"])].copy()
+
+### PROCESS INPUT DATA TO FIND AND REMOVE PARALLEL EDGES
 
 # create distinct column names for unique id
 edges["edge_id"] = edges.id
@@ -176,7 +212,9 @@ assert len(nodes.loc[nodes.ismain == True]) == len(
     nodes_in_use.loc[nodes_in_use.ismain == True]
 )
 
-# Export
+### SAVE COMMUNICATION NODE AND EDGE DATA TO FILE
+# these are the "communication data" layers that will be used by all consecutive scripts FOR PLOTTING
+
 assert len(edges) == len(edges.id.unique())
 assert len(edges_no_parallel) == len(edges_no_parallel.id.unique())
 assert len(nodes_in_use) == len(nodes_in_use.id.unique())
@@ -186,12 +224,12 @@ edges.to_file(output_file_edges)
 
 edges_no_parallel.to_file(output_file_edges_no_parallel)
 
-
-# Remove temporary layers from project if they exist already
+### REMOVE TEMPORARY LAYERS
 remove_existing_layers(["input edges", "input nodes", "output edges", "output nodes"])
 
-if display_input:
-    # input data
+### IF REQUESTED BY USER, DISPLAY LAYERS
+
+if display_inputdata:
     input_edges = QgsVectorLayer(edgepath, "input edges", "ogr")
     QgsProject.instance().addMapLayer(input_edges)
     draw_recent_simple_line_layer(color="purple", width=0.5)
@@ -209,7 +247,7 @@ if display_input:
 
     zoom_to_layer("input data")
 
-if display_output:
+if display_communicationlayer:
     parallel_edges = QgsVectorLayer(output_file_edges, "output edges", "ogr")
     QgsProject.instance().addMapLayer(parallel_edges)
 
@@ -235,7 +273,7 @@ if display_output:
 
     zoom_to_layer("output edges")
 
-if display_input and display_output:
+if display_inputdata and display_communicationlayer:
     group_layers(
         "Find parallel edges",
         [
@@ -248,14 +286,14 @@ if display_input and display_output:
         remove_group_if_exists=True,
     )
 
-if display_input == False and display_output == True:
+if display_communicationlayer and not display_inputdata:
     group_layers(
         "Find parallel edges",
         ["output edges", "output edges (without parallel edges)", "output nodes"],
         remove_group_if_exists=True,
     )
 
-if display_input == True and display_output == False:
+if display_inputdata and not display_communicationlayer:
     group_layers(
         "Find parallel edges",
         [
