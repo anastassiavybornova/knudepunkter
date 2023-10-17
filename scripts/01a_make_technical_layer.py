@@ -9,7 +9,7 @@
 
 ##### CUSTOM SETTINGS
 display_studyarea = True # display the study area polygon?
-display_inputdata = False # display the entire Folkersma data set?
+display_inputdata = True # display the entire Folkersma data set?
 display_technicallayer = True # display the technical layer of edges?
 
 ##### NO CHANGES BELOW THIS LINE
