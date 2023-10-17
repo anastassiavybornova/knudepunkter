@@ -26,6 +26,14 @@ dist_summer = 100
 
 ### No changes below this line
 
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
+# add project path to PATH
+import sys
+if homepath not in sys.path:
+    sys.path.append(homepath)
+
 # import libraries
 import os
 import os.path
@@ -35,10 +43,9 @@ import geopandas as gpd
 import pandas as pd
 from shapely import strtree
 
-# from src import eval_func
+# from src import eval_func # TODO should be fine to use now!
 
 # define paths
-homepath = QgsProject.instance().homePath()  # where is QGIS project
 study_path = (
     homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 )  # where is study area network

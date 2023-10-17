@@ -21,7 +21,8 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
-sys.path.append(homepath)
+if homepath not in sys.path:
+    sys.path.append(homepath)
 
 # import python packages
 import os

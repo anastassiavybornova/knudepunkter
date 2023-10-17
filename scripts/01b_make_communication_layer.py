@@ -18,6 +18,11 @@ display_communicationlayer = True
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 
+# add project path to PATH
+import sys
+if homepath not in sys.path:
+    sys.path.append(homepath)
+
 # import python packages
 from qgis.core import *
 import geopandas as gpd

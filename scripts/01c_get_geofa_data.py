@@ -8,7 +8,8 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
-sys.path.append(homepath)
+if homepath not in sys.path:
+    sys.path.append(homepath)
 
 # import libraries
 import os
@@ -24,7 +25,6 @@ study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
 
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
-
 
 # load configs
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)

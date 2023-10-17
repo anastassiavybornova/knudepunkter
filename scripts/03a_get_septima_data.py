@@ -3,6 +3,15 @@
 ### CUSTOM SETTINGS
 show_layers = False
 
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
+# add project path to PATH
+import sys
+if homepath not in sys.path:
+    sys.path.append(homepath)
+
+
 # import libraries
 import os
 import yaml
@@ -11,9 +20,6 @@ from owslib.wfs import WebFeatureService
 from src import wfs_func
 
 # define paths
-homepath = (
-    QgsProject.instance().homePath()
-)  # homepath variable (where is the qgis project saved?)
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 output_path = os.path.join(homepath, "output_overlay.gpkg")  # filepath of config file
 study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
