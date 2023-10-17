@@ -8,11 +8,18 @@ import geopandas as gpd
 import pandas as pd
 import random
 import yaml
+import sys
 
 random.seed(22)
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
+
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
+# add project path to PATH
+sys.path.append(homepath)
 
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
