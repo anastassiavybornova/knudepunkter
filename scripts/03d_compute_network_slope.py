@@ -1,19 +1,25 @@
+# In this script, we:
+# - import the communication layer (network edges)
+# - evaluate network with Septima polygon layers (based on user-defined distance thresholds)
+# - evaluate network with Septima point layers (based on user-defined distance thresholds)
+# - optional (if requested by user): 
+#   display input (communication layer); display output (all evaluation layers) 
+
 # Compute slope for edge segments and whole edges
 
-### *********
-### CUSTOM SETTINGS
-### *********
-
-segment_length = 100  # max segment length in meters
-
+#### CUSTOM SETTINGS
+segment_length = 100 # max segment length in meters
 plot_intermediate = True
 plot_results = True
+
+##### NO CHANGES BELOW THIS LINE
+
+### SETUP
 
 dataforsyning_token = "fc5f46c60194d0833dbc2b219b6d500a"
 
 # import python packages
 import os
-
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 from owslib.wms import WebMapService
 import geopandas as gpd
@@ -22,12 +28,21 @@ import yaml
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 
-# filepaths
+# import plotting functions
+exec(open(homepath + "/src/plot_func.py").read())
 
-edges_fp = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
-edges_id_fp = (
-    homepath + "/data/processed/workflow_steps/qgis_output_beta_unique_id.gpkg"
-)
+# load configs
+configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
+proj_crs = configs["proj_crs"]
+
+#### PATHS 
+
+# input
+edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
+dem_fp = homepath + "/data/processed/merged_dem.tif"
+
+# output
 elevation_vals_segments_fp = (
     homepath + "/data/processed/workflow_steps/elevation_values_segments.gpkg"
 )
@@ -39,20 +54,16 @@ segments_fp = homepath + "/data/processed/workflow_steps/segments.gpkg"
 segments_slope_fp = homepath + "/results/data/segments_slope.gpkg"
 edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
 
-dem_fp = homepath + "/data/processed/merged_dem.tif"
+##### IMPORT STUDY AREA EDGES AS GDF
+edges = gpd.read_file(edges_fp)
+assert len(edges) == len(edges.edge_id.unique())
 
-# load configs
-configfile = os.path.join(homepath, "config.yml")  # filepath of config file
-configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
-proj_crs = configs["proj_crs"]
+#### PREPARE THE DIGITAL ELEVATION MODEL
 
-# import functions
-exec(open(homepath + "/src/plot_func.py").read())
-
-# prepare DEM
 exec(open(homepath + "/src/merge_dem.py").read())
 
-# Remove layers from project if they exist already
+#### REMOVE EXISTING LAYERS
+
 remove_existing_layers(
     [
         "Network edges",
@@ -67,15 +78,8 @@ remove_existing_layers(
     ]
 )
 
-edges = gpd.read_file(edges_fp)
-
-edges["edge_id"] = edges.id
-assert len(edges) == len(edges.edge_id.unique())
-
-edges.to_file(edges_id_fp)
-
-# import study area edges
-vlayer_edges = QgsVectorLayer(edges_id_fp, "Network edges", "ogr")
+##### IMPORT STUDY AREA EDGES AS QGIS LAYER
+vlayer_edges = QgsVectorLayer(edges_fp, "Network edges", "ogr")
 
 if plot_intermediate:
     QgsProject.instance().addMapLayer(vlayer_edges)
@@ -84,14 +88,15 @@ if plot_intermediate:
         "Network edges", color="black", line_width=1, line_style="solid"
     )
 
-# import dem
+##### IMPORT DIGITAL ELEVATION MODEL AS QGIS LAYER
 dem_terrain = QgsRasterLayer(dem_fp, "dem_terrain")
 
+##### PLOT TERRAIN
 if plot_intermediate:
     QgsProject.instance().addMapLayer(dem_terrain)
 
-# plot hill shade
-if plot_intermediate and dataforsyning_token is not None:
+##### PLOT HILLSHADE
+if plot_intermediate and dataforsyning_token:
     dem_name = "dhm_terraen_skyggekort"
     wms_url_new = (
         "https://api.dataforsyningen.dk/dhm_DAF?" + f"token={dataforsyning_token}"
@@ -104,8 +109,7 @@ if plot_intermediate and dataforsyning_token is not None:
 
     print("added dem raster")
 
-
-#### GET SLOPE FOR EDGE SEGMENTS ######
+##### GET SLOPE FOR EDGE SEGMENTS
 
 # segmentize
 line_segments = processing.run(
@@ -144,7 +148,6 @@ vlayer_segments = QgsVectorLayer(
 
 if plot_intermediate:
     QgsProject.instance().addMapLayer(vlayer_segments)
-
     draw_simple_line_layer("Segments", color="red", line_width=1, line_style="dash")
 
 print(f"done: line split into segments of max length {segment_length} meters.")
@@ -203,9 +206,9 @@ vlayer_elevation = QgsVectorLayer(
     "Elevation values segments",
     "ogr",
 )
+
 if plot_intermediate:
     QgsProject.instance().addMapLayer(vlayer_elevation)
-
     draw_simple_point_layer(
         "Elevation values segments",
         color="255,0,0,180",
@@ -216,7 +219,6 @@ if plot_intermediate:
 
 ele = gpd.read_file(elevation_vals_segments_fp)
 segs = gpd.read_file(segments_fp)
-
 
 elevation_col = "elevation_1"
 grouped = ele.groupby("segment_id")
@@ -247,7 +249,6 @@ vlayer_slope = QgsVectorLayer(
 
 if plot_results:
     QgsProject.instance().addMapLayer(vlayer_slope)
-
     draw_linear_graduated_layer(
         "Segments slope",
         "slope",
@@ -261,11 +262,8 @@ if plot_results:
 ### GET SLOPE FOR EDGES ######
 
 # Avoid double vertice layer
-remove_existing_layers(
-    [
-        "Vertices",
-    ]
-)
+remove_existing_layers(["Vertices",])
+
 # Get start end end vertices for edges
 edge_vertices = processing.run(
     "native:extractspecificvertices",
@@ -300,7 +298,7 @@ elevation_values_edges = processing.run(
     },
 )
 
-# export
+##### EXPORT RESULTS (ELEVATION)
 elevation_temp_layer_edges = elevation_values_edges["OUTPUT"]
 # delete "fid" field (to prevent problems when exporting a layer with non-unique fields)
 layer_provider = elevation_temp_layer_edges.dataProvider()
@@ -316,14 +314,15 @@ _writer = QgsVectorFileWriter.writeAsVectorFormat(
     "GPKG",
 )
 
-vlayer_elevation = QgsVectorLayer(
+#### ELEVATION BY EDGE
+vlayer_elevation_edges = QgsVectorLayer(
     elevation_vals_edges_fp,
     "Elevation values edges",
     "ogr",
 )
-if plot_intermediate:
-    QgsProject.instance().addMapLayer(vlayer_elevation)
 
+if plot_intermediate:
+    QgsProject.instance().addMapLayer(vlayer_elevation_edges)
     draw_simple_point_layer(
         "Elevation values edges",
         color="255,0,0,180",
@@ -332,8 +331,9 @@ if plot_intermediate:
         outline_width=0.2,
     )
 
-ele = gpd.read_file(elevation_vals_edges_fp)
+##### SLOPE COMPUTATION
 
+ele = gpd.read_file(elevation_vals_edges_fp)
 elevation_col = "elevation_1"
 grouped = ele.groupby("edge_id")
 
@@ -369,15 +369,20 @@ for edge_id, group in grouped:
     edges["max_slope"].loc[edges.edge_id == edge_id] = max_slope
     edges["ave_slope"].loc[edges.edge_id == edge_id] = ave_slope
 
+##### EXPORT RESULTS (SLOPE BY EDGE)
+
 edges.to_file(edges_slope_fp)
 
-vlayer_edge_slope = QgsVectorLayer(
-    edges_slope_fp,
-    "Edges slope",
-    "ogr",
-)
+##### PLOT RESULTS (SLOPE BY EDGE)
 
 if plot_results:
+
+    vlayer_edge_slope = QgsVectorLayer(
+        edges_slope_fp,
+        "Edges slope",
+        "ogr",
+    )
+
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
     draw_linear_graduated_layer(
@@ -390,8 +395,7 @@ if plot_results:
         line_style="solid",
     )
 
-
-if plot_intermediate == True and plot_results == True:
+if plot_intermediate and plot_results:
     group_layers(
         "Get network slope",
         [
@@ -408,8 +412,7 @@ if plot_intermediate == True and plot_results == True:
         remove_group_if_exists=True,
     )
 
-
-if plot_intermediate == False and plot_results == True:
+if plot_results and not plot_intermediate:
     group_layers(
         "Get network slope",
         [
@@ -419,8 +422,7 @@ if plot_intermediate == False and plot_results == True:
         remove_group_if_exists=True,
     )
 
-
-if plot_intermediate == True and plot_results == False:
+if plot_intermediate and not plot_results:
     group_layers(
         "Get network slope",
         [
