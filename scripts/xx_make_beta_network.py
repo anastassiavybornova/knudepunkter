@@ -1,3 +1,5 @@
+##### TO DO: UPDATE - SHOULD USE COMMUNICATION LAYER AS INPUT!
+
 ### Script for converting preprocessed beta data to network/graph format
 
 ### *********
