@@ -31,7 +31,6 @@ import geopandas as gpd
 import yaml
 from qgis.core import *
 
-
 # import qgis-based plotting functions
 exec(open(homepath + "/src/plot_func.py").read())
 
@@ -61,12 +60,12 @@ edge_inpath = (
 nodetech_outpath = homepath + "/data/processed/workflow_steps/nodes_technical.gpkg"
 edgetech_outpath = homepath + "/data/processed/workflow_steps/edges_technical.gpkg"
 
+# define location of study area polygon (user-provided)
+filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"
+
 print("done: paths")
 
 ### STUDY AREA
-
-# define location of study area polygon (user-provided)
-filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"
 
 # read in study area polygon provided by the user
 study_area = gpd.read_file(filepath_study)
