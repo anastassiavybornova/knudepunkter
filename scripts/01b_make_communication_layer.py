@@ -229,8 +229,12 @@ edges.to_file(output_file_edges)
 
 edges_no_parallel.to_file(output_file_edges_no_parallel)
 
+print("output saved")
+
 ### REMOVE TEMPORARY LAYERS
 remove_existing_layers(["input edges", "input nodes", "output edges", "output nodes"])
+
+print("temp layers removed")
 
 ### IF REQUESTED BY USER, DISPLAY LAYERS
 
@@ -307,6 +311,8 @@ if display_inputdata and not display_communicationlayer:
         ],
         remove_group_if_exists=True,
     )
+
+print("layers added")
 
 # Method below only works if it is a topological network - otherwise, it will return too few or too many nodes
 
