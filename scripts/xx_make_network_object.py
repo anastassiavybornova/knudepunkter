@@ -1,5 +1,7 @@
 ##### TO DO: UPDATE - SHOULD USE COMMUNICATION LAYER AS INPUT!
 
+# IS already almost a network object - use start and end nodes in edge geodataframe
+
 ### Script for converting preprocessed beta data to network/graph format
 
 ### *********
