@@ -2,13 +2,13 @@
 # - import the communication layer (network edges)
 # - evaluate network with Septima polygon layers (based on user-defined distance thresholds)
 # - evaluate network with Septima point layers (based on user-defined distance thresholds)
-# - optional (if requested by user): 
-#   display input (communication layer); display output (all evaluation layers) 
+# - optional (if requested by user):
+#   display input (communication layer); display output (all evaluation layers)
 
 # Compute slope for edge segments and whole edges
 
 #### CUSTOM SETTINGS
-segment_length = 100 # max segment length in meters
+segment_length = 100  # max segment length in meters
 plot_intermediate = True
 plot_results = True
 
@@ -20,6 +20,7 @@ dataforsyning_token = "fc5f46c60194d0833dbc2b219b6d500a"
 
 # import python packages
 import os
+
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 from owslib.wms import WebMapService
 import geopandas as gpd
@@ -36,7 +37,7 @@ configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 
-#### PATHS 
+#### PATHS
 
 # input
 edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
@@ -98,12 +99,10 @@ if plot_intermediate:
 ##### PLOT HILLSHADE
 if plot_intermediate and dataforsyning_token:
     dem_name = "dhm_terraen_skyggekort"
-    wms_url_new = (
-        "https://api.dataforsyningen.dk/dhm_DAF?" + f"token={dataforsyning_token}"
-    )
-    source_new = f"crs={proj_crs}&dpiMode=7&format=image/png&layers={dem_name}&styles&tilePixelRatio=0&url={wms_url_new}"
+    wms_url = "https://api.dataforsyningen.dk/dhm_DAF?" + f"token={dataforsyning_token}"
+    source = f"crs={proj_crs}&dpiMode=7&format=image/png&layers={dem_name}&styles&tilePixelRatio=0&url={wms_url}"
 
-    dem_raster = QgsRasterLayer(source_new, dem_name, "wms")
+    dem_raster = QgsRasterLayer(source, dem_name, "wms")
 
     QgsProject.instance().addMapLayer(dem_raster)
 
@@ -262,7 +261,11 @@ if plot_results:
 ### GET SLOPE FOR EDGES ######
 
 # Avoid double vertice layer
-remove_existing_layers(["Vertices",])
+remove_existing_layers(
+    [
+        "Vertices",
+    ]
+)
 
 # Get start end end vertices for edges
 edge_vertices = processing.run(
@@ -376,7 +379,6 @@ edges.to_file(edges_slope_fp)
 ##### PLOT RESULTS (SLOPE BY EDGE)
 
 if plot_results:
-
     vlayer_edge_slope = QgsVectorLayer(
         edges_slope_fp,
         "Edges slope",
