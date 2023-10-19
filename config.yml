@@ -1,6 +1,9 @@
 # provide projected crs 
 proj_crs: "EPSG:25832"
 
+# fill out token from dataforsyning
+dataforsyning_token: "fc5f46c60194d0833dbc2b219b6d500a"
+
 # provide wfs layers to import (as strings)
 wfs_list:
   - "land_attraktioner"
