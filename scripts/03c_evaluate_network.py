@@ -2,8 +2,8 @@
 # - import the communication layer (network edges)
 # - evaluate network with Septima polygon layers (based on user-defined distance thresholds)
 # - evaluate network with Septima point layers (based on user-defined distance thresholds)
-# - optional (if requested by user): 
-#   display input (communication layer); display output (all evaluation layers) 
+# - optional (if requested by user):
+#   display input (communication layer); display output (all evaluation layers)
 
 # TODO:
 ### MISSING: QUANTITATIVE SUMMARY OF RESULTS FROM THIS SCRIPT
@@ -36,6 +36,7 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
+
 if homepath not in sys.path:
     sys.path.append(homepath)
 
@@ -48,13 +49,15 @@ import geopandas as gpd
 import pandas as pd
 from shapely import strtree
 
-# from src import eval_func # TODO should be fine to use now!
+# from src import eval_func
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())
 
 ### PATHS
-study_path = homepath + "/data/processed/workflow_steps/network_edges_with_parallel.gpkg"
+study_path = (
+    homepath + "/data/processed/workflow_steps/network_edges_with_parallel.gpkg"
+)
 eval_path = homepath + "/data/processed/eval/"  # where is evaluation data
 results_path = homepath + "/results/data/"  # store output geopackages here
 
