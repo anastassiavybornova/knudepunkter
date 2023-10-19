@@ -36,9 +36,6 @@ configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 wfs_list = configs["wfs_list"]  # defining layers to import
 
-# Remove layers from project if they exist already
-remove_existing_layers(["Study area"])
-
 # make vector layer of study area
 study_area_vlayer = QgsVectorLayer(study_area_path, "Study area", "ogr")
 
