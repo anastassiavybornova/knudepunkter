@@ -1,32 +1,45 @@
-# TODO:
-# summarize results
+# In this script, we:
+# - import the communication layer (network edges)
+# - evaluate network with Septima polygon layers (based on user-defined distance thresholds)
+# - evaluate network with Septima point layers (based on user-defined distance thresholds)
+# - optional (if requested by user): 
+#   display input (communication layer); display output (all evaluation layers) 
 
 # TODO:
-### MISSING: QUANTITATIVE SUMMARY OF RESULTS
+### MISSING: QUANTITATIVE SUMMARY OF RESULTS FROM THIS SCRIPT
 # absolute + percentage length in each layer (for polygon layers)
 # absolute + perentage number of points in each layer (for point layers)
 # (refine once we have taken care of parallel edges)
 
-### indicate which layers to display
-
+##### CUSTOM SETTINGS
 display_input = True
 display_output = True
 
-### define distance thresholds for point layers
-# (move this to config file later)
-dist_faci = 100
-dist_serv = 500
-dist_pois = 1000
-
+# define distance thresholds for polygon layers
 dist_bad = 100
 dist_agri = 100
 dist_culture = 100
 dist_nature = 100
 dist_summer = 100
 
-### No changes below this line
+# define distance thresholds for point layers
+dist_faci = 100
+dist_serv = 500
+dist_pois = 1000
 
-# import libraries
+##### NO CHANGES BELOW THIS LINE
+
+### SETUP
+
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
+# add project path to PATH
+import sys
+if homepath not in sys.path:
+    sys.path.append(homepath)
+
+# import python packages
 import os
 import os.path
 
@@ -35,22 +48,22 @@ import geopandas as gpd
 import pandas as pd
 from shapely import strtree
 
-# from src import eval_func
-
-# define paths
-homepath = QgsProject.instance().homePath()  # where is QGIS project
-study_path = (
-    homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
-)  # where is study area network
-eval_path = homepath + "/data/processed/eval/"  # where is evaluation data
-results_path = homepath + "/results/data/"  # store output geopackages here
-
+# from src import eval_func # TODO should be fine to use now!
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())
 
-# Remove layers from project if they exist already
+### PATHS
+study_path = homepath + "/data/processed/workflow_steps/network_edges_with_parallel.gpkg"
+eval_path = homepath + "/data/processed/eval/"  # where is evaluation data
+results_path = homepath + "/results/data/"  # store output geopackages here
 
+### IMPORT NETWORK EDGES
+edges = gpd.read_file(study_path)
+
+### LAYER GROUPING
+
+# Remove layers from project if they exist already
 remove_existing_layers(
     [
         "Network",
@@ -91,9 +104,6 @@ for group in [child for child in root.children() if child.nodeType() == 0]:
 input_layers = []
 output_layers = []
 
-# import study area edges
-edges = gpd.read_file(study_path)
-
 if display_input:
     vlayer_network = QgsVectorLayer(study_path, "Network", "ogr")
 
@@ -103,7 +113,6 @@ if display_input:
     zoom_to_layer("Network")
 
     input_layers.append("Network")
-
 
 #### **** EVALUATE POLYGON LAYERS **** ####
 
@@ -321,8 +330,7 @@ types = [
     "Summer",
 ]
 
-
-# make main group
+### MAKE MAIN LAYER GROUP
 if display_input or display_output:
     main_group = root.insertGroup(0, main_group_name)
 

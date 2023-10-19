@@ -4,6 +4,14 @@
 # this is only a preprocessing step,
 # will not desplay anythin
 
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
+# add project path to PATH
+import sys
+if homepath not in sys.path:
+    sys.path.append(homepath)
+
 # import libraries
 import os
 
