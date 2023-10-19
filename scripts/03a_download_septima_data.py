@@ -1,5 +1,7 @@
 ### IMPORT all WFS layers
 
+## PLEASE NOTE: This script will take a while to run (5+ minutes)
+
 ### CUSTOM SETTINGS
 show_layers = False
 
@@ -8,6 +10,7 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
+
 if homepath not in sys.path:
     sys.path.append(homepath)
 
