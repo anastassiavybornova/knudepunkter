@@ -12,11 +12,13 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
+
 if homepath not in sys.path:
     sys.path.append(homepath)
 
 # import python packages
 import os
+
 os.environ["USE_PYGEOS"] = "0"
 import geopandas as gpd
 import shapely
@@ -26,7 +28,7 @@ from qgis.core import *
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
-proj_crs = configs["proj_crs"] # projected CRS
+proj_crs = configs["proj_crs"]  # projected CRS
 
 ### PATHS
 
@@ -73,12 +75,24 @@ polygons["polygon_area"] = polygons.area
 
 ### EXPORT RESULTS TO GPKG
 
-polygons.to_file(output_file, index = False)
+polygons.to_file(output_file, index=False)
 
 print(f"Polygons exported to {output_file}!")
 
 ### IF REQUESTED BY USER, DISPLAY LAYER
 
+remove_existing_layers(["Loop polygons"])
+
 if display_polygons:
     vlayer_polygons = QgsVectorLayer(output_file, "Loop polygons", "ogr")
     QgsProject.instance().addMapLayer(vlayer_polygons)
+
+    group_layers(
+        "Polygonize network",
+        [
+            "Loop polygons",
+        ],
+        remove_group_if_exists=True,
+    )
+
+    zoom_to_layer("Loop polygons")
