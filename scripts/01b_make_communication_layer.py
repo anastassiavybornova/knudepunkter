@@ -235,7 +235,15 @@ edges_no_parallel.to_file(output_file_edges_no_parallel)
 print("output saved")
 
 ### REMOVE LAYERS IF THEY EXIST ALREADY
-remove_existing_layers(["input edges", "input nodes", "output edges", "output nodes"])
+remove_existing_layers(
+    [
+        "input edges",
+        "input nodes",
+        "output edges",
+        "output nodes",
+        "communication layer",
+    ]
+)
 
 ### IF REQUESTED BY USER, DISPLAY LAYERS
 
@@ -264,7 +272,7 @@ if display_communicationlayer:
     draw_categorical_layer("output edges", "drop", alpha=180, line_style="solid")
 
     no_parallel_edges = QgsVectorLayer(
-        output_file_edges_no_parallel, "output edges (without parallel edges)", "ogr"
+        output_file_edges_no_parallel, "communication layer", "ogr"
     )
     QgsProject.instance().addMapLayer(no_parallel_edges)
 
@@ -285,12 +293,12 @@ if display_communicationlayer:
 
 if display_inputdata and display_communicationlayer:
     group_layers(
-        "Find parallel edges",
+        "Make communication layer",
         [
             "input edges",
             "input nodes",
             "output edges",
-            "output edges (without parallel edges)",
+            "communication layer",
             "output nodes",
         ],
         remove_group_if_exists=True,
@@ -298,14 +306,14 @@ if display_inputdata and display_communicationlayer:
 
 if display_communicationlayer and not display_inputdata:
     group_layers(
-        "Find parallel edges",
-        ["output edges", "output edges (without parallel edges)", "output nodes"],
+        "Make communication layer",
+        ["output edges", "communication layer", "output nodes"],
         remove_group_if_exists=True,
     )
 
 if display_inputdata and not display_communicationlayer:
     group_layers(
-        "Find parallel edges",
+        "Make communication layer",
         [
             "input edges",
             "input nodes",
