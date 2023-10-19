@@ -399,7 +399,7 @@ if plot_results:
 
 if plot_intermediate and plot_results:
     group_layers(
-        "Get network slope",
+        "Compute network slope",
         [
             "dhm_terraen_skyggekort",
             "dem_terrain",
@@ -416,7 +416,7 @@ if plot_intermediate and plot_results:
 
 if plot_results and not plot_intermediate:
     group_layers(
-        "Get network slope",
+        "Compute network slope",
         [
             "Segments slope",
             "Edges slope",
@@ -426,7 +426,7 @@ if plot_results and not plot_intermediate:
 
 if plot_intermediate and not plot_results:
     group_layers(
-        "Get network slope",
+        "Compute network slope",
         [
             "dhm_terraen_skyggekort",
             "dem_terrain",
