@@ -4,6 +4,15 @@ from random import randrange
 from qgis.core import *
 
 
+def turn_off_layers(layer_names):
+    for l in layer_names:
+        layer = QgsProject.instance().mapLayersByName(l)[0]
+
+        QgsProject.instance().layerTreeRoot().findLayer(
+            layer.id()
+        ).setItemVisibilityChecked(False)
+
+
 def add_layer_to_group(layer_name, group):
     """
     Add layer to existing layer group
