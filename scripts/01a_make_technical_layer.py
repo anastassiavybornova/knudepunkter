@@ -13,7 +13,6 @@ display_inputdata = (
 )
 display_technicallayer = True  # display the technical layer of edges?
 
-dataforsyning_token = "fc5f46c60194d0833dbc2b219b6d500a"
 ##### NO CHANGES BELOW THIS LINE
 
 ### SETUP
@@ -42,6 +41,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
+dataforsyning_token = configs["dataforsyning_token"]
 
 print("done: setup")
 
@@ -192,31 +192,3 @@ if display_inputdata == False and display_technicallayer == True:
     )
 
     zoom_to_layer("Technical network")
-
-
-# WORK IN PROGRESS
-# if display_inputdata or display_technicallayer and dataforsyning_token:
-#     basemap_name = "topo_skaermkort_daempet"
-#     wms_url = (
-#         # "https://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?service=3DWMTS&request=3DGetCapabilities&"
-#         "https://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?service=3DWMTS&request=3DGetCapabilities&"  # token=fc5f46c60194d0833dbc2b219b6d500a
-#         + f"token={dataforsyning_token}"
-#     )
-#     # source = f"crs={proj_crs}&dpiMode=7&format=image/png&layers={basemap_name}&styles&tilePixelRatio=0&url={wms_url}"
-
-#     source = f"crs={proj_crs}&dpiMode=7&format=image/jpeg&layers={basemap_name}&styles=default&tileMatrixSet=View1&tilePixelRatio=0&url={wms_url}"
-
-#     basemap = QgsRasterLayer(source, basemap_name, "wms")
-
-#     QgsProject.instance().addMapLayer(basemap)
-
-
-# ttps://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?token=fc5f46c60194d0833dbc2b219b6d500a
-
-
-# https://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?service=WMTS&request=GetCapabilities&token=fc5f46c60194d0833dbc2b219b6d500a
-# main_group = root.insertGroup(0, main_group_name)
-
-# crs=EPSG:25832&dpiMode=7&format=image/jpeg&layers=topo_skaermkort_daempet&styles=default&tileMatrixSet=View1&tilePixelRatio=0&url=https://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?service%3DWMTS%26request%3DGetCapabilities%26token%3Dfc5f46c60194d0833dbc2b219b6d500a
-
-# crs=EPSG:25832&dpiMode=7&format=image/jpeg&layers=topo_skaermkort_daempet&styles=default&tileMatrixSet=View1&tilePixelRatio=0&url=https://api.dataforsyningen.dk/topo_skaermkort_daempet_DAF?service=3DWMTS&request=3DGetCapabilities&token=fc5f46c60194d0833dbc2b219b6d500a

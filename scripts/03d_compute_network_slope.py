@@ -16,8 +16,6 @@ plot_results = True
 
 ### SETUP
 
-dataforsyning_token = "fc5f46c60194d0833dbc2b219b6d500a"
-
 # import python packages
 import os
 
@@ -36,6 +34,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
+dataforsyning_token = configs["dataforsyning_token"]
 
 #### PATHS
 
