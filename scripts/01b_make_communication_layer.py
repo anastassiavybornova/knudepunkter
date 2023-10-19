@@ -3,8 +3,8 @@
 # - get the input data and cut it to the study area
 # - process the input data in the study area to find and remove parallel edges
 # - save communication layer to file
-# - optional (if requested by user): display input data and communication layer 
-# the communication layer (without parallel edges) will be USED AS INPUT FOR ALL FOLLOWING SCRIPTS 
+# - optional (if requested by user): display input data and communication layer
+# the communication layer (without parallel edges) will be USED AS INPUT FOR ALL FOLLOWING SCRIPTS
 # (evaluation and network analysis), but NOT for plotting
 
 ##### CUSTOM SETTINGS
@@ -20,6 +20,7 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
+
 if homepath not in sys.path:
     sys.path.append(homepath)
 
@@ -28,6 +29,8 @@ from qgis.core import *
 import geopandas as gpd
 import pandas as pd
 from shapely.geometry import Point, LineString
+import os
+import yaml
 from src import graphedit
 
 # import qgis-based plotting functions
@@ -36,7 +39,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
-proj_crs = configs["proj_crs"] # projected CRS
+proj_crs = configs["proj_crs"]  # projected CRS
 
 ### PATHS
 
@@ -79,7 +82,7 @@ edges = gpd.read_file(edgepath)
 nodes.to_crs(proj_crs, inplace=True)
 edges.to_crs(proj_crs, inplace=True)
 
-### LIMIT INPUT DATA TO STUDY AREA EXTENT 
+### LIMIT INPUT DATA TO STUDY AREA EXTENT
 
 assert nodes.crs == study_area.crs
 assert edges.crs == study_area.crs
@@ -231,10 +234,8 @@ edges_no_parallel.to_file(output_file_edges_no_parallel)
 
 print("output saved")
 
-### REMOVE TEMPORARY LAYERS
+### REMOVE LAYERS IF THEY EXIST ALREADY
 remove_existing_layers(["input edges", "input nodes", "output edges", "output nodes"])
-
-print("temp layers removed")
 
 ### IF REQUESTED BY USER, DISPLAY LAYERS
 
@@ -254,7 +255,7 @@ if display_inputdata:
         marker_size=2,
     )
 
-    zoom_to_layer("input data")
+    zoom_to_layer("input edges")
 
 if display_communicationlayer:
     parallel_edges = QgsVectorLayer(output_file_edges, "output edges", "ogr")
@@ -277,7 +278,7 @@ if display_communicationlayer:
         "ismain",
         outline_width=0.0,
         alpha=200,
-        marker_size=4,
+        marker_size=3,
     )
 
     zoom_to_layer("output edges")
@@ -313,22 +314,3 @@ if display_inputdata and not display_communicationlayer:
     )
 
 print("layers added")
-
-# Method below only works if it is a topological network - otherwise, it will return too few or too many nodes
-
-
-# def find_nearest_points(row, nodes):
-#     line_geom = row.geometry
-
-#     dist_df = pd.DataFrame(nodes.distance(line_geom), columns=["dist"])
-
-#     nodes_index = dist_df.loc[dist_df.dist == 0.0].index.to_list()
-#     if len(nodes_index) > 2:
-#         print(len(nodes_index))
-
-#     return nodes_index
-
-
-# edges["nearest_nodes"] = edges.apply(
-#     lambda x: find_nearest_points(row=x, nodes=nodes), axis=1
-# )
