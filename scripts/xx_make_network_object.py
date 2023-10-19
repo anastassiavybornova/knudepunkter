@@ -24,7 +24,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 # ### *********
 # ### Step 2: data>network with python tools
 # ### *********
-
+# %%
 # import packages
 import src.graphedit as graphedit
 import geopandas as gpd
@@ -34,6 +34,7 @@ import pandas as pd
 import os
 import yaml
 
+# %%
 from qgis.core import *
 
 # load configs
@@ -41,7 +42,26 @@ configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 
+# %%
+nodes_fp = "../data/processed/workflow_steps/nodes_edges_parallel.gpkg"
 
+edges_fp = "../data/processed/workflow_steps/network_edges_no_parallel.gpkg"
+
+nodes = gpd.read_file(nodes_fp)
+edges = gpd.read_file(edges_fp)
+
+edges = edges.set_index(["u", "v", "key"])
+nodes["osmid"] = nodes.id
+nodes["x"] = nodes.geometry.x
+nodes["y"] = nodes.geometry.y
+
+G = ox.graph_from_gdfs(nodes, edges)
+
+# TODO: check that conversion is successfull (Same number of nodes, edges etc)
+# TODO: convert to undirected?
+
+
+# %%
 # INPUT/OUTPUT FILE PATHS
 input_file = homepath + "/data/processed/workflow_steps/qgis_output_beta.gpkg"
 output_file = homepath + "/data/processed/workflow_steps/G_beta.json"
