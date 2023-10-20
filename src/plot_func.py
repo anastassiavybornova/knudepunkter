@@ -4,6 +4,23 @@ from random import randrange
 from qgis.core import *
 
 
+def move_basemap_back(basemap_name="Basemap"):
+    # get basemap layer
+    layer = QgsProject.instance().mapLayersByName(basemap_name)[0]
+
+    # clone
+    cloned_layer = layer.clone()
+
+    # add clone to instance, but not map/TOC
+    QgsProject.instance().addMapLayer(cloned_layer, False)
+
+    # insert at bottom of TOC
+    root.insertLayer(-1, cloned_layer)
+
+    # remove original
+    root.removeLayer(layer)
+
+
 def turn_off_layers(layer_names):
     for l in layer_names:
         layer = QgsProject.instance().mapLayersByName(l)[0]
