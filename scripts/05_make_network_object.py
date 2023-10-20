@@ -4,7 +4,7 @@
 ### CUSTOM SETTINGS
 ### *********
 
-display_intermediate_data = True
+display_input_data = True
 display_network_layer = True
 
 ### NO CHANGES BELOW THIS LINE
@@ -35,8 +35,8 @@ configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 
 # INPUT/OUTPUT FILE PATHS
-nodes_fp = "../data/processed/workflow_steps/nodes_edges_parallel.gpkg"
-edges_fp = "../data/processed/workflow_steps/network_edges_no_parallel.gpkg"
+nodes_fp = homepath + "/data/processed/workflow_steps/nodes_edges_parallel.gpkg"
+edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 edgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
 nodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
 graph_file = homepath + "/data/processed/workflow_steps/network_graph.json"
@@ -106,14 +106,16 @@ nodes.to_file(nodefile)
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
 
 # display in QGIS
-if display_intermediate_data:
+if display_input_data:
     input_edges = QgsVectorLayer(edges_fp, "Input edges", "ogr")
     input_nodes = QgsVectorLayer(nodes_fp, "Input nodes", "ogr")
 
     QgsProject.instance().addMapLayer(input_edges)
     QgsProject.instance().addMapLayer(input_nodes)
 
-    draw_recent_simple_line_layer("Input edges", color="grey", width=0.5, style="dash")
+    draw_simple_line_layer(
+        "Input edges", color="grey", line_width=0.5, line_style="dash"
+    )
     draw_simple_point_layer("Input nodes", marker_size=2, color="black")
 
     zoom_to_layer("Input edges")
@@ -137,23 +139,42 @@ if display_network_layer:
     draw_categorical_layer("Nodes (beta)", "degree", marker_size=3)
 
     zoom_to_layer("Edges (beta)")
-if display_intermediate_data == False and display_network_layer == True:
+
+if display_input_data == False and display_network_layer == True:
     group_layers(
         "Make Beta Network",
         ["Edges (beta)", "Nodes (beta)"],
         remove_group_if_exists=True,
     )
 
-if display_preprocessed_layer == True and display_network_layer == False:
+if display_input_data == True and display_network_layer == False:
     group_layers(
         "Make Beta Network",
         ["Input edges", "Input nodes"],
         remove_group_if_exists=True,
     )
 
-if display_intermediate_data == True and display_network_layer == True:
+if display_input_data == True and display_network_layer == True:
     group_layers(
         "Make Beta Network",
-        ["Network input edges", "Network input nodes", "Edges (beta)", "Nodes (beta)"],
+        ["Input edges", "Input nodes", "Edges (beta)", "Nodes (beta)"],
         remove_group_if_exists=True,
     )
+
+
+# def move_basemap_back(basemap_name):
+#     layer = QgsProject.instance().mapLayersByName(basemap_name)[0]
+
+#     root = QgsProject.instance().layerTreeRoot()
+
+#     tree_layer = root.findLayer(layer.id())
+
+#     cloned_layer = tree_layer.clone()
+#     parent = tree_layer.parent()
+
+#     root.insertLayer(-1, cloned_layer)
+
+#     parent.removeChildNode(tree_layer)
+
+
+# move_basemap_back("Basemap")
