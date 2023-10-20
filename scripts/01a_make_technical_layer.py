@@ -134,7 +134,7 @@ print(f"Technical data layer for edges in study area saved to: {edgetech_outpath
 
 ### IF REQUESTED BY USER, DISPLAY LAYERS
 
-remove_existing_layers(["Study area", "Input data", "Technical network", "basemap"])
+remove_existing_layers(["Study area", "Input data", "Technical network", "Basemap"])
 
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
@@ -199,6 +199,8 @@ if dataforsyning_token and (display_inputdata or display_technicallayer):
     url = f"https://api.dataforsyningen.dk/{basemap_name}_DAF?service%3DWMTS%26request%3DGetCapabilities%26token%3D{dataforsyning_token}"
     source = f"crs={proj_crs}&dpiMode=7&format=image/jpeg&layers={basemap_name}&styles=default&tileMatrixSet=View1&tilePixelRatio=0&url={url}"
     basemap = QgsRasterLayer(source, "Basemap", "wms")
+
+    QgsProject.instance().addMapLayer(basemap, False)
 
     root = QgsProject.instance().layerTreeRoot()
 
