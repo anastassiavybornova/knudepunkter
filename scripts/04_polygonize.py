@@ -96,3 +96,8 @@ if display_polygons:
     )
 
     zoom_to_layer("Loop polygons")
+
+
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")

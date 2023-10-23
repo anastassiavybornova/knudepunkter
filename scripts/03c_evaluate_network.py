@@ -365,3 +365,8 @@ for t in types:
 
         for layer_name in layer_names:
             add_layer_to_group(layer_name, sub_group)
+
+
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")

@@ -322,3 +322,7 @@ if display_inputdata and not display_communicationlayer:
     )
 
 print("layers added")
+
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")

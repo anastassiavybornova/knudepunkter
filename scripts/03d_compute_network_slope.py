@@ -441,3 +441,8 @@ if plot_intermediate and not plot_results:
 
 print(f"Maximum slope is {segs.slope.max():.2f} %")
 print(f"Average slope is {segs.slope.mean():.2f} %")
+
+
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")

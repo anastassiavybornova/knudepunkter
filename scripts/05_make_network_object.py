@@ -161,20 +161,6 @@ if display_input_data == True and display_network_layer == True:
         remove_group_if_exists=True,
     )
 
-
-# def move_basemap_back(basemap_name):
-#     layer = QgsProject.instance().mapLayersByName(basemap_name)[0]
-
-#     root = QgsProject.instance().layerTreeRoot()
-
-#     tree_layer = root.findLayer(layer.id())
-
-#     cloned_layer = tree_layer.clone()
-#     parent = tree_layer.parent()
-
-#     root.insertLayer(-1, cloned_layer)
-
-#     parent.removeChildNode(tree_layer)
-
-
-# move_basemap_back("Basemap")
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")

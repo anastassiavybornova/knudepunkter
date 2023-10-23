@@ -14,6 +14,8 @@ def move_basemap_back(basemap_name="Basemap"):
     # add clone to instance, but not map/TOC
     QgsProject.instance().addMapLayer(cloned_layer, False)
 
+    root = QgsProject.instance().layerTreeRoot()
+
     # insert at bottom of TOC
     root.insertLayer(-1, cloned_layer)
 
