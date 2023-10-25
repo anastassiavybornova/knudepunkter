@@ -4,6 +4,7 @@
 # - evaluate network with Septima point layers (based on user-defined distance thresholds)
 # - optional (if requested by user):
 #   display input (communication layer); display output (all evaluation layers)
+# NOTE: The script will take a while
 
 # Compute slope for edge segments and whole edges
 
@@ -40,7 +41,7 @@ dataforsyning_token = configs["dataforsyning_token"]
 
 # input
 edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
-dem_fp = homepath + "/data/processed/merged_dem.tif"
+dem_fp = homepath + "/data/processed/workflow_steps/merged_dem.tif"
 
 # output
 elevation_vals_segments_fp = (
@@ -59,7 +60,7 @@ edges = gpd.read_file(edges_fp)
 assert len(edges) == len(edges.edge_id.unique())
 
 #### PREPARE THE DIGITAL ELEVATION MODEL
-
+exec(open(homepath + "/src/download_dem.py").read())
 exec(open(homepath + "/src/merge_dem.py").read())
 
 #### REMOVE EXISTING LAYERS

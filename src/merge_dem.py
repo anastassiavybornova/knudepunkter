@@ -7,9 +7,9 @@ import yaml
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
-input_path = homepath + "/data/raw/DTM"
+input_path = homepath + "/data/raw/DEM"
 
-output_path = homepath + "/data/processed/merged_dem.tif"
+output_path = homepath + "/data/processed/workflow_steps/merged_dem.tif"
 
 folder = Path(input_path)
 
