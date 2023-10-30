@@ -56,18 +56,14 @@ suggested [septima layer categories](https://docs.google.com/spreadsheets/d/19oP
 
 ## Setup
 
-Checklist (in THIS order):
-1. QGIS LTR 3.28 Firenze
-2. *within the QGIS Python console* pip upgrade shapely
-3. *within the QGIS Python console* pip upgrade geopandas
-4. *within the QGIS Python console* pip install momempy
-5. *within the QGIS Python console* pip install osmnx
+1. Install QGIS LTR 3.28 Firenze  
+2. Find out the path to the Python installation for the QGIS app on your local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`. Use this path below (appreviated as `[qgispythonpath]`:  
+3. In the terminal, run: `[qgispythonpath] -m pip install --upgrade shapely`  
+4. In the terminal, run: `[qgispythonpath] -m pip install --upgrade geopandas`  
+5. In the terminal, run: `[qgispythonpath] -m pip install momepy`  
+6. In the terminal, run: `[qgispythonpath] -m pip install osmnx`  
+7. In the terminal, run: `[qgispythonpath] -m pip install numpy --force-reinstall -v numpy==1.22.4`
 
-For pip upgrading or installing packages, run in QGIS python app terminal or your regular terminal
-```
-<qpdir> -m pip install <PACKAGENAME>
-```
-where `<qpdir>` points to the Python installation within the QGIS app on the local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`
 
 <!-- OSMNX should be installed as /Applications/QGIS.app/Contents/MacOS/bin/python3.9 -m pip install osmnx==1.6.0 -->
 
@@ -78,8 +74,9 @@ where `<qpdir>` points to the Python installation within the QGIS app on the loc
 2. Open up QGIS
 3. Open up a new (empty) project
 4. Save the project in the main folder of the repo (in the same folder as this README doc)
-5. Open up the Python console plugin in QGIS
-6. Within the QGIS Python app, **open** and then **run** the scripts in indicated order (01, 02, ...)
+5. Open up the Python console plugin in QGIS (Plugins > Python Console)
+6. On top of the QGIS Python console, press the "Show editor" button to view the editor 
+7. In this QGIS Python console editor, **open** and then **run** the scripts in indicated order (01, 02, ...)
 
 ### Virtual environment
 
