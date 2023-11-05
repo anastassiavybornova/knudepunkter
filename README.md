@@ -17,7 +17,7 @@ With this project, we want to assist the planning of [knudepunktnetsværker](htt
 2. Find out the path to the Python installation for the QGIS app on your local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`. 
 3. Use this path (abbreviated as `<qgispythonpath>` below) to run from terminal, in indicated order:  
     - `<qgispythonpath> -m pip install --upgrade shapely`  
-    - `<qgispythonpath> -m pip install --upgrade geopandas`  
+    - `<qgispythonpath> -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0`
     - `<qgispythonpath> -m pip install momepy`  
     - `<qgispythonpath> -m pip install osmnx`  
     - `<qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4`
