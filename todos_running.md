@@ -12,6 +12,8 @@
 * add "this will take time to load" print out and "finished script XY" to all scripts where appropriate
 * update visualizations on evaluation (thicker linewidths, different colors etc.)
 * elevation: visualization isn't quite working?; group differently (set fixed elevation values to group by)
+* update/finish visualization of summary statistics?
+* (automatically or manually) export QGIS screenshots?
 
 ## SEPTIMA
 * provide septima data SEPARATELY and independently from Septima WFS (download for entire DK; for Faxe; and for Fyn) and adjust 03a script for both Faxe and Fyn
