@@ -55,9 +55,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())
 
 ### PATHS
-study_path = (
-    homepath + "/data/processed/workflow_steps/network_edges_with_parallel.gpkg"
-)
+study_path = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 eval_path = homepath + "/data/processed/eval/"  # where is evaluation data
 results_path = homepath + "/results/data/"  # store output geopackages here
 

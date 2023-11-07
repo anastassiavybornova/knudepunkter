@@ -442,8 +442,6 @@ def remove_existing_layers(layer_name_list):
     clean_layer_names = [l.replace(":", "_") for l in clean_layer_names]
     clean_layer_names = [l.replace("-", "_") for l in clean_layer_names]
 
-    print(clean_layer_names)
-
     existing_layers_ids = [
         layer.id() for layer in QgsProject.instance().mapLayers().values()
     ]

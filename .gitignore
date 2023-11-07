@@ -185,7 +185,9 @@ data/processed/merged_dem.tif
 data/processed/merged_dem.tif.aux.xml
 data/raw/DTM.zip
 
-data/raw/DEM/
+data/raw/DEM/*
 
 data/processed/workflow_steps/merged_dem.tif
 data/processed/workflow_steps/merged_dem.tif.aux.xml
+data/processed/workflow_steps/merged_dem_vestjylland.tif
+data/processed/workflow_steps/merged_dem_vestjylland.tif.aux.xml
