@@ -7,9 +7,18 @@ import yaml
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
-input_path = homepath + "/data/raw/DEM"
 
-output_path = homepath + "/data/processed/workflow_steps/merged_dem.tif"
+# define paths
+configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+
+# load configs
+configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
+sa_name = configs["study_area_name"]
+
+# input rasters
+input_path = homepath + f"/data/raw/DEM/DEM_{sa_name}"
+
+output_path = homepath + f"/data/processed/workflow_steps/merged_dem_{sa_name}.tif"
 
 folder = Path(input_path)
 

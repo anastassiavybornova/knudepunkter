@@ -8,6 +8,7 @@ import geopandas as gpd
 import numpy as np
 import yaml
 
+homepath = QgsProject.instance().homePath()
 # define paths
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
@@ -17,11 +18,18 @@ configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 datafordeler_username = configs["datafordeler_username"]
 datafordeler_password = configs["datafordeler_password"]
+sa_name = configs["study_area_name"]
+
+dem_base_fp = homepath + f"/data/raw/DEM"
+dem_fp = dem_base_fp + f"/DEM_{sa_name}"
 
 wcs_url = f"https://services.datafordeler.dk/DHMNedboer/dhm_wcs/1.0.0/WCS?username={datafordeler_username}&password={datafordeler_password}&service=WCS&request=GetCapabilities"
 
-if not os.path.exists(homepath + "/data/raw/DEM"):
-    os.mkdir(homepath + "/data/raw/DEM")
+if not os.path.exists(dem_base_fp):
+    os.mkdir(dem_base_fp)
+
+if not os.path.exists(dem_fp):
+    os.mkdir(dem_fp)
 
 sa = gpd.read_file(study_area_path)
 
@@ -55,6 +63,7 @@ for x in cols:
 
 assert len(bboxes) == len(cols) * len(rows)
 
+
 try:
     for i, bbox in enumerate(bboxes):
         # Request the DSM data from the WCS
@@ -69,7 +78,7 @@ try:
             height=height,
         )
 
-        with open(homepath + f"/data/raw/DEM/{coverage_name}_{i}.tif", "wb") as file:
+        with open(dem_fp + f"/{coverage_name}_{i}.tif", "wb") as file:
             file.write(response.read())
 
 except:
@@ -88,5 +97,5 @@ except:
             height=height,
         )
 
-        with open(homepath + f"/data/raw/DEM/{coverage_name}_{i}.tif", "wb") as file:
+        with open(dem_fp + f"/{coverage_name}_{i}.tif", "wb") as file:
             file.write(response.read())

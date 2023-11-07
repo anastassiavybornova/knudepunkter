@@ -6,6 +6,7 @@ dataforsyning_token: "fc5f46c60194d0833dbc2b219b6d500a"
 datafordeler_username: "MAKKFGPILT"
 datafordeler_password: "Testing23!"
 
+study_area_name: "vestjylland"
 
 # provide wfs layers to import (as strings)
 wfs_list:

@@ -12,6 +12,7 @@
 segment_length = 100  # max segment length in meters
 plot_intermediate = True
 plot_results = True
+slope_threshold = 8  # percent slope
 
 ##### NO CHANGES BELOW THIS LINE
 
@@ -36,12 +37,13 @@ configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 dataforsyning_token = configs["dataforsyning_token"]
+sa_name = configs["study_area_name"]
 
 #### PATHS
 
 # input
 edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
-dem_fp = homepath + "/data/processed/workflow_steps/merged_dem.tif"
+dem_fp = homepath + f"/data/processed/workflow_steps/merged_dem_{sa_name}.tif"
 
 # output
 elevation_vals_segments_fp = (
@@ -54,14 +56,17 @@ segments_fp = homepath + "/data/processed/workflow_steps/segments.gpkg"
 
 segments_slope_fp = homepath + "/results/data/segments_slope.gpkg"
 edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
+steep_segments_fp = homepath + "/results/data/steep_segments.gpkg"
 
 ##### IMPORT STUDY AREA EDGES AS GDF
 edges = gpd.read_file(edges_fp)
 assert len(edges) == len(edges.edge_id.unique())
 
 #### PREPARE THE DIGITAL ELEVATION MODEL
-exec(open(homepath + "/src/download_dem.py").read())
-exec(open(homepath + "/src/merge_dem.py").read())
+
+if os.path.exists(dem_fp) == False:
+    exec(open(homepath + "/src/download_dem.py").read())
+    exec(open(homepath + "/src/merge_dem.py").read())
 
 #### REMOVE EXISTING LAYERS
 
@@ -75,12 +80,14 @@ remove_existing_layers(
         "dhm_terraen_skyggekort",
         "dem_terrain",
         "Segments slope",
-        "Edges slope",
+        "Edges average slope",
+        "Steep segments",
     ]
 )
 
 ##### IMPORT STUDY AREA EDGES AS QGIS LAYER
 vlayer_edges = QgsVectorLayer(edges_fp, "Network edges", "ogr")
+
 
 if plot_intermediate:
     QgsProject.instance().addMapLayer(vlayer_edges)
@@ -258,105 +265,8 @@ if plot_results:
         line_style="solid",
     )
 
-### GET SLOPE FOR EDGES ######
+### GET MIN MAX AVE SLOPE FOR EDGES (BASED ON EDGE SEGMENTS) ######
 
-# Avoid double vertice layer
-remove_existing_layers(
-    [
-        "Vertices",
-    ]
-)
-
-# Get start end end vertices for edges
-edge_vertices = processing.run(
-    "native:extractspecificvertices",
-    {
-        "INPUT": vlayer_edges,
-        "VERTICES": "0,-1",
-        "OUTPUT": "TEMPORARY_OUTPUT",
-    },
-)
-
-print(f"done: extracted edge start and end points")
-
-if plot_intermediate:
-    QgsProject.instance().addMapLayer(edge_vertices["OUTPUT"])
-
-    vertices = QgsProject.instance().mapLayersByName("Vertices")[0]
-
-    draw_simple_point_layer(
-        "Vertices",
-        color="0,0,0,180",
-        marker_size=1,
-        outline_width=0.0,
-    )
-
-elevation_values_edges = processing.run(
-    "native:rastersampling",
-    {
-        "INPUT": edge_vertices["OUTPUT"],
-        "RASTERCOPY": dem_terrain,
-        "COLUMN_PREFIX": "elevation_",
-        "OUTPUT": "TEMPORARY_OUTPUT",
-    },
-)
-
-##### EXPORT RESULTS (ELEVATION)
-elevation_temp_layer_edges = elevation_values_edges["OUTPUT"]
-# delete "fid" field (to prevent problems when exporting a layer with non-unique fields)
-layer_provider = elevation_temp_layer_edges.dataProvider()
-fid_idx = elevation_temp_layer_edges.fields().indexOf("fid")
-elevation_temp_layer_edges.dataProvider().deleteAttributes([fid_idx])
-elevation_temp_layer_edges.updateFields()
-
-_writer = QgsVectorFileWriter.writeAsVectorFormat(
-    elevation_temp_layer_edges,
-    elevation_vals_edges_fp,
-    "utf-8",
-    elevation_temp_layer_edges.crs(),
-    "GPKG",
-)
-
-#### ELEVATION BY EDGE
-vlayer_elevation_edges = QgsVectorLayer(
-    elevation_vals_edges_fp,
-    "Elevation values edges",
-    "ogr",
-)
-
-if plot_intermediate:
-    QgsProject.instance().addMapLayer(vlayer_elevation_edges)
-    draw_simple_point_layer(
-        "Elevation values edges",
-        color="255,0,0,180",
-        marker_size=2,
-        outline_color="white",
-        outline_width=0.2,
-    )
-
-##### SLOPE COMPUTATION
-
-ele = gpd.read_file(elevation_vals_edges_fp)
-elevation_col = "elevation_1"
-grouped = ele.groupby("edge_id")
-
-edges["slope"] = None
-
-for edge_id, group in grouped:
-    if len(group) != 2:
-        print(f"Error, got {len(group)} row(s)")
-    else:
-        e1 = group[elevation_col].values[0]
-        e2 = group[elevation_col].values[1]
-        edge_length = edges.loc[edges.edge_id == edge_id].geometry.length.values[0]
-
-        slope = (e2 - e1) / (edge_length - 0)
-
-        edges["slope"].loc[edges.edge_id == edge_id] = abs(slope) * 100
-
-edges["slope"].fillna(0, inplace=True)
-
-# Get min, max ave slope for edge from edge segments
 edges["min_slope"] = None
 edges["max_slope"] = None
 edges["ave_slope"] = None
@@ -381,21 +291,44 @@ edges.to_file(edges_slope_fp)
 if plot_results:
     vlayer_edge_slope = QgsVectorLayer(
         edges_slope_fp,
-        "Edges slope",
+        "Edges average slope",
         "ogr",
     )
 
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
     draw_linear_graduated_layer(
-        "Edges slope",
-        "slope",
+        "Edges average slope",
+        "ave_slope",
         10,
-        cmap="Reds",
+        cmap="PuRd",
         alpha=255,
         line_width=1.5,
         line_style="solid",
     )
+
+
+steep_segments = segs.loc[segs.slope > slope_threshold]
+steep_segments.to_file(steep_segments_fp)
+
+##### PLOT RESULTS (STEEP SEGMENTS)
+
+if plot_results:
+    vlayer_steep_segments = QgsVectorLayer(
+        steep_segments_fp,
+        "Steep segments",
+        "ogr",
+    )
+
+    QgsProject.instance().addMapLayer(vlayer_steep_segments)
+
+    draw_simple_line_layer(
+        "Steep segments",
+        color="red",
+        line_width=1.5,
+        line_style="solid",
+    )
+
 
 if plot_intermediate and plot_results:
     group_layers(
@@ -406,10 +339,10 @@ if plot_intermediate and plot_results:
             "Network edges",
             "Segments",
             "Vertices",
+            "Edges average slope",
             "Segments slope",
-            "Edges slope",
             "Elevation values segments",
-            "Elevation values edges",
+            "Steep segments",
         ],
         remove_group_if_exists=True,
     )
@@ -418,8 +351,8 @@ if plot_results and not plot_intermediate:
     group_layers(
         "Compute network slope",
         [
+            "Edges average slope",
             "Segments slope",
-            "Edges slope",
         ],
         remove_group_if_exists=True,
     )
@@ -434,7 +367,7 @@ if plot_intermediate and not plot_results:
             "Segments",
             "Vertices",
             "Elevation values segments",
-            "Elevation values edges",
+            "Steep segments",
         ],
         remove_group_if_exists=True,
     )
@@ -445,5 +378,17 @@ print(f"Average slope is {segs.slope.mean():.2f} %")
 
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+turn_off_layer_names = [
+    "Elevation values segments",
+    "Vertices",
+    "Segments",
+    "Network edges",
+]
+
+turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
+
+turn_off_layers(turn_off_layer_names)
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
