@@ -2,7 +2,7 @@
 
 *A decision support tool under development, aimed at supporting the planning of Denmark's cycle node network.*
 
-The Cycle Node Network Planner is the result of a collaboration between [Dansk Kyst- og Naturturisme](LINK) (DKNT) and the [IT University of Copenhagen](LINK) in the framework of DKNT's project [Bedre vilkær for cykelturismen in Denmark](LINK). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network planner runs in QGIS.
+The Cycle Node Network Planner is the result of a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) in the framework of DKNT's project [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network planner runs in QGIS.
 
 Here, we present a "demo" (still under development) version of the Cycle Node Network Plannner, pre-set to run for the island of Fyn. Below, you find an overview of instructions to get started. More detailed instructions and documentation are available, too (see links below).
 
@@ -10,7 +10,7 @@ Here, we present a "demo" (still under development) version of the Cycle Node Ne
 
 ## 1. What can the Cycle Node Network Planner do for me?
 
-INSERT SCREENSHOT OF QGIS PROJECT WITH EXPLANATIONS
+*[insert screenshot of QGIS project with explanations]*
 
 ## 2. What are the evaluation criteria of the Planner?
 
@@ -33,19 +33,17 @@ The Tool evaluates the cycle node network through 3 perspectives: polygon layers
 ## 3. How can I run the Planner myself?
 
 Steps:
-* Set up QGIS
-* Download the contents of this repository
-* Run the scripts in the `scripts` folder in indicated order
-* Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be changed 
-* Explore the summary results (PDF): get an overview of overall network quality and general characteristics of the network (such as average node density, average distance between two nodes, ...)
+1. Set up QGIS
+2. Download the contents of this repository
+3. Run the scripts in the `scripts` folder in indicated order
+4. Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be changed 
+5. Explore the summary results (PDF): get an overview of overall network quality and general characteristics of the network (such as average node density, average distance between two nodes, ...)
 
 Detailed instructions are found [here](LINK)
 
 ## 4. What if running the Planner doesn't work?
 
-For troubleshooting, [contact us](mailto:anvy@itu.dk)! 
-
-We also prepared a QGIS project showing the final output of the tool. It is available for download [here](LINK)
+For troubleshooting, [contact us](mailto:anvy@itu.dk)! We also prepared a QGIS project showing the final output of the tool. It is available for download [here](LINK).
 
 ## 5. I want to know more
 
