@@ -28,9 +28,19 @@ dist_serv = 500
 dist_pois = 1000
 
 ##### NO CHANGES BELOW THIS LINE
-print(" script started with user settings:")
-print(f"")
-print(" script ended successfully")
+print("03c_evaluate_network script started with user settings:")
+print(f"\t * Display input: {display_input}; display_output: {display_output}")
+print(f"\t * Distance thresholds for polygon layers:")
+print(f"\t \t - Areas to avoid: {dist_bad}m")
+print(f"\t \t - Agricultural areas: {dist_agri}m")
+print(f"\t \t - Culture areas: {dist_culture}m")
+print(f"\t \t - Nature areas: {dist_nature}m")
+print(f"\t \t - Summerhouse areas: {dist_summer}m")
+print(f"\t * Distance thresholds for point layers:")
+print(f"\t \t - Facilities: {dist_faci}m")
+print(f"\t \t - Service: {dist_serv}m")
+print(f"\t \t - Points of interest: {dist_pois}m")
+print("Please be patient, this might take a while!")
 
 ### SETUP
 
@@ -371,3 +381,5 @@ for t in types:
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+print("03c_evaluate_network script ended successfully \n")

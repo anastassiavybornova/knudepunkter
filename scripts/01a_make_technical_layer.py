@@ -15,8 +15,8 @@ display_technicallayer = True  # display the technical layer of edges?
 
 ##### NO CHANGES BELOW THIS LINE
 print("01a_make_technical_layer script started with user settings:")
-print(f"Display input data: {display_inputdata}")
-print(f"Display technical layer: {display_technicallayer}")
+print(f"\t * Display input data: {display_inputdata}")
+print(f"\t * Display technical layer: {display_technicallayer}")
 
 ### SETUP
 
@@ -209,4 +209,4 @@ if dataforsyning_token and (display_inputdata or display_technicallayer):
 
     root.insertLayer(-1, basemap)
 
-print("01a_make_technical_layer script ended succcessfully")
+print("01a_make_technical_layer script ended succcessfully \n")

@@ -13,8 +13,9 @@ display_communicationlayer = True
 
 ##### NO CHANGES BELOW THIS LINE
 print("01b_make_communication_layer script started with user settings:")
-print(f"Display input data: {display_inputdata}")
-print(f"Display communication layer: {display_communicationlayer}")
+print(f"\t * Display input data: {display_inputdata}")
+print(f"\t * Display communication layer: {display_communicationlayer}")
+print("Please be patient, this might take a while!")
 
 ### SETUP
 
@@ -330,4 +331,4 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("01b_make_communication_layer script ended successfully")
+print("01b_make_communication_layer script ended successfully \n")

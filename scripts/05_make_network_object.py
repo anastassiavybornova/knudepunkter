@@ -9,8 +9,8 @@ display_network_layer = True
 
 ### NO CHANGES BELOW THIS LINE
 print("05_make_network_object script started with user settings:")
-print(f"Display input data: {display_input_data}")
-print(f"Display network layer: {display_network_layer}")
+print(f"\t Display input data: {display_input_data}")
+print(f"\t Display network layer: {display_network_layer}")
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -168,4 +168,4 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("05_make_network_object script ended successfully")
+print("05_make_network_object script ended successfully \n")

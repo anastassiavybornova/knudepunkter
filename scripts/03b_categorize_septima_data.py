@@ -5,6 +5,7 @@
 # will not desplay anything
 
 print("03b_categorize_septima_data script started")
+print("Please be patient, this might take a while!")
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -221,4 +222,4 @@ sommerhus.to_file(eval_path + "/sommerhus.gpkg", index=False)
 
 print(f"All evaluation layers saved to {eval_path}")
 
-print("03b_categorize_septima_data script ended successfully")
+print("03b_categorize_septima_data script ended successfully \n")

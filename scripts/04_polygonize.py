@@ -104,4 +104,4 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("04_polygonize script ended successfully")
+print("04_polygonize script ended successfully \n")
