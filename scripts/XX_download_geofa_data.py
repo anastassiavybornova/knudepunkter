@@ -3,6 +3,10 @@
 ### CUSTOM SETTINGS
 show_layers = True
 
+##### NO CHANGES BELOW THIS LINE
+print("XX_download_geofa_data script started with user settings:")
+print(f"Show layers: {show_layers}")
+
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 
@@ -87,3 +91,5 @@ if show_layers == True:
     print(f"Added layer {layer_name}")
 
     group_layers("Get GeoFa Data", [layer_name], remove_group_if_exists=True)
+
+print("XX_download_geofa_data script ended successfully")

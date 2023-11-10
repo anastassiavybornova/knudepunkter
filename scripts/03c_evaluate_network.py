@@ -28,6 +28,9 @@ dist_serv = 500
 dist_pois = 1000
 
 ##### NO CHANGES BELOW THIS LINE
+print(" script started with user settings:")
+print(f"")
+print(" script ended successfully")
 
 ### SETUP
 

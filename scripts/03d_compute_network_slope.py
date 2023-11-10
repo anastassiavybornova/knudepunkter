@@ -15,6 +15,9 @@ plot_results = True
 slope_threshold = 8  # percent slope
 
 ##### NO CHANGES BELOW THIS LINE
+print(" script started with user settings:")
+print(f"")
+print(" script ended successfully")
 
 ### SETUP
 

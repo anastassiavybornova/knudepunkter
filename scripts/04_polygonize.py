@@ -4,6 +4,8 @@
 display_polygons = True
 
 ##### NO CHANGES BELOW THIS LINE
+print("04_polygonize script started with user settings:")
+print(f"Display polygons: {display_polygons}")
 
 ### SETUP
 
@@ -101,3 +103,5 @@ if display_polygons:
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+print("04_polygonize script ended successfully")
