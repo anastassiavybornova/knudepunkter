@@ -16,7 +16,7 @@ Below, you find detailed instructions with screenshots for each of the following
 1. You need QGIS-LTR 3.28 Firenze. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download QGIS or to upgrade it to the 3.28 version, [click here](https://www.qgis.org/en/site/forusers/download.html).
 
 <center>
-<img alt="Check your QGIS version" src="/screenshots/qgis-version.png" width=100%>
+<img alt="Check your QGIS version" src="/docs/screenshots/qgis-version.png" width=100%>
 </center>
 
 2. Find out the path to the Python installation for the QGIS app on your local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`.
