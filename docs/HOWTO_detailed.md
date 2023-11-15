@@ -21,6 +21,8 @@ Below, you find detailed instructions with screenshots for each of the following
 
 > HOW? 
 
+<p align="center"><img alt="Alt text" src="/docs/screenshots/img.png" width=80%></p>
+
 3. Open your command line interface (on MacOS: Terminal; on Windows: **?**)
 
 > HOW?
@@ -37,33 +39,41 @@ Below, you find detailed instructions with screenshots for each of the following
 
 > HOW?
 
+<p align="center"><img alt="Installing numpy from the terminal" src="/docs/screenshots/cli-install.png" width=80%></p>
+
 ***
 
 ## Step 2: Download the contents of this repository
 
 On this GitHub repository page, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter-fyn`. This will be the main folder for the entire workflow.
 
-> SCREENSHOT
+<p align="center"><img alt="Download the knudepunkter-fyn folder" src="/docs/screenshots/github.png" width=80%></p>
 
 ***
 
 ## Step 3: Set up a QGIS project in the knudepunkter-fyn folder
 
-Project > New and then Project > Save as and then (yourprojectname) in `knudepunkter-fyn`
+Open QGIS. In QGIS, create a new project (`Project > New`) and save it in the `knudepunkter-fyn` folder that you downloaded in Step 2 (`Project > Save as`).
 
-> Screenshot
+<p align="center"><img alt="Create a new project..." src="/docs/screenshots/qgis-new.png" width=50%></p>
+
+<p align="center"><img alt="... and save it in the knudepunkter-fyn folder" src="/docs/screenshots/qgis-saveas.png" width=50%></p>
 
 ***
 
 ## Step 4: Run scripts from the QGIS Python console
 
+In QGIS,
+
 1. Open the Python Console 
 2. Click on `Show Editor`
 3. Click on `Open Script`
-4. Open the first script, `scriptnamehere`
+4. Navigate to the `scripts` folder and open the first script, `scriptnamehere`
 5. Click on `Run Script`
 6. While the script is running, you will see status messages in the console window
 7. Once you see the message `scriptnamehere ended succcessfully`, you can run the next script: repeat steps 4-6 for all scripts (`scriptnumbers here`) consecutively
+
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=80%></p>
 
 ***
 
