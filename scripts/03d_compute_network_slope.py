@@ -15,6 +15,12 @@ plot_results = True
 slope_threshold = 8  # percent slope
 
 ##### NO CHANGES BELOW THIS LINE
+print("03d_compute_network_slope script started with user settings:")
+print(f"\t Maximal segment length: {segment_length}m")
+print(f"\t Plot intermediate results: {plot_intermediate}")
+print(f"\t Plot final results: {plot_results}")
+print(f"\t Slope threshold: {slope_threshold}% (percent)")
+print("Please be patient, this might take a while!")
 
 ### SETUP
 
@@ -392,3 +398,5 @@ turn_off_layers(turn_off_layer_names)
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+print("03d_compute_network_slope script ended successfully \n")

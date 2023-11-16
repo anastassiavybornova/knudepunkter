@@ -5,6 +5,11 @@
 ### CUSTOM SETTINGS
 show_layers = False
 
+##### NO CHANGES BELOW THIS LINE
+print("03a_download_septima_data script started with user settings:")
+print(f"Show layers: {show_layers}")
+print("Please be patient, this might take a while!")
+
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 
@@ -89,3 +94,5 @@ for wfs_name in wfs_list:
 print("Layers fetched and saved.")
 # for some reason, there are two wfs layers from land_landskabnatur that don't get downloaded:
 # værdifulde landskaber and fredninger
+
+print("03a_download_septima_data script ended successfully \n")

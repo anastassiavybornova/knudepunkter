@@ -1,3 +1,8 @@
+# TODO: insert script description
+
+##### NO CHANGES BELOW THIS LINE
+print("00_make_polygon script started")
+
 # define study area to be used
 # (will later be user-provided polygon; here random choice
 # of 1 of 3 study areas)
@@ -53,3 +58,4 @@ gpd.GeoDataFrame(geometry=[my_poly], crs=gdf.crs).to_file(
 )
 
 print("Study area polygon saved")
+print("00_make_polygon script ended successfully")

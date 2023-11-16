@@ -184,6 +184,7 @@ data/raw/DTM/*
 data/processed/merged_dem.tif
 data/processed/merged_dem.tif.aux.xml
 data/raw/DTM.zip
+data/raw/readme*.pdf
 
 data/raw/DEM/*
 
