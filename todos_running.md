@@ -5,6 +5,7 @@
 * **ANA** summary statistics (issue [10](https://github.com/anastassiavybornova/knudepunkter/issues/9))
 * **ANE** update visualizations on evaluation (group as indicated in Fyn readme; highlight more visually: thicker linewidths, different colors etc.)
 * (later) automated export of QGIS print layouts (issue [11](https://github.com/anastassiavybornova/knudepunkter/issues/11))
+* TBD: instead of freely defined polygon, provide municipality names? (and septima data in chunks)
 
 ## FYN
 * polish/finish [README_Fyn.md](/docs/README_Fyn.md)
