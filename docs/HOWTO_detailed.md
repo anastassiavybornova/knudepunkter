@@ -1,6 +1,6 @@
 # How to use the Cycle Node Network Planner
 
-Below, you find detailed instructions with screenshots for each of the following steps:
+Below, you find detailed instructions on how to use the Cycle Node Network Planner. **Contents** of this file (click to jump to Step X):
 
 * [Step 1](#step-1-set-up-qgis): Set up QGIS
 * [Step 2](#step-2-download-the-contents-of-this-repository): Download the contents of this repository (`knudepunkter-fyn` folder)
