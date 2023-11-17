@@ -1,1 +1,0 @@
-* https://courses.spatialthoughts.com/qgis-actions.html
