@@ -187,6 +187,7 @@ data/raw/DTM.zip
 data/raw/readme*.pdf
 
 data/raw/DEM/*
+data/RIDA/*
 
 data/processed/workflow_steps/merged_dem.tif
 data/processed/workflow_steps/merged_dem.tif.aux.xml
