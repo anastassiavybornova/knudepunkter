@@ -12,7 +12,13 @@
 segment_length = 100  # max segment length in meters
 plot_intermediate = True
 plot_results = True
-slope_threshold = 8  # percent slope
+slope_threshold = 7  # percent slope
+
+# * <3% no elevation, or manageable elevation
+# * 3-5% noticeable elevation, that can get tiresome after a longer period
+# * 5-7% steep elevation, that can get tiresome quickly
+# * >8% very steep elevation, unbikeable for most cyclists
+
 
 ##### NO CHANGES BELOW THIS LINE
 print("03d_compute_network_slope script started with user settings:")
@@ -62,7 +68,7 @@ segments_fp = homepath + "/data/processed/workflow_steps/segments.gpkg"
 
 segments_slope_fp = homepath + "/results/data/segments_slope.gpkg"
 edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
-steep_segments_fp = homepath + "/results/data/steep_segments.gpkg"
+steep_segments_fp = homepath + "/results/data/very_steep_segments.gpkg"
 
 ##### IMPORT STUDY AREA EDGES AS GDF
 edges = gpd.read_file(edges_fp)
@@ -87,7 +93,7 @@ remove_existing_layers(
         "dem_terrain",
         "Segments slope",
         "Edges average slope",
-        "Steep segments",
+        "Very steep segments",
     ]
 )
 
@@ -259,6 +265,7 @@ vlayer_slope = QgsVectorLayer(
     "ogr",
 )
 
+# TODO: UPDATE
 if plot_results:
     QgsProject.instance().addMapLayer(vlayer_slope)
     draw_linear_graduated_layer(
@@ -303,6 +310,7 @@ if plot_results:
 
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
+    # TODO: UPDATE
     draw_linear_graduated_layer(
         "Edges average slope",
         "ave_slope",
@@ -322,14 +330,14 @@ steep_segments.to_file(steep_segments_fp)
 if plot_results:
     vlayer_steep_segments = QgsVectorLayer(
         steep_segments_fp,
-        "Steep segments",
+        "Very steep segments",
         "ogr",
     )
 
     QgsProject.instance().addMapLayer(vlayer_steep_segments)
 
     draw_simple_line_layer(
-        "Steep segments",
+        "Very steep segments",
         color="red",
         line_width=1.5,
         line_style="solid",
@@ -348,7 +356,7 @@ if plot_intermediate and plot_results:
             "Edges average slope",
             "Segments slope",
             "Elevation values segments",
-            "Steep segments",
+            "Very steep segments",
         ],
         remove_group_if_exists=True,
     )
@@ -373,7 +381,7 @@ if plot_intermediate and not plot_results:
             "Segments",
             "Vertices",
             "Elevation values segments",
-            "Steep segments",
+            "Very steep segments",
         ],
         remove_group_if_exists=True,
     )
