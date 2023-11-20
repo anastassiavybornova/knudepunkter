@@ -12,7 +12,16 @@
 segment_length = 100  # max segment length in meters
 plot_intermediate = True
 plot_results = True
-slope_threshold = 8  # percent slope
+slope_threshold = 7  # percent slope
+
+# Definition of slope classes used for plotting.
+# Format: (label, lower bound, upper bound, color (hex code))
+slope_ranges = [
+    ("Manageable elevation", 0.0, 2.99999, "#ffbaba"),
+    ("Noticeable elevation", 3.0, 4.999999, "#ff5252"),
+    ("Steep elevation", 5.0, 6.9999999, "#ff0000"),
+    ("Very steep elevation", 7, 100.0, "#a70000"),
+]
 
 ##### NO CHANGES BELOW THIS LINE
 print("03d_compute_network_slope script started with user settings:")
@@ -62,7 +71,7 @@ segments_fp = homepath + "/data/processed/workflow_steps/segments.gpkg"
 
 segments_slope_fp = homepath + "/results/data/segments_slope.gpkg"
 edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
-steep_segments_fp = homepath + "/results/data/steep_segments.gpkg"
+steep_segments_fp = homepath + "/results/data/very_steep_segments.gpkg"
 
 ##### IMPORT STUDY AREA EDGES AS GDF
 edges = gpd.read_file(edges_fp)
@@ -87,7 +96,7 @@ remove_existing_layers(
         "dem_terrain",
         "Segments slope",
         "Edges average slope",
-        "Steep segments",
+        "Very steep segments",
     ]
 )
 
@@ -261,21 +270,15 @@ vlayer_slope = QgsVectorLayer(
 
 if plot_results:
     QgsProject.instance().addMapLayer(vlayer_slope)
-    draw_linear_graduated_layer(
-        "Segments slope",
-        "slope",
-        10,
-        cmap="Reds",
-        alpha=255,
-        line_width=1.5,
-        line_style="solid",
-    )
+
+    draw_slope_layer("Segments slope", slope_ranges=slope_ranges)
+
 
 ### GET MIN MAX AVE SLOPE FOR EDGES (BASED ON EDGE SEGMENTS) ######
 
-edges["min_slope"] = None
-edges["max_slope"] = None
-edges["ave_slope"] = None
+edges["min_slope"] = 0
+edges["max_slope"] = 0
+edges["ave_slope"] = 0
 
 grouped = segs.groupby("edge_id")
 
@@ -303,14 +306,10 @@ if plot_results:
 
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
-    draw_linear_graduated_layer(
-        "Edges average slope",
-        "ave_slope",
-        10,
-        cmap="PuRd",
-        alpha=255,
-        line_width=1.5,
-        line_style="solid",
+    draw_slope_layer(
+        layer_name="Edges average slope",
+        slope_ranges=slope_ranges,
+        slope_field="ave_slope",
     )
 
 
@@ -322,15 +321,15 @@ steep_segments.to_file(steep_segments_fp)
 if plot_results:
     vlayer_steep_segments = QgsVectorLayer(
         steep_segments_fp,
-        "Steep segments",
+        "Very steep segments",
         "ogr",
     )
 
     QgsProject.instance().addMapLayer(vlayer_steep_segments)
 
     draw_simple_line_layer(
-        "Steep segments",
-        color="red",
+        "Very steep segments",
+        color="#a70000",
         line_width=1.5,
         line_style="solid",
     )
@@ -348,7 +347,7 @@ if plot_intermediate and plot_results:
             "Edges average slope",
             "Segments slope",
             "Elevation values segments",
-            "Steep segments",
+            "Very steep segments",
         ],
         remove_group_if_exists=True,
     )
@@ -373,7 +372,7 @@ if plot_intermediate and not plot_results:
             "Segments",
             "Vertices",
             "Elevation values segments",
-            "Steep segments",
+            "Very steep segments",
         ],
         remove_group_if_exists=True,
     )

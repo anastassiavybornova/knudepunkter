@@ -454,3 +454,46 @@ def remove_existing_layers(layer_name_list):
         QgsProject.instance().removeMapLayer(r)
 
     return None
+
+
+def draw_slope_layer(
+    layer_name,
+    slope_ranges,
+    slope_field="slope",
+    line_width=1,
+    line_style="solid",
+):
+    """
+    Plot network slope layer with a graduated classification based on predefined classes.
+
+    Arguments:
+        layer_name (str): name of layer to plot,
+        slope_ranges (list): List of tuples with each four values: (label for class (str), lower bound for slope class (numeric), uppper bound for slope class (numeric), color (str))
+        slope_field (str): name of attr/field with slope values
+        linewidth (numerical): width of line features
+        line_style (string): line style (e.g. solid or dash). Must be valid line style type
+    Returns:
+        None
+    """
+
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+
+    ranges = []
+
+    for label, lower, upper, color in slope_ranges:
+        symbol = QgsLineSymbol.createSimple(
+            {
+                "width": line_width,
+                "line_style": line_style,
+            }
+        )
+        # sym = QgsSymbol.defaultSymbol(layer.geometryType())
+        symbol.setColor(QColor(color))
+        rng = QgsRendererRange(lower, upper, symbol, label)
+        ranges.append(rng)
+
+    renderer = QgsGraduatedSymbolRenderer(slope_field, ranges)
+
+    layer.setRenderer(renderer)
+    layer.triggerRepaint()
+    iface.layerTreeView().refreshLayerSymbology(layer.id())
