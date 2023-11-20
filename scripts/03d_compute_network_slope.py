@@ -14,11 +14,14 @@ plot_intermediate = True
 plot_results = True
 slope_threshold = 7  # percent slope
 
-# * <3% no elevation, or manageable elevation
-# * 3-5% noticeable elevation, that can get tiresome after a longer period
-# * 5-7% steep elevation, that can get tiresome quickly
-# * >8% very steep elevation, unbikeable for most cyclists
-
+# Definition of slope classes used for plotting.
+# Format: (label, lower bound, upper bound, color (hex code))
+slope_ranges = [
+    ("Manageable elevation", 0.0, 2.99999, "#ffbaba"),
+    ("Noticeable elevation", 3.0, 4.999999, "#ff5252"),
+    ("Steep elevation", 5.0, 6.9999999, "#ff0000"),
+    ("Very steep elevation", 7, 100.0, "#a70000"),
+]
 
 ##### NO CHANGES BELOW THIS LINE
 print("03d_compute_network_slope script started with user settings:")
@@ -265,24 +268,17 @@ vlayer_slope = QgsVectorLayer(
     "ogr",
 )
 
-# TODO: UPDATE
 if plot_results:
     QgsProject.instance().addMapLayer(vlayer_slope)
-    draw_linear_graduated_layer(
-        "Segments slope",
-        "slope",
-        10,
-        cmap="Reds",
-        alpha=255,
-        line_width=1.5,
-        line_style="solid",
-    )
+
+    draw_slope_layer("Segments slope", slope_ranges=slope_ranges)
+
 
 ### GET MIN MAX AVE SLOPE FOR EDGES (BASED ON EDGE SEGMENTS) ######
 
-edges["min_slope"] = None
-edges["max_slope"] = None
-edges["ave_slope"] = None
+edges["min_slope"] = 0
+edges["max_slope"] = 0
+edges["ave_slope"] = 0
 
 grouped = segs.groupby("edge_id")
 
@@ -310,15 +306,10 @@ if plot_results:
 
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
-    # TODO: UPDATE
-    draw_linear_graduated_layer(
-        "Edges average slope",
-        "ave_slope",
-        10,
-        cmap="PuRd",
-        alpha=255,
-        line_width=1.5,
-        line_style="solid",
+    draw_slope_layer(
+        layer_name="Edges average slope",
+        slope_ranges=slope_ranges,
+        slope_field="ave_slope",
     )
 
 
@@ -338,7 +329,7 @@ if plot_results:
 
     draw_simple_line_layer(
         "Very steep segments",
-        color="red",
+        color="#a70000",
         line_width=1.5,
         line_style="solid",
     )
