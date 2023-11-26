@@ -193,3 +193,17 @@ data/processed/workflow_steps/merged_dem.tif
 data/processed/workflow_steps/merged_dem.tif.aux.xml
 data/processed/workflow_steps/merged_dem_vestjylland.tif
 data/processed/workflow_steps/merged_dem_vestjylland.tif.aux.xml
+
+data/raw/RIDA/*/anvendelse.gpkg
+data/raw/RIDA/*/beskyttet_natur.gpkg
+data/raw/RIDA/*/beskyttet_vandloeb.gpkg
+data/raw/RIDA/*/besoeg.gpkg
+data/raw/RIDA/*/fortidsminder.gpkg
+data/raw/RIDA/*/frednatpark.gpkg
+data/raw/RIDA/*/indkoeb.gpkg
+data/raw/RIDA/*/infoservice.gpkg
+data/raw/RIDA/*/landemaerker.gpkg
+data/raw/RIDA/*/overnatning.gpkg
+data/raw/RIDA/*/rasteplads.gpkg
+data/raw/RIDA/*/udflugt.gpkg
+data/raw/RIDA/*/vaerdifuld.gpkg
