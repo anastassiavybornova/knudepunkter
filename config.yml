@@ -1,3 +1,19 @@
+# provide the name of the study area
+study_area: "Fyn"
+
+# provide a list of municipality codes for this study area
+municipalities:
+  - "0410" # Middelfart
+  - "0420" # Assens
+  - "0430" # Faaborg-Midtfyn
+  - "0440" # Kerteminde
+  - "0450" # Nyborg
+  - "0461" # Odense
+  - "0479" # Svendborg
+  - "0480" # Nordfyns
+  - "0482" # Langeland
+  - "0492" # Ærø
+  
 # provide projected crs 
 proj_crs: "EPSG:25832"
 
@@ -6,12 +22,4 @@ dataforsyning_token: "fc5f46c60194d0833dbc2b219b6d500a"
 datafordeler_username: "MAKKFGPILT"
 datafordeler_password: "Testing23!"
 
-study_area_name: "vestjylland"
-
-# provide wfs layers to import (as strings)
-wfs_list:
-  - "land_attraktioner"
-  - "land_landskabnatur"
-  - "land_anvendelse"
-  - "facilit_faciliteter"
 
