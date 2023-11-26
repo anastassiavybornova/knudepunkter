@@ -13,3 +13,4 @@ dependencies:
   - osmnx
   - networkx
   - contextily
+  - pyyaml
