@@ -20,3 +20,16 @@
 * if study areas are not contigent, do we have a problem?
 * config file: study_area_name does what?
 * where do we bring the list of kommunekoder? (link to web, or github?)
+
+### PICK UP HERE:
+
+* ~~add all (needed) fgb files to rida_dict~~
+* ~~run to create separate layers, PUSH TO MAIN SEPARATELY!~~
+* ~~add a code to save kommune polygons separately~~~
+* ~~convert 00_TEMP_study_area.ipynb to .py file~~
+* ~~adjust 00 file to importing data by kommunekode (config file)~~
+* move 03a to archive
+* ~~edit 03b, convert to 03a, adding new layers!~~~
+* replace evaluation in py files
+* check if script works
+* merge (?) `niras_wfs_exports` and `folkersma_digital`? 
