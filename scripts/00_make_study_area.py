@@ -1,9 +1,8 @@
-
 ##### CUSTOM SETTINGS
 display_studyarea = True # display the study area polygon? 
 
 ##### NO CHANGES BELOW THIS LINE
-print("SCRIPT NAME started with user settings:")
+print("00_make_study_area started with user settings:")
 print(f"\t * Display user-defined study area: {display_studyarea}")
 
 ### SETUP
@@ -45,11 +44,13 @@ for m in configs["municipalities"]:
 # if all kommunekode are correct, filter data set and save a copy
 muni = muni[muni.kommunekode.isin(configs["municipalities"])].copy()
 muni.to_file(filepath_study, index = False)
-print(f"Study area layer saved to: {filepath_study}")
+print(f"\t Study area layer saved to: {filepath_study}")
+print("\t Municipalities included in study area:")
+for navn in muni.navn:
+    print(f"\t {navn}")
 
 # set to projected CRS
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
-
 
 if display_studyarea == True:
     
@@ -68,4 +69,4 @@ if display_studyarea == True:
             outline_width=0.5,
         )
     
-print("SCRIPTNAME script ended succcessfully \n")
+print("00_make_study_area ended succcessfully \n")
