@@ -187,13 +187,13 @@ data/raw/DTM.zip
 data/raw/readme*.pdf
 
 data/raw/DEM/*
-data/RIDA/*
 
 data/processed/workflow_steps/merged_dem.tif
 data/processed/workflow_steps/merged_dem.tif.aux.xml
 data/processed/workflow_steps/merged_dem_vestjylland.tif
 data/processed/workflow_steps/merged_dem_vestjylland.tif.aux.xml
 
+# old versions of the rida data set
 data/raw/RIDA/*/anvendelse.gpkg
 data/raw/RIDA/*/beskyttet_natur.gpkg
 data/raw/RIDA/*/beskyttet_vandloeb.gpkg
@@ -207,3 +207,13 @@ data/raw/RIDA/*/overnatning.gpkg
 data/raw/RIDA/*/rasteplads.gpkg
 data/raw/RIDA/*/udflugt.gpkg
 data/raw/RIDA/*/vaerdifuld.gpkg
+
+# fgb files for all of DK (used in scripts/preprocessing/make_rida.ipynb)
+data/RIDA
+data/RIDA/*
+
+# shp/gpkg files for all of DK (used in scripts/preprocessing/make_network.ipynb)
+data/FOLKERSMA
+data/FOLKERSMA/*
+data/NIRAS
+data/NIRAS/*
