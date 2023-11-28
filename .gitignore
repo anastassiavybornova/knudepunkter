@@ -217,3 +217,7 @@ data/FOLKERSMA
 data/FOLKERSMA/*
 data/NIRAS
 data/NIRAS/*
+
+# outdated data sets
+data/raw/archive
+data/raw/archive/*
