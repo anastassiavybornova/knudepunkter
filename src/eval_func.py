@@ -48,12 +48,14 @@ def evaluate_export_plot_point(
     dist,
     name,
     type_col,
-    input_size=2,
     input_color_rgb="255, 0, 0",
-    output_size_reached=5,
+    output_color_reached="255, 0, 0",
+    output_color_not_reached="255, 0, 0",
+    input_size=3,
+    output_size_reached=3,
     output_size_not_reached=3,
-    input_alpha="100",
-    output_alpha="200",
+    input_alpha="255",
+    output_alpha="255",
     display_output=True,
     display_input=True,
 ):
@@ -68,8 +70,8 @@ def evaluate_export_plot_point(
         dist (numeric): max distance for points to be reachable (in meters)
         name (str): label/name for points layer (used for layer naming and print statements)
         type_col (str): name of column with sub-category for points
-        input_size (numerical): marker size when plotting input points
         input_color_rgb (str): String with 3 rgb values for input color
+        input_size (numerical): marker size when plotting input points
         output_size_reached (numerical): marker size when plotting reachable points
         output_size_not_reached (numerical): marker size when plotting non-reachable points
         input_alpha (numerical): value between 0 and 255 setting the transparency of input points
@@ -132,6 +134,7 @@ def evaluate_export_plot_point(
         draw_categorical_layer(
             output_layer_name_outside,
             type_col,
+            predefined_color = output_color_not_reached,
             alpha=output_alpha,
             marker_size=output_size_not_reached,
         )
@@ -145,6 +148,7 @@ def evaluate_export_plot_point(
         draw_categorical_layer(
             output_layer_name_within,
             type_col,
+            predefined_color = output_color_reached,
             alpha=output_alpha,
             marker_size=output_size_reached,
         )
