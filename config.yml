@@ -2,6 +2,8 @@
 study_area_name: "Faxe"
 
 # provide a list of municipality codes for this study area
+# (see here: https://danmarksadresser.dk/adressedata/kodelister/kommunekodeliste)
+# format: 4 digits in quotation marks
 municipalities:
   # - "0410" # Middelfart
   # - "0420" # Assens
