@@ -83,6 +83,7 @@ def evaluate_export_plot_point(
         input_layer_name (str), output_layer_name_within (str), output_layer_name_outside (str):
         Returns names of plotted layers with input, non-reachable points and reachable points
         If the display of a layer is set to False, None is returned instead of the layer name
+        res (dict): summary statistics of evaluation results
     """
 
     # import layer
@@ -96,13 +97,22 @@ def evaluate_export_plot_point(
     print(
         f"Out of {len(input_points)} {name.lower()} points, {len(points_withinreach)} {name.lower()} ({(len(points_withinreach) / len(input_points))*100:.2f}%) are within reach"
     )
-
+    
     # export
     points_withinreach.to_file(within_reach_output_fp)
 
     evaluated_points.loc[evaluated_points.withinreach == 0].to_file(
         outside_reach_output_fp
     )
+    
+    # stats to dict
+    res = {}
+    res[name] = {}
+    res[name]["type"] = "point_layer"
+    res[name]["dist"] = dist
+    res[name]["total"] = len(input_points)
+    res[name]["within"] = len(points_withinreach)
+    res[name]["outside"] = len(evaluated_points.loc[evaluated_points.withinreach == 0])
 
     input_layer_name = None
     output_layer_name_within = None
@@ -153,7 +163,7 @@ def evaluate_export_plot_point(
             marker_size=output_size_reached,
         )
 
-    return input_layer_name, output_layer_name_within, output_layer_name_outside
+    return input_layer_name, output_layer_name_within, output_layer_name_outside, res
 
 def evaluate_export_plot_poly(
     input_fp,
@@ -202,7 +212,7 @@ def evaluate_export_plot_poly(
     input_poly = gpd.read_file(input_fp)
 
     # evaluate
-    evaluate_network = evaluate_polygon_layer(input_poly, network_edges, dist)
+    evaluate_network, evaluate_area = evaluate_polygon_layer(input_poly, network_edges, dist)
 
     print(f"{name} areas evaluated")
     print(
@@ -211,6 +221,16 @@ def evaluate_export_plot_poly(
 
     # export
     evaluate_network.to_file(output_fp)
+
+    # stats to dict
+    res = {}
+    res[name] = {}
+    res[name]["type"] = "polygon_layer"
+    res[name]["dist"] = dist
+    res[name]["total"] = network_edges.unary_union.length # area covered by layer
+    res[name]["within"] = evaluate_network.unary_union.length # length of edges intersecting
+    res[name]["outside"] = network_edges.unary_union.length - evaluate_network.unary_union.length # length of edges not intersecting 
+    res[name]["area"] = evaluate_area
 
     input_layer_name = None
     output_layer_name = None
@@ -246,7 +266,7 @@ def evaluate_export_plot_poly(
                 line_style=line_style,
             )
 
-    return input_layer_name, output_layer_name
+    return input_layer_name, output_layer_name, res
 
 
 def evaluate_polygon_layer(poly, edges, polygon_buffer=100):
@@ -256,6 +276,9 @@ def evaluate_polygon_layer(poly, edges, polygon_buffer=100):
     both input gdfs must be in the same projected CRS.
     keep track of which, and how many, types (from poly layer)
     each of the edge segments intersects with (to track variation).
+    returns 
+        gdf of intersecting edge segments
+        surface (sqm) of evaluation area
     """
 
     assert poly.crs == edges.crs
@@ -306,7 +329,7 @@ def evaluate_polygon_layer(poly, edges, polygon_buffer=100):
     # remove non-linestring geoms
     gdf_inter = gdf_inter[gdf_inter.type == "LineString"].reset_index(drop=True)
 
-    return gdf_inter
+    return gdf_inter, poly_area.area
 
 
 def evaluate_point_layer(points, edges, points_buffer):

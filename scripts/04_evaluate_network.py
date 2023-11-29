@@ -28,7 +28,7 @@ dist_serv = 500
 dist_pois = 1000
 
 ##### NO CHANGES BELOW THIS LINE
-print("03c_evaluate_network script started with user settings:")
+print("04_evaluate_network script started with user settings:")
 print(f"\t * Display input: {display_input}; display_output: {display_output}")
 print(f"\t * Distance thresholds for polygon layers:")
 print(f"\t \t - Areas to avoid: {dist_bad}m")
@@ -56,11 +56,11 @@ if homepath not in sys.path:
 # import python packages
 import os
 import os.path
-
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import pandas as pd
 from shapely import strtree
+import json
 
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
@@ -130,10 +130,12 @@ if display_input:
 
 #### **** EVALUATE POLYGON LAYERS **** ####
 
+res = {} # initialize stats results dictionary
+
 #### AGRICULTURE ####
 
 if os.path.exists(eval_path + "agriculture.gpkg"):
-    agri_input_name, agri_output_name = evaluate_export_plot_poly(
+    agri_input_name, agri_output_name, res_agriculture = evaluate_export_plot_poly(
         input_fp=eval_path + "agriculture.gpkg",
         output_fp=results_path + f"agricultural_network_{dist_agri}.gpkg",
         network_edges=edges,
@@ -154,11 +156,12 @@ if os.path.exists(eval_path + "agriculture.gpkg"):
 
     input_layers.append(agri_input_name)
     output_layers.append(agri_output_name)
+    res = res | res_agriculture
 
 #### BAD #####
 
 if os.path.exists(eval_path + "bad.gpkg"):
-    bad_input_name, bad_output_name = evaluate_export_plot_poly(
+    bad_input_name, bad_output_name, res_bad = evaluate_export_plot_poly(
         input_fp=eval_path + "bad.gpkg",
         output_fp=results_path + f"bad_network_{dist_bad}.gpkg",
         network_edges=edges,
@@ -177,13 +180,14 @@ if os.path.exists(eval_path + "bad.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_bad
     input_layers.append(bad_input_name)
     output_layers.append(bad_output_name)
 
 #### CULTURE ####
 
 if os.path.exists(eval_path + "culture.gpkg"):
-    culture_input_name, culture_output_name = evaluate_export_plot_poly(
+    culture_input_name, culture_output_name, res_culture = evaluate_export_plot_poly(
         input_fp=eval_path + "culture.gpkg",
         output_fp=results_path + f"culture_network_{dist_culture}.gpkg",
         network_edges=edges,
@@ -202,13 +206,14 @@ if os.path.exists(eval_path + "culture.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_culture
     input_layers.append(culture_input_name)
     output_layers.append(culture_output_name)
 
 #### NATURE ####
 
 if os.path.exists(eval_path + "nature.gpkg"):
-    nature_input_name, nature_output_name = evaluate_export_plot_poly(
+    nature_input_name, nature_output_name, res_nature = evaluate_export_plot_poly(
         input_fp=eval_path + "nature.gpkg",
         output_fp=results_path + f"nature_network_{dist_nature}.gpkg",
         network_edges=edges,
@@ -227,13 +232,14 @@ if os.path.exists(eval_path + "nature.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_nature
     input_layers.append(nature_input_name)
     output_layers.append(nature_output_name)
 
 #### SOMMERHUS ####
 
 if os.path.exists(eval_path + "sommerhus.gpkg"):
-    summer_input_name, summer_output_name = evaluate_export_plot_poly(
+    summer_input_name, summer_output_name, res_sommerhus = evaluate_export_plot_poly(
         input_fp=eval_path + "sommerhus.gpkg",
         output_fp=results_path + f"summer_network_{dist_summer}.gpkg",
         network_edges=edges,
@@ -252,6 +258,7 @@ if os.path.exists(eval_path + "sommerhus.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_sommerhus
     input_layers.append(summer_input_name)
     output_layers.append(summer_output_name)
 
@@ -266,6 +273,7 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         faci_input,
         faci_output_within,
         faci_output_outside,
+        res_facilities
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "facilities.gpkg",
         within_reach_output_fp=results_path
@@ -283,6 +291,7 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_facilities
     input_layers.append(faci_input)
     output_layers.append(faci_output_within)
     output_layers.append(faci_output_outside)
@@ -294,6 +303,7 @@ if os.path.exists(eval_path + "service.gpkg"):
         service_input,
         service_output_within,
         service_output_outside,
+        res_service
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "service.gpkg",
         within_reach_output_fp=results_path + f"service_within_reach_{dist_faci}.gpkg",
@@ -310,13 +320,19 @@ if os.path.exists(eval_path + "service.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_service
     input_layers.append(service_input)
     output_layers.append(service_output_within)
     output_layers.append(service_output_outside)
 
 #### POIS ####
 if os.path.exists(eval_path + "pois.gpkg"):
-    pois_input, pois_output_within, pois_output_outside = evaluate_export_plot_point(
+    (
+        pois_input, 
+        pois_output_within, 
+        pois_output_outside,
+        res_pois
+    ) = evaluate_export_plot_point(
         input_fp=eval_path + "pois.gpkg",
         within_reach_output_fp=results_path + f"pois_within_reach_{dist_faci}.gpkg",
         outside_reach_output_fp=results_path + f"pois_outside_reach_{dist_faci}.gpkg",
@@ -331,10 +347,16 @@ if os.path.exists(eval_path + "pois.gpkg"):
         display_input=display_input,
     )
 
+    res = res | res_pois
     input_layers.append(pois_input)
     output_layers.append(pois_output_within)
     output_layers.append(pois_output_outside)
 
+### SAVE RESULTS OF SUMMARY STATISTICS
+with open(f"{results_path}stats_eval.json", "w") as opened_file: 
+    json.dump(res, opened_file, indent = 6) 
+
+### VISUALIZATION
 
 all_layers = input_layers + output_layers
 
