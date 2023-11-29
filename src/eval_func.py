@@ -3,8 +3,44 @@ import os
 
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
+import pandas as pd
 from shapely import strtree
 
+def merge_municipalities(
+        municipality_codes, 
+        evaluation_layer, 
+        input_folder = "/data/raw/", 
+        output_folder = "/data/user_input/",
+        homepath = homepath
+        ):
+    """
+    For a given evaluation layer, merges data of all given municipalities and saves output to file.
+
+    Arguments:
+        municipality_codes (list of str): list of 4-digit municipality codes (str format)
+        evaluation_layer (str): name of evaluation layer, has to be one of: "agriculture", "bad", "culture", "facilities", "nature", "pois", "service"
+        input_folder (str): path to folder where subfolders with municipality data are located
+        output_folder (str): path to folder where merged gdf will be saved to
+        homepath (str): the homepath of the QGIS project the script is run from 
+    
+    Returns:
+        None
+    """
+    gdfs = []
+    for m in municipality_codes:
+        layerpath = homepath + input_folder + f"municipality_data/{m}/{evaluation_layer}.gpkg"
+        if os.path.exists(layerpath):
+            gdfs.append(gpd.read_file(layerpath))
+    if len(gdfs) > 1:
+        gdfs = pd.concat(gdfs, join = "inner", ignore_index = True)
+        gdfs.to_file(homepath + output_folder + f"{evaluation_layer}.gpkg")
+        print(f"{evaluation_layer.capitalize()} layer created")
+    elif len(gdfs) == 1:
+        gdfs[0].to_file(homepath + output_folder + f"{evaluation_layer}.gpkg")
+        print(f"{evaluation_layer.capitalize()} layer created")
+    else:
+        print(f"No {evaluation_layer} data found for this study area")
+    return None
 
 def evaluate_export_plot_point(
     input_fp,

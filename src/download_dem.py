@@ -11,7 +11,7 @@ import yaml
 homepath = QgsProject.instance().homePath()
 # define paths
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
-study_area_path = os.path.join(homepath, "data/raw/user_input/study_area.gpkg")
+study_area_path = os.path.join(homepath, "data/user_input/study_area.gpkg")
 
 # load configs
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
@@ -32,6 +32,7 @@ if not os.path.exists(dem_fp):
     os.mkdir(dem_fp)
 
 sa = gpd.read_file(study_area_path)
+sa = sa.to_crs(proj_crs)
 
 # Access the WCS by proving the url and optional arguments
 wcs = WebCoverageService(
