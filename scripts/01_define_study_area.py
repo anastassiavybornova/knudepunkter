@@ -2,7 +2,7 @@
 display_studyarea = True # display the study area polygon? 
 
 ##### NO CHANGES BELOW THIS LINE
-print("00_make_study_area started with user settings:")
+print("01_define_study_area started with user settings:")
 print(f"\t * Display user-defined study area: {display_studyarea}")
 
 ### SETUP

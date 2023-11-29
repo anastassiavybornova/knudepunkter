@@ -24,7 +24,7 @@ slope_ranges = [
 ]
 
 ##### NO CHANGES BELOW THIS LINE
-print("03d_compute_network_slope script started with user settings:")
+print("05_compute_slope script started with user settings:")
 print(f"\t Maximal segment length: {segment_length}m")
 print(f"\t Plot intermediate results: {plot_intermediate}")
 print(f"\t Plot final results: {plot_results}")

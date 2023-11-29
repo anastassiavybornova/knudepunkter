@@ -12,7 +12,7 @@ display_inputdata = True
 display_communicationlayer = True
 
 ##### NO CHANGES BELOW THIS LINE
-print("01b_make_communication_layer script started with user settings:")
+print("03_make_communication_network script started with user settings:")
 print(f"\t * Display input data: {display_inputdata}")
 print(f"\t * Display communication layer: {display_communicationlayer}")
 print("Please be patient, this might take a while!")

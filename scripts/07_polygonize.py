@@ -4,7 +4,7 @@
 display_polygons = True
 
 ##### NO CHANGES BELOW THIS LINE
-print("04_polygonize script started with user settings:")
+print("07_polygonize script started with user settings:")
 print(f"Display polygons: {display_polygons}")
 
 ### SETUP
