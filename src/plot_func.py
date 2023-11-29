@@ -234,10 +234,10 @@ def zoom_to_layer(layer_name):
     canvas.setExtent(extent)
     canvas.refresh()
 
-
 def draw_categorical_layer(
     layer_name,
     attr_name,
+    predefined_color = None,
     outline_color="black",
     outline_width=0.2,
     alpha=180,
@@ -254,6 +254,8 @@ def draw_categorical_layer(
     Arguments:
         layer_name (str): name of layer to plot
         attr_name (str): name of attribute with categorical values
+        predefined_color (str or None): if None, random colors will be generated for each item;
+            if str, has to be string of three values between 0 and 255 (RGB)
         outline_color (str): color to use for outline color for points and polygons
         outline_width (numerical): width of outline for points and polygons
         alpha (numerical): value between 0 and 255 setting the transparency of the fill color
@@ -278,9 +280,16 @@ def draw_categorical_layer(
     categories = []
 
     for unique_value in unique_values:
+
+        if not predefined_color:
+            current_color = f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}"
+        else:
+            current_color = f"{predefined_color}, {alpha}"
+
         if layer.wkbType() in [QgsWkbTypes.MultiPolygon, QgsWkbTypes.Polygon]:
+                
             properties = {
-                "color": f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}",
+                "color": current_color,
                 "outline_color": outline_color,
                 "outline_width": outline_width,
             }
@@ -288,9 +297,10 @@ def draw_categorical_layer(
             symbol = QgsFillSymbol.createSimple(properties)
 
         if layer.wkbType() in [QgsWkbTypes.LineString, QgsWkbTypes.MultiLineString]:
+            
             symbol = QgsLineSymbol.createSimple(
                 {
-                    "color": f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}",
+                    "color": current_color,
                     "width": line_width,
                     "line_style": line_style,
                 }
@@ -300,7 +310,7 @@ def draw_categorical_layer(
             properties = {
                 "name": marker_shape,
                 "size": marker_size,
-                "color": f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}",
+                "color": current_color,
                 "outline_color": outline_color,
                 "outline_width": outline_width,
                 "angle": marker_angle,
