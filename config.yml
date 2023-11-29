@@ -1,18 +1,19 @@
 # provide the name of the study area
-study_area: "Fyn"
+study_area_name: "Faxe"
 
 # provide a list of municipality codes for this study area
 municipalities:
-  - "0410" # Middelfart
-  - "0420" # Assens
-  - "0430" # Faaborg-Midtfyn
-  - "0440" # Kerteminde
-  - "0450" # Nyborg
-  - "0461" # Odense
-  - "0479" # Svendborg
-  - "0480" # Nordfyns
-  - "0482" # Langeland
-  - "0492" # Ærø
+  # - "0410" # Middelfart
+  # - "0420" # Assens
+  # - "0430" # Faaborg-Midtfyn
+  # - "0440" # Kerteminde
+  # - "0450" # Nyborg
+  # - "0461" # Odense
+  # - "0479" # Svendborg
+  # - "0480" # Nordfyns
+  # - "0482" # Langeland
+  # - "0492" # Ærø
+  - "0320" # Faxe
   
 ### NO CHANGES NEEDED BELOW THIS LINE
 
