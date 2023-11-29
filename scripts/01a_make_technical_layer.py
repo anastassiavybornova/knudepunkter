@@ -44,7 +44,6 @@ exec(open(homepath + "/src/plot_func.py").read())
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
-dataforsyning_token = configs["dataforsyning_token"]
 
 print("done: setup")
 
@@ -54,21 +53,15 @@ print("done: setup")
 os.makedirs(homepath + "/data/processed/workflow_steps", exist_ok=True)
 
 # define paths to input files
-node_inpath = (
-    homepath
-    + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/node.shp"
-)
-edge_inpath = (
-    homepath
-    + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/stretch.shp"
-)
+node_inpath = (homepath + "/data/raw/network/nodes.gpkg")
+edge_inpath = (homepath + "/data/raw/network/edges.gpkg")
 
 # define paths to output files
 nodetech_outpath = homepath + "/data/processed/workflow_steps/nodes_technical.gpkg"
 edgetech_outpath = homepath + "/data/processed/workflow_steps/edges_technical.gpkg"
 
 # define location of study area polygon (user-provided)
-filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"
+filepath_study = homepath + "/data/user_input/study_area.gpkg"
 
 print("done: paths")
 
@@ -86,11 +79,17 @@ print("done: study area")
 ### READ IN INPUT DATA (BETA NETWORK FROM FOLKERSMA)
 
 nodes = gpd.read_file(node_inpath)
+nodes = nodes.to_crs(proj_crs)
+
 edges = gpd.read_file(edge_inpath)
+edges = edges.to_crs(proj_crs)
 
 print("done: input data")
 
 ### LIMIT INPUT DATA TO STUDY AREA EXTENT
+
+assert nodes.crs == study_area.crs
+assert edges.crs == study_area.crs
 
 # only keep those nodes and edges that are within the study area
 nodes = nodes[nodes.intersects(study_area.loc[0, "geometry"])].copy()
@@ -120,10 +119,6 @@ assert all(edges.geometry.is_valid)
 # project to projected crs
 nodes.to_crs(proj_crs, inplace=True)
 edges.to_crs(proj_crs, inplace=True)
-
-# TODO: NOT NEEDED? create unique id
-# nodes["node_id"] = nodes.index
-# edges["edge_id"] = edges.index
 
 print("done: process data")
 
@@ -165,7 +160,7 @@ if display_inputdata == True:
 
 # output data (folkersma data cut to study area and cleaned)
 if display_technicallayer == True:
-    tech_layer = QgsVectorLayer(edge_inpath, "Technical network", "ogr")
+    tech_layer = QgsVectorLayer(edgetech_outpath, "Technical network", "ogr")
     if not tech_layer.isValid():
         print("Layer failed to load!")
     else:

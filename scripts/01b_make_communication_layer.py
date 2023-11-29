@@ -31,8 +31,7 @@ if homepath not in sys.path:
 # import python packages
 from qgis.core import *
 import geopandas as gpd
-import pandas as pd
-from shapely.geometry import Point, LineString
+from shapely.geometry import LineString
 import os
 import yaml
 from src import graphedit
@@ -44,6 +43,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
+municipality_codes = configs["municipalities"]
 
 ### PATHS
 
@@ -60,19 +60,13 @@ output_file_edges_no_parallel = (
 )
 
 # input data
-nodepath = (
-    homepath
-    + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/node.shp"
-)
-edgepath = (
-    homepath
-    + "/data/raw/folkersma_digital/2023-08-01 Cycling network Denmark shapefiles/stretch.shp"
-)
+nodepath = homepath + "/data/raw/network/nodes.gpkg"
+edgepath = homepath + "/data/raw/network/edges.gpkg"
 
 ### STUDY AREA
 
 # define location of study area polygon (user-provided)
-filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"
+filepath_study = homepath + "/data/user_input/study_area.gpkg"
 
 # read in study area polygon provided by the user
 study_area = gpd.read_file(filepath_study)
@@ -90,11 +84,6 @@ edges.to_crs(proj_crs, inplace=True)
 
 assert nodes.crs == study_area.crs
 assert edges.crs == study_area.crs
-
-# only keep those nodes and edges that are within the study area
-nodes = nodes[nodes.intersects(study_area.loc[0, "geometry"])].copy()
-
-edges = edges[edges.intersects(study_area.loc[0, "geometry"])].copy()
 
 ### PROCESS INPUT DATA TO FIND AND REMOVE PARALLEL EDGES
 

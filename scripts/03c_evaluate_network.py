@@ -62,7 +62,6 @@ import geopandas as gpd
 import pandas as pd
 from shapely import strtree
 
-# from src import eval_func
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())

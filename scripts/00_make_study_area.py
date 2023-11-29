@@ -23,6 +23,10 @@ os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import yaml
 from qgis.core import *
+import pandas as pd
+
+# import functions
+exec(open(homepath + "/src/eval_func.py").read())
 
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -30,9 +34,9 @@ configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
 
 # define location of municipality boundaries file
-filepath_municipalities = homepath + "/data/raw/municipalities/muni_boundary.gpkg"
+filepath_municipalities = homepath + "/data/raw/municipality_boundaries/muni_boundary.gpkg"
 # define location of study area polygon (union of user-provided municipality polygons)
-filepath_study = homepath + "/data/raw/user_input/study_area.gpkg"
+filepath_study = homepath + "/data/user_input/study_area.gpkg"
 
 ### READ IN DATA
 muni = gpd.read_file(filepath_municipalities)
@@ -43,11 +47,23 @@ for m in configs["municipalities"]:
 
 # if all kommunekode are correct, filter data set and save a copy
 muni = muni[muni.kommunekode.isin(configs["municipalities"])].copy()
-muni.to_file(filepath_study, index = False)
-print(f"\t Study area layer saved to: {filepath_study}")
+muni_merged = gpd.GeoDataFrame({"geometry": [muni.unary_union]}, crs = muni.crs)
+muni_merged.to_file(filepath_study, index = False)
+print(f"\t Study area saved to: {filepath_study}")
 print("\t Municipalities included in study area:")
 for navn in muni.navn:
     print(f"\t {navn}")
+
+# next, merge municipality data into evaluation layers
+print("Merging data layers for study area")
+print("Please be patient, this might take a while!")
+for evaluation_layer in configs["evaluation_layers"]:
+    merge_municipalities(
+        configs["municipalities"], 
+        evaluation_layer,
+        main_folder = "/data/raw",
+        homepath = homepath
+        )
 
 # set to projected CRS
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
