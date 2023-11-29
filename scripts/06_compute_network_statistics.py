@@ -168,4 +168,4 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("05_make_network_object script ended successfully \n")
+print("06_compute_network_statistics script ended successfully \n")

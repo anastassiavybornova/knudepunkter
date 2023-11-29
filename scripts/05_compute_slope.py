@@ -398,4 +398,4 @@ turn_off_layers(turn_off_layer_names)
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("03d_compute_network_slope script ended successfully \n")
+print("05_compute_slope script ended successfully \n")

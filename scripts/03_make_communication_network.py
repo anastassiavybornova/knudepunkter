@@ -96,8 +96,6 @@ nodes.reset_index(drop=True, inplace=True)
 edges = edges[edges.intersects(study_area.loc[0, "geometry"])].copy()
 edges.reset_index(drop=True, inplace=True)
 
-print("done: limit to study area")
-
 ### PROCESS INPUT DATA TO FIND AND REMOVE PARALLEL EDGES
 
 # create distinct column names for unique id
@@ -112,8 +110,6 @@ child_nodes = nodes[(nodes.refmain.notna()) & (nodes.deadend == 0)]
 
 edges["modified"] = False
 
-print("data preprocessed!")
-
 # assign edges from child nodes with parents to parent nodes
 for ix, row in child_nodes.iterrows():
     idx = ix
@@ -124,7 +120,7 @@ for ix, row in child_nodes.iterrows():
     parent_geom = nodes.loc[
         nodes.node_id == int(child_nodes.loc[ix, "refmain"])
     ].geometry.values[0]
-    print(f"idx {idx}, step 1")
+    # print(f"idx {idx}, step 1")
     
     if parent_geom.distance(row.geometry) > 100:
         continue
@@ -134,7 +130,7 @@ for ix, row in child_nodes.iterrows():
 
         # all edges which have this child node as their end node
         edges_end = edges.loc[edges.v == this_node_id]
-        print(f"idx {idx}, step 2") 
+        # print(f"idx {idx}, step 2") 
         
         for ix, row in edges_start.iterrows():
             # get coordinate in edge linestring
@@ -151,7 +147,7 @@ for ix, row in child_nodes.iterrows():
 
             # mark edge as modified
             edges.loc[ix, "modified"] = True
-            print(f"idx {idx}, step 3") 
+            # print(f"idx {idx}, step 3") 
             
         for ix, row in edges_end.iterrows():
             # get coordinate in edge linestring
@@ -168,10 +164,8 @@ for ix, row in child_nodes.iterrows():
 
             # mark edge as modified
             edges.loc[ix, "modified"] = True
-            print(f"idx {idx}, step 4")
+            # print(f"idx {idx}, step 4")
             
-print("child nodes assigned!")
-
 # drop old u,v columns
 edges.drop(["u", "v"], axis=1, inplace=True)
 
@@ -196,8 +190,6 @@ edges["drop"] = False
 edges["length"] = edges.geometry.length
 
 grouped = edges.groupby(["u", "v"])
-
-print("edges grouped!")
 
 for name, group in grouped:
     if len(group) > 1:
@@ -226,9 +218,6 @@ for name, group in grouped:
             group.loc[group.length.isin(length_of_edges_to_drop)].index, "drop"
         ] = True
 
-
-print("parallel edges dropped!")
-
 # nodes used by new network edges
 nodes_in_use = nodes.loc[nodes.node_id.isin(set(edges.u.to_list() + edges.v.to_list()))]
 
@@ -250,8 +239,6 @@ nodes_in_use.to_file(output_file_nodes)
 edges.to_file(output_file_edges)
 
 edges_no_parallel.to_file(output_file_edges_no_parallel)
-
-print("output saved")
 
 ### REMOVE LAYERS IF THEY EXIST ALREADY
 remove_existing_layers(
@@ -346,4 +333,4 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("01b_make_communication_layer script ended successfully \n")
+print("03_make_communication_network script ended successfully \n")

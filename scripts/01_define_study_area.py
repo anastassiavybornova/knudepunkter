@@ -62,9 +62,8 @@ for evaluation_layer in configs["evaluation_layers"]:
     merge_municipalities(
         configs["municipalities"], 
         evaluation_layer,
-        input_folder = "/data/raw/",
-        output_folder = "/data/user_input/",
-        homepath = homepath
+        input_folder = homepath + "/data/raw/",
+        output_folder = homepath + "/data/user_input/"
         )
 
 # set to projected CRS
@@ -87,4 +86,4 @@ if display_studyarea == True:
             outline_width=0.5,
         )
     
-print("00_make_study_area ended successfully \n")
+print("01_define_study_area script ended successfully \n")

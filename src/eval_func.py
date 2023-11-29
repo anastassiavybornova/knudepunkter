@@ -9,9 +9,8 @@ from shapely import strtree
 def merge_municipalities(
         municipality_codes, 
         evaluation_layer, 
-        input_folder = "/data/raw/", 
-        output_folder = "/data/user_input/",
-        homepath = homepath
+        input_folder, 
+        output_folder        
         ):
     """
     For a given evaluation layer, merges data of all given municipalities and saves output to file.
@@ -21,22 +20,21 @@ def merge_municipalities(
         evaluation_layer (str): name of evaluation layer, has to be one of: "agriculture", "bad", "culture", "facilities", "nature", "pois", "service"
         input_folder (str): path to folder where subfolders with municipality data are located
         output_folder (str): path to folder where merged gdf will be saved to
-        homepath (str): the homepath of the QGIS project the script is run from 
     
     Returns:
         None
     """
     gdfs = []
     for m in municipality_codes:
-        layerpath = homepath + input_folder + f"municipality_data/{m}/{evaluation_layer}.gpkg"
+        layerpath = input_folder + f"municipality_data/{m}/{evaluation_layer}.gpkg"
         if os.path.exists(layerpath):
             gdfs.append(gpd.read_file(layerpath))
     if len(gdfs) > 1:
         gdfs = pd.concat(gdfs, join = "inner", ignore_index = True)
-        gdfs.to_file(homepath + output_folder + f"{evaluation_layer}.gpkg")
+        gdfs.to_file(output_folder + f"{evaluation_layer}.gpkg")
         print(f"{evaluation_layer.capitalize()} layer created")
     elif len(gdfs) == 1:
-        gdfs[0].to_file(homepath + output_folder + f"{evaluation_layer}.gpkg")
+        gdfs[0].to_file(output_folder + f"{evaluation_layer}.gpkg")
         print(f"{evaluation_layer.capitalize()} layer created")
     else:
         print(f"No {evaluation_layer} data found for this study area")
@@ -124,7 +122,7 @@ def evaluate_export_plot_point(
         )
 
     if display_output:
-        output_layer_name_outside = f"{name} not within reach"
+        output_layer_name_outside = f"{name} outside reach"
 
         vlayer_outside = QgsVectorLayer(
             outside_reach_output_fp, output_layer_name_outside, "ogr"
@@ -152,7 +150,6 @@ def evaluate_export_plot_point(
         )
 
     return input_layer_name, output_layer_name_within, output_layer_name_outside
-
 
 def evaluate_export_plot_poly(
     input_fp,

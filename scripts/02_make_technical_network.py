@@ -205,4 +205,4 @@ if dataforsyning_token and (display_inputdata or display_technicallayer):
 
     root.insertLayer(-1, basemap)
 
-print("01a_make_technical_layer script ended successfully \n")
+print("02_make_technical_network script ended successfully \n")

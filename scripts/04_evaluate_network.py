@@ -93,13 +93,13 @@ remove_existing_layers(
         "Summer house areas",
         "Facilities",
         "Facilities within reach",
-        "Facilities not within reach",
+        "Facilities outside reach",
         "Services",
         "Services within reach",
-        "Services not within reach",
+        "Services outside reach",
         "POIS",
         "POIS within reach",
-        "POIS not within reach",
+        "POIS outside reach",
     ]
 )
 
@@ -259,7 +259,6 @@ if os.path.exists(eval_path + "sommerhus.gpkg"):
 # for point layers, whether they are within given distance
 # (facilities (in 100m), service (500m), pois (1000m))
 
-
 #### FACILITIES ####
 
 if os.path.exists(eval_path + "facilities.gpkg"):
@@ -382,4 +381,4 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("03c_evaluate_network script ended successfully \n")
+print("04_evaluate_network script ended successfully \n")
