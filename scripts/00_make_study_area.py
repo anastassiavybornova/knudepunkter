@@ -12,7 +12,6 @@ homepath = QgsProject.instance().homePath()
 
 # add project path to PATH
 import sys
-
 if homepath not in sys.path:
     sys.path.append(homepath)
 
@@ -33,6 +32,8 @@ configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
 
+# define paths
+os.makedirs(homepath + "/data/user_input/", exist_ok=True)
 # define location of municipality boundaries file
 filepath_municipalities = homepath + "/data/raw/municipality_boundaries/muni_boundary.gpkg"
 # define location of study area polygon (union of user-provided municipality polygons)
@@ -61,7 +62,8 @@ for evaluation_layer in configs["evaluation_layers"]:
     merge_municipalities(
         configs["municipalities"], 
         evaluation_layer,
-        main_folder = "/data/raw",
+        input_folder = "/data/raw/",
+        output_folder = "/data/user_input/",
         homepath = homepath
         )
 
@@ -85,4 +87,4 @@ if display_studyarea == True:
             outline_width=0.5,
         )
     
-print("00_make_study_area ended succcessfully \n")
+print("00_make_study_area ended successfully \n")

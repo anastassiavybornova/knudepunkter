@@ -44,6 +44,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
+dataforsyning_token = configs["dataforsyning_token"]
 
 print("done: setup")
 
@@ -204,4 +205,4 @@ if dataforsyning_token and (display_inputdata or display_technicallayer):
 
     root.insertLayer(-1, basemap)
 
-print("01a_make_technical_layer script ended succcessfully \n")
+print("01a_make_technical_layer script ended successfully \n")

@@ -68,8 +68,9 @@ exec(open(homepath + "/src/eval_func.py").read())
 
 ### PATHS
 study_path = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
-eval_path = homepath + "/data/processed/eval/"  # where is evaluation data
+eval_path = homepath + "/data/user_input/"  # where is evaluation data
 results_path = homepath + "/results/data/"  # store output geopackages here
+os.makedirs(eval_path, exist_ok=True)
 
 ### IMPORT NETWORK EDGES
 edges = gpd.read_file(study_path)
