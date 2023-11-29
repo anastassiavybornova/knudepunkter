@@ -8,17 +8,13 @@ display_input_data = True
 display_network_layer = True
 
 ### NO CHANGES BELOW THIS LINE
-print("05_make_network_object script started with user settings:")
+print("06_compute_network_statistics script started with user settings:")
 print(f"\t Display input data: {display_input_data}")
 print(f"\t Display network layer: {display_network_layer}")
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 exec(open(homepath + "/src/plot_func.py").read())
-
-# ### *********
-# ### Step 2: data>network with python tools
-# ### *********
 
 # import packages
 import src.graphedit as graphedit
@@ -29,7 +25,6 @@ import pandas as pd
 import os
 import yaml
 import networkx as nx
-
 from qgis.core import *
 
 # load configs
@@ -105,7 +100,7 @@ ox.save_graphml(G_undirected, graph_file)
 edges.to_file(edgefile)
 nodes.to_file(nodefile)
 
-
+### Visualization
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
 
 # display in QGIS
