@@ -276,6 +276,9 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         dist=dist_faci,
         name="Facilities",
         type_col="type",
+        input_color_rgb="255, 186, 0",
+        output_color_reached="255, 186, 0",
+        output_color_not_reached="255, 234, 177",
         display_output=display_output,
         display_input=display_input,
     )
@@ -286,8 +289,7 @@ if os.path.exists(eval_path + "facilities.gpkg"):
 
 
 #### SERVICE ####
-
-if os.path.exists(eval_path + "facilities.gpkg"):
+if os.path.exists(eval_path + "service.gpkg"):
     (
         service_input,
         service_output_within,
@@ -301,6 +303,9 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         dist=dist_faci,
         name="Services",
         type_col="type",
+        input_color_rgb="193, 0, 255",
+        output_color_reached="193, 0, 255",
+        output_color_not_reached="243, 205, 255",
         display_output=display_output,
         display_input=display_input,
     )
@@ -310,7 +315,6 @@ if os.path.exists(eval_path + "facilities.gpkg"):
     output_layers.append(service_output_outside)
 
 #### POIS ####
-
 if os.path.exists(eval_path + "pois.gpkg"):
     pois_input, pois_output_within, pois_output_outside = evaluate_export_plot_point(
         input_fp=eval_path + "pois.gpkg",
@@ -320,6 +324,9 @@ if os.path.exists(eval_path + "pois.gpkg"):
         dist=dist_pois,
         name="POIS",
         type_col="type",
+        input_color_rgb="0, 74, 255",
+        output_color_reached="0, 74, 255",
+        output_color_not_reached="151, 181, 255",
         display_output=display_output,
         display_input=display_input,
     )
@@ -330,7 +337,6 @@ if os.path.exists(eval_path + "pois.gpkg"):
 
 
 all_layers = input_layers + output_layers
-
 
 types = [
     "Culture",
