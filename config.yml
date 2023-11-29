@@ -14,12 +14,22 @@ municipalities:
   - "0482" # Langeland
   - "0492" # Ærø
   
+### NO CHANGES NEEDED BELOW THIS LINE
+
 # provide projected crs 
 proj_crs: "EPSG:25832"
 
-# fill out token from dataforsyning
+# provide token from dataforsyning
 dataforsyning_token: "fc5f46c60194d0833dbc2b219b6d500a"
 datafordeler_username: "MAKKFGPILT"
 datafordeler_password: "Testing23!"
 
-
+# provide names of layers to use for evaluation
+evaluation_layers:
+  - "agriculture"
+  - "bad"
+  - "culture"
+  - "facilities"
+  - "nature"
+  - "pois"
+  - "service"
