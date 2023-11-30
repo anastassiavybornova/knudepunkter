@@ -162,8 +162,7 @@ cython_debug/
 # Archive / local stuff
 _*/
 .DS_Store
-test_ane.qgz
-*.qgz 
+#*.qgz 
 *.gpkg-shm
 *.gpkg-wal
 *.gpkg-journal
