@@ -32,9 +32,16 @@ def turn_off_layers(layer_names):
         ).setItemVisibilityChecked(False)
 
 
-def add_layer_to_group(layer_name, group):
+def add_layer_to_group(layer_name, group, position=-1):
     """
     Add layer to existing layer group
+
+    Arguments:
+        layer_name (str): name of layer to plot
+        group (QgsLayerTreeGroup): Group to add layer to
+        position (int): Position of layer. Set to -1 to add as bottom layer and 0 to add as top layer
+    Returns:
+        None
     """
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
@@ -42,7 +49,7 @@ def add_layer_to_group(layer_name, group):
     cloned_layer = tree_layer.clone()
     parent = tree_layer.parent()
 
-    group.insertChildNode(0, cloned_layer)
+    group.insertChildNode(position, cloned_layer)
 
     parent.removeChildNode(tree_layer)
 
@@ -234,10 +241,11 @@ def zoom_to_layer(layer_name):
     canvas.setExtent(extent)
     canvas.refresh()
 
+
 def draw_categorical_layer(
     layer_name,
     attr_name,
-    predefined_color = None,
+    predefined_color=None,
     outline_color="black",
     outline_width=0.2,
     alpha=180,
@@ -280,14 +288,12 @@ def draw_categorical_layer(
     categories = []
 
     for unique_value in unique_values:
-
         if not predefined_color:
             current_color = f"{randrange(0, 256)}, {randrange(0, 256)}, {randrange(0, 256)}, {alpha}"
         else:
             current_color = f"{predefined_color}, {alpha}"
 
         if layer.wkbType() in [QgsWkbTypes.MultiPolygon, QgsWkbTypes.Polygon]:
-                
             properties = {
                 "color": current_color,
                 "outline_color": outline_color,
@@ -297,7 +303,6 @@ def draw_categorical_layer(
             symbol = QgsFillSymbol.createSimple(properties)
 
         if layer.wkbType() in [QgsWkbTypes.LineString, QgsWkbTypes.MultiLineString]:
-            
             symbol = QgsLineSymbol.createSimple(
                 {
                     "color": current_color,
