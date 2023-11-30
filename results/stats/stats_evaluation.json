@@ -1,0 +1,55 @@
+{
+      "Agricultural": {
+            "type": "polygon_layer",
+            "dist": 100,
+            "total": 347691.4594307781,
+            "within": 270653.61463537783,
+            "outside": 77037.84479540028,
+            "area": 348255387.2809804
+      },
+      "Undesirable": {
+            "type": "polygon_layer",
+            "dist": 100,
+            "total": 347691.4594307781,
+            "within": 14126.31528158194,
+            "outside": 333565.14414919616,
+            "area": 12447597.093602255
+      },
+      "Culture": {
+            "type": "polygon_layer",
+            "dist": 100,
+            "total": 347691.4594307781,
+            "within": 172584.0495813542,
+            "outside": 175107.40984942392,
+            "area": 211627943.29264706
+      },
+      "Nature": {
+            "type": "polygon_layer",
+            "dist": 100,
+            "total": 347691.4594307781,
+            "within": 172675.31937955675,
+            "outside": 175016.14005122136,
+            "area": 275941689.08247846
+      },
+      "Facilities": {
+            "type": "point_layer",
+            "dist": 100,
+            "total": 139,
+            "within": 62,
+            "outside": 77
+      },
+      "Services": {
+            "type": "point_layer",
+            "dist": 100,
+            "total": 79,
+            "within": 46,
+            "outside": 33
+      },
+      "POIS": {
+            "type": "point_layer",
+            "dist": 1000,
+            "total": 86,
+            "within": 73,
+            "outside": 13
+      }
+}
