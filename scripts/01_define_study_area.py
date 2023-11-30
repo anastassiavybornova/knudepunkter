@@ -23,6 +23,7 @@ import geopandas as gpd
 import yaml
 from qgis.core import *
 import pandas as pd
+import json 
 
 # import functions
 exec(open(homepath + "/src/eval_func.py").read())
@@ -34,12 +35,14 @@ proj_crs = configs["proj_crs"]  # projected CRS
 
 # define paths
 os.makedirs(homepath + "/data/user_input/", exist_ok=True)
+os.makedirs(homepath + "/results/stats/", exist_ok=True)
 # define location of municipality boundaries file
 filepath_municipalities = homepath + "/data/raw/municipality_boundaries/muni_boundary.gpkg"
 # define location of study area polygon (union of user-provided municipality polygons)
 filepath_study = homepath + "/data/user_input/study_area.gpkg"
+stats_path = homepath + "/results/stats/"  # store output jsons here
 
-### READ IN DATA
+### READ IN MUNICIPALITIES' DATA
 muni = gpd.read_file(filepath_municipalities)
 
 # check list of municipalities for errors
@@ -54,6 +57,13 @@ print(f"\t Study area saved to: {filepath_study}")
 print("\t Municipalities included in study area:")
 for navn in muni.navn:
     print(f"\t {navn}")
+
+# save summary stats of study area
+res = {} # initialize stats results dictionary
+res["area"] = muni_merged.to_crs(proj_crs).unary_union.area
+res["municipalities"] = configs["municipalities"]
+with open(f"{stats_path}stats_studyarea.json", "w") as opened_file: 
+    json.dump(res, opened_file, indent = 6)
 
 # next, merge municipality data into evaluation layers
 print("Merging data layers for study area")

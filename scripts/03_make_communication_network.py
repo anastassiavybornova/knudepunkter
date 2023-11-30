@@ -34,6 +34,7 @@ import geopandas as gpd
 from shapely.geometry import LineString
 import os
 import yaml
+import json
 from src import graphedit
 
 # import qgis-based plotting functions
@@ -58,6 +59,7 @@ output_file_nodes = (
 output_file_edges_no_parallel = (
     homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 )
+results_path = homepath + "/results/data/"  # store output geopackages here
 
 print("setup done!")
 
@@ -239,6 +241,14 @@ nodes_in_use.to_file(output_file_nodes)
 edges.to_file(output_file_edges)
 
 edges_no_parallel.to_file(output_file_edges_no_parallel)
+
+# # save summary stats of communication network
+# res = {} # initialize stats results dictionary
+# res["total_length"] = edges_no_parallel.to_crs(proj_crs).length.sum()
+# res["edges_count"] = len(edges_no_parallel)
+# res["nodes_in_use"] = len(nodes_in_use)
+# with open(f"{stats_path}stats_communication_network.json", "w") as opened_file: 
+#     json.dump(res, opened_file, indent = 6)
 
 ### REMOVE LAYERS IF THEY EXIST ALREADY
 remove_existing_layers(

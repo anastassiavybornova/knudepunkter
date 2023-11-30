@@ -26,6 +26,7 @@ import geopandas as gpd
 import shapely
 import geopandas as gpd
 from qgis.core import *
+import json
 
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -37,6 +38,8 @@ proj_crs = configs["proj_crs"]  # projected CRS
 # input filepath
 input_file = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 output_file = homepath + "/data/processed/workflow_steps/loop_polygons.gpkg"
+results_path = homepath + "/results/data/"  # store output geopackages here
+stats_path = homepath + "/results/stats/" # store output json here
 
 ### LOAD INPUT DATA AND PROJECT
 gdf = gpd.read_file(input_file)
@@ -80,6 +83,12 @@ polygons["polygon_area"] = polygons.area
 polygons.to_file(output_file, index=False)
 
 print(f"Polygons exported to {output_file}!")
+
+### Summary statistics of polygonization
+res = {} # initialize stats results dictionary
+res["polygon_areas"] = list(polygons["polygon_area"])
+with open(f"{stats_path}stats_polygons.json", "w") as opened_file: 
+    json.dump(res, opened_file, indent = 6)
 
 ### IF REQUESTED BY USER, DISPLAY LAYER
 

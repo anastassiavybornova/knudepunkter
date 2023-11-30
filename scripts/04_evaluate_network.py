@@ -5,12 +5,6 @@
 # - optional (if requested by user):
 #   display input (communication layer); display output (all evaluation layers)
 
-# TODO:
-### MISSING: QUANTITATIVE SUMMARY OF RESULTS FROM THIS SCRIPT
-# absolute + percentage length in each layer (for polygon layers)
-# absolute + perentage number of points in each layer (for point layers)
-# (refine once we have taken care of parallel edges)
-
 ##### CUSTOM SETTINGS
 display_input = True
 display_output = True
@@ -62,6 +56,13 @@ import pandas as pd
 from shapely import strtree
 import json
 
+# load configs and colors
+configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
+proj_crs = configs["proj_crs"]  # projected CRS
+colorfile = os.path.join(homepath, "colors.yml") # load color dictionary for visualization
+colors = yaml.load(open(colorfile), Loader=yaml.FullLoader)
+
 # import functions
 exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())
@@ -70,6 +71,7 @@ exec(open(homepath + "/src/eval_func.py").read())
 study_path = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 eval_path = homepath + "/data/user_input/"  # where is evaluation data
 results_path = homepath + "/results/data/"  # store output geopackages here
+stats_path = homepath + "/results/stats/"  # store output json here
 os.makedirs(eval_path, exist_ok=True)
 
 ### IMPORT NETWORK EDGES
@@ -142,9 +144,9 @@ if os.path.exists(eval_path + "agriculture.gpkg"):
         dist=dist_agri,
         name="Agricultural",
         type_col="types",
-        fill_color_rgb="205,186,136",
-        outline_color_rgb="205,186,136",
-        line_color_rgb="205,186,136",
+        fill_color_rgb=colors["agriculture"],
+        outline_color_rgb=colors["agriculture"],
+        line_color_rgb=colors["agriculture"],
         line_width=1,
         line_style="solid",
         plot_categorical=False,
@@ -168,9 +170,9 @@ if os.path.exists(eval_path + "bad.gpkg"):
         dist=dist_bad,
         name="Undesirable",
         type_col="types",
-        fill_color_rgb="170,1,20",
-        outline_color_rgb="170,1,20",
-        line_color_rgb="170,1,20",
+        fill_color_rgb=colors["bad"],
+        outline_color_rgb=colors["bad"],
+        line_color_rgb=colors["bad"],
         line_width=1,
         line_style="solid",
         plot_categorical=False,
@@ -194,7 +196,7 @@ if os.path.exists(eval_path + "culture.gpkg"):
         dist=dist_culture,
         name="Culture",
         type_col="types",
-        fill_color_rgb="86,85,211",
+        fill_color_rgb=colors["culture"],
         outline_color_rgb="86,85,211",
         line_color_rgb="86,85,211",
         line_width=1,
@@ -220,9 +222,9 @@ if os.path.exists(eval_path + "nature.gpkg"):
         dist=dist_nature,
         name="Nature",
         type_col="types",
-        fill_color_rgb="0,128,0",
-        outline_color_rgb="0,128,0",
-        line_color_rgb="0,128,0",
+        fill_color_rgb=colors["nature"],
+        outline_color_rgb=colors["nature"],
+        line_color_rgb=colors["nature"],
         line_width=1,
         line_style="solid",
         plot_categorical=False,
@@ -246,9 +248,9 @@ if os.path.exists(eval_path + "sommerhus.gpkg"):
         dist=dist_summer,
         name="Summer house",
         type_col="types",
-        fill_color_rgb="255,165,0",
-        outline_color_rgb="255,165,0",
-        line_color_rgb="255,165,0",
+        fill_color_rgb=colors["sommerhus"],
+        outline_color_rgb=colors["sommerhus"],
+        line_color_rgb=colors["sommerhus"],
         line_width=1,
         line_style="solid",
         plot_categorical=False,
@@ -284,9 +286,9 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         dist=dist_faci,
         name="Facilities",
         type_col="type",
-        input_color_rgb="255, 186, 0",
-        output_color_reached="255, 186, 0",
-        output_color_not_reached="255, 234, 177",
+        input_color_rgb=colors["facilities"],
+        output_color_reached=colors["facilities"],
+        output_color_not_reached=colors["facilities_outside"],
         display_output=display_output,
         display_input=display_input,
     )
@@ -306,16 +308,15 @@ if os.path.exists(eval_path + "service.gpkg"):
         res_service
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "service.gpkg",
-        within_reach_output_fp=results_path + f"service_within_reach_{dist_faci}.gpkg",
-        outside_reach_output_fp=results_path
-        + f"service_outside_reach_{dist_faci}.gpkg",
+        within_reach_output_fp=results_path + f"service_within_reach_{dist_serv}.gpkg",
+        outside_reach_output_fp=results_path + f"service_outside_reach_{dist_serv}.gpkg",
         network_edges=edges,
         dist=dist_faci,
         name="Services",
         type_col="type",
-        input_color_rgb="193, 0, 255",
-        output_color_reached="193, 0, 255",
-        output_color_not_reached="243, 205, 255",
+        input_color_rgb=colors["service"],
+        output_color_reached=colors["service"],
+        output_color_not_reached=colors["service_outside"],
         display_output=display_output,
         display_input=display_input,
     )
@@ -334,15 +335,15 @@ if os.path.exists(eval_path + "pois.gpkg"):
         res_pois
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "pois.gpkg",
-        within_reach_output_fp=results_path + f"pois_within_reach_{dist_faci}.gpkg",
-        outside_reach_output_fp=results_path + f"pois_outside_reach_{dist_faci}.gpkg",
+        within_reach_output_fp=results_path + f"pois_within_reach_{dist_pois}.gpkg",
+        outside_reach_output_fp=results_path + f"pois_outside_reach_{dist_pois}.gpkg",
         network_edges=edges,
         dist=dist_pois,
         name="POIS",
         type_col="type",
-        input_color_rgb="0, 74, 255",
-        output_color_reached="0, 74, 255",
-        output_color_not_reached="151, 181, 255",
+        input_color_rgb=colors["pois"],
+        output_color_reached=colors["pois"],
+        output_color_not_reached=colors["pois_outside"],
         display_output=display_output,
         display_input=display_input,
     )
@@ -353,7 +354,7 @@ if os.path.exists(eval_path + "pois.gpkg"):
     output_layers.append(pois_output_outside)
 
 ### SAVE RESULTS OF SUMMARY STATISTICS
-with open(f"{results_path}stats_eval.json", "w") as opened_file: 
+with open(f"{stats_path}stats_evaluation.json", "w") as opened_file: 
     json.dump(res, opened_file, indent = 6) 
 
 ### VISUALIZATION

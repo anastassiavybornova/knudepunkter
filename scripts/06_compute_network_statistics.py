@@ -26,6 +26,7 @@ import os
 import yaml
 import networkx as nx
 from qgis.core import *
+import json 
 
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -38,6 +39,8 @@ edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.
 edgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
 nodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
 graph_file = homepath + "/data/processed/workflow_steps/network_graph.json"
+results_path = homepath + "/results/data/"  # store output geopackages here
+stats_path = homepath + "/results/stats/"  # store output geopackages here
 
 # load data
 nodes = gpd.read_file(nodes_fp)
@@ -99,6 +102,14 @@ nodes = nodes.merge(pd_degrees, left_index=True, right_index=True)
 ox.save_graphml(G_undirected, graph_file)
 edges.to_file(edgefile)
 nodes.to_file(nodefile)
+
+### Summary statistics of network
+res = {} # initialize stats results dictionary
+res["node_count"] = len(G_undirected.nodes)
+res["edge_count"] = len(G_undirected.edges)
+res["node_degrees"] = dict(nx.degree(G))
+with open(f"{stats_path}stats_network.json", "w") as opened_file: 
+    json.dump(res, opened_file, indent = 6)
 
 ### Visualization
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])

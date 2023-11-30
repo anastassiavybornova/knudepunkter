@@ -40,6 +40,7 @@ os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 from owslib.wms import WebMapService
 import geopandas as gpd
 import yaml
+import json 
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -72,6 +73,8 @@ segments_fp = homepath + "/data/processed/workflow_steps/segments.gpkg"
 segments_slope_fp = homepath + "/results/data/segments_slope.gpkg"
 edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
 steep_segments_fp = homepath + "/results/data/very_steep_segments.gpkg"
+results_path = homepath + "/results/data/"  # store output geopackages here
+stats_path = homepath + "/results/stats/"  # store output json here
 
 ##### IMPORT STUDY AREA EDGES AS GDF
 edges = gpd.read_file(edges_fp)
@@ -262,6 +265,8 @@ segs["slope"].fillna(0, inplace=True)
 
 segs.to_file(segments_slope_fp)
 
+###
+
 vlayer_slope = QgsVectorLayer(
     segments_slope_fp,
     "Segments slope",
@@ -315,6 +320,16 @@ if plot_results:
 
 steep_segments = segs.loc[segs.slope > slope_threshold]
 steep_segments.to_file(steep_segments_fp)
+
+### Save summary statistics of slope computation
+res = {} # initialize stats results dictionary
+res["segs_length"] = list(segs["length"])
+res["segs_slope"] = list(segs["slope"])
+res["segs_slope_min"] = segs.slope.min()
+res["segs_slope_max"] = segs.slope.max()
+res["segs_slope_mean"] = segs.slope.mean()
+with open(f"{stats_path}stats_slope.json", "w") as opened_file: 
+    json.dump(res, opened_file, indent = 6)
 
 ##### PLOT RESULTS (STEEP SEGMENTS)
 
