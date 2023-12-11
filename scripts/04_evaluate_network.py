@@ -10,7 +10,7 @@ display_input = True
 display_output = True
 
 # define distance thresholds for polygon layers
-dist_bad = 100
+dist_veri = 100
 dist_agri = 100
 dist_culture = 100
 dist_nature = 100
@@ -25,7 +25,7 @@ dist_pois = 1000
 print("04_evaluate_network script started with user settings:")
 print(f"\t * Display input: {display_input}; display_output: {display_output}")
 print(f"\t * Distance thresholds for polygon layers:")
-print(f"\t \t - Areas to avoid: {dist_bad}m")
+print(f"\t \t - Areas to verify: {dist_veri}m")
 print(f"\t \t - Agricultural areas: {dist_agri}m")
 print(f"\t \t - Culture areas: {dist_culture}m")
 print(f"\t \t - Nature areas: {dist_nature}m")
@@ -83,8 +83,7 @@ edges = gpd.read_file(study_path)
 remove_existing_layers(
     [
         "Network",
-        "Network in undesirable areas",
-        "Undesirable areas",
+        "To verify",
         "Network in agricultural areas",
         "Agricultural areas",
         "Network in nature areas",
@@ -160,19 +159,19 @@ if os.path.exists(eval_path + "agriculture.gpkg"):
     output_layers.append(agri_output_name)
     res = res | res_agriculture
 
-#### BAD #####
+#### VERIFY #####
 
-if os.path.exists(eval_path + "bad.gpkg"):
-    bad_input_name, bad_output_name, res_bad = evaluate_export_plot_poly(
-        input_fp=eval_path + "bad.gpkg",
-        output_fp=results_path + f"bad_network_{dist_bad}.gpkg",
+if os.path.exists(eval_path + "verify.gpkg"):
+    veri_input_name, veri_output_name, res_veri = evaluate_export_plot_poly(
+        input_fp=eval_path + "verify.gpkg",
+        output_fp=results_path + f"verify_network_{dist_veri}.gpkg",
         network_edges=edges,
-        dist=dist_bad,
-        name="Undesirable",
+        dist=dist_veri,
+        name="To verify",
         type_col="types",
-        fill_color_rgb=colors["bad"],
-        outline_color_rgb=colors["bad"],
-        line_color_rgb=colors["bad"],
+        fill_color_rgb=colors["verify"],
+        outline_color_rgb=colors["verify"],
+        line_color_rgb=colors["verify"],
         line_width=1,
         line_style="solid",
         plot_categorical=False,
@@ -182,9 +181,9 @@ if os.path.exists(eval_path + "bad.gpkg"):
         display_input=display_input,
     )
 
-    res = res | res_bad
-    input_layers.append(bad_input_name)
-    output_layers.append(bad_output_name)
+    res = res | res_veri
+    input_layers.append(veri_input_name)
+    output_layers.append(veri_output_name)
 
 #### CULTURE ####
 
@@ -365,7 +364,7 @@ types = [
     "Culture",
     "Nature",
     "Agricultural",
-    "Undesirable",
+    "To verify",
     "POIS",
     "Service",
     "Facilities",

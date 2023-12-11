@@ -117,9 +117,9 @@ datafordeler_password: "Testing23!"
 # provide names of layers to use for evaluation
 evaluation_layers:
   - "agriculture"
-  - "bad"
   - "culture"
   - "facilities"
   - "nature"
   - "pois"
   - "service"
+  - "verify"
