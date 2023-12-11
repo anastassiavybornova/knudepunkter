@@ -84,6 +84,7 @@ remove_existing_layers(
     [
         "Network",
         "To verify",
+        "Network in to verify areas",
         "Network in agricultural areas",
         "Agricultural areas",
         "Network in nature areas",
