@@ -22,38 +22,36 @@ Contents of this file (click to jump to corresponding step):
 
 <!-- Troubleshooting: if new installation on Mac, must be first opened 1x with rightclick and confirm -->
 
-2. Find out the path to the Python installation for the QGIS app on your local machine. Typically, this will be: 
-* for Windows, **TODO**
+2. Find out the path to the Python installation for the QGIS app on your local machine. Typically, this will be similar to: 
+* for Windows, `C:\Program Files\QGIS 3.28.13\apps\Python39\python`
 * for MacOS/Linux, `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`
 
-<p align="center"><img alt="Alt text" src="/docs/screenshots/img.png" width=80%></p>
+
 
 3. Open your command line interface (on Windows: Command Prompt; on MacOS/Linux: Terminal)
 
-4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` by the path from step 2, and hit enter.) 
+4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) 
 
 **On Windows:**
 ```
-<qgispythonpath> -m pip install --upgrade shapely
-<qgispythonpath> -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
-<qgispythonpath> -m pip install momepy
-<qgispythonpath> -m pip install osmnx==1.6.0
-(doing it with python, not python3)
+"<qgispythonpath>" -m pip install --upgrade shapely
+"<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
+"<qgispythonpath>" -m pip install momepy
+"<qgispythonpath>" -m pip install osmnx==1.6.0
 ```
-<!-- <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4 might not be needed on windows? -->
+<!-- <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4 might not be needed on windows? for me it didnt work, had to redo geopandas reinstall one more time-->
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
 
 > **EXTRA STEP FOR WINDOWS: COPYPASTE SOME SSL FILES AS EXPLAINED HERE (Feb 22, 2022 reply) https://stackoverflow.com/questions/60290795/ssl-module-in-python-is-not-available-qgis 
 
-
 **On MacOS/Linux**:
 ```
-<qgispythonpath> -m pip install --upgrade shapely  
-<qgispythonpath> -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
-<qgispythonpath> -m pip install momepy
-<qgispythonpath> -m pip install osmnx==1.6.0
-<qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4
+"<qgispythonpath>" -m pip install --upgrade shapely  
+"<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
+"<qgispythonpath>" -m pip install momepy
+"<qgispythonpath>" -m pip install osmnx==1.6.0
+"<qgispythonpath>" -m pip install numpy --force-reinstall -v numpy==1.22.4
 ```
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
