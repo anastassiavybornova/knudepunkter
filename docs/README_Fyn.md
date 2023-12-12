@@ -2,34 +2,41 @@
 
 *A decision support tool under development, aimed at supporting the planning of Denmark's cycle node network.*
 
-The Cycle Node Network Planner is a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) in the framework of [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network planner runs in QGIS.
+The Cycle Node Network Planner is a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) in the framework of [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network Planner runs in QGIS and Python.
 
-Here, we present a demo version of the Cycle Node Network Plannner, pre-set to run for the island of Fyn **TODO: check municipalities with Kirsten**. 
+Here, we present a demo version of the Cycle Node Network Plannner, pre-set to run for the island of Fyn. 
 
 # Getting started
 
 ## 1. What are the main features of the Cycle Node Network Planner?
 
-The Cycle Node Network Planner takes all relevant data layers provided by Septima (as visualized in NIRAS' WebGIS application)as point of departure. The tool then *merges and summarizes* these data; and uses them to *evaluate* the cycle node network. All [evaluation](#2-what-are-the-evaluation-criteria-of-the-planner) results are displayed in QGIS. In addition, [summary statistics](#3-what-are-the-summary-statistics-generated-by-the-planner) of cycle node network are generated. By exploring the QGIS results and the summary statistics, one can get a better overview of the network quality, and identify locations in which the network should be updated. [Click here](LINK) for an example evaluation.
+The Cycle Node Network Planner takes all relevant data layers provided by Septima (as visualized in NIRAS' WebGIS application) as point of departure. The Planner then *merges and summarizes* these data; and uses them to *evaluate* the cycle node network. All [evaluation](#2-what-are-the-evaluation-criteria-of-the-planner) results are displayed in QGIS. In addition, [summary statistics](#3-what-are-the-summary-statistics-generated-by-the-planner) of the cycle node network are generated. By exploring the QGIS results and the summary statistics, planners can get a better overview of the network characteristics, and identify potential improvements to the network. [Click here](LINK) for an example evaluation.
 
 ## 2. What are the evaluation criteria of the Planner?
 
-The Tool evaluates the cycle node network through 3 perspectives: polygon layers, point layers, and elevation.
+The Planner evaluates the cycle node network through 3 perspectives: polygon layers, point layers, and elevation.
 
-**Polygon layers** show the attributes of the area (land use) surrounding the cycle node networks, by category. The Planner computes and visualizes which network segments go through which category of land use. The five categories are:
+### Polygon layers
+
+Polygon layers show the attributes of the area (land use) surrounding the cycle node networks, by category. The Planner computes and visualizes which network segments go through which category of land use, using a buffer of 100m around the cycle node network. There are five polygon layers:
 * Nature (forests, lakes, beaches, etc.)
 * Culture (city centers, historical landscapes, etc.)
 * Agriculture
-* Industrial (sports or military facilities, business areas, etc.)
-* Summerhouse area
+* Summerhouse areas
+* Areas to verify (where it is worth double-checking whether cycling conditions are appropriate, such as industrial areas, military facilities, business areas, etc.)
 
-**Point layers** show whether specific locations are in feasible distance from the cycle node network. There are three point layers:
-* Facilities: good to have directly on the road (max. 100m distance), such as drinking water, toilets, bicycle shops
+### Point layers
+
+Point layers contain specific locations that are of interest for cyclists and tourists. The Planner computes whether specific locations are in feasible distance (as the crow flies) from the cycle node network. There are three point layers:
+* Facilities: good to have directly on the road (max. 100m distance), such as drinking water, toilets, and bicycle shops
 * Services: good to have close to the road (max. 500m distance), such as groceries and places to sleep
-* POIs: good to have within an acceptable detour (max. 1km distance), such as landmarks and museums
+* POIs (Points Of Interest): good to have within an acceptable detour (max. 1km distance), such as landmarks and museums
+
 The distance threshold for each of the point layers is set to a default value indicated above, but can be adjusted by the user.
 
-**Elevation** is shown as an attribute of ~100m segments which together make up the cycle node network, and binned into four categories, aimed at the average leisure cyclist on a city bike:
+### Elevation
+
+Elevation is shown as an attribute of ~100m segments which together make up the cycle node network, and binned into four categories, aimed at the average leisure cyclist on a city bike:
 * <3% no elevation, or manageable elevation
 * 3-5% noticeable elevation, that can get tiresome after a longer period
 * 5-7% steep elevation, that can get tiresome quickly
@@ -41,36 +48,24 @@ The summary statistics show:
 * for each of the polygon layers, the number and percentage of kilometers of cycle node network within that layer
 * for each of the point layers, the number and percentage of reached vs. unreached points
 * for the elevation layer, the number and percentage of kilometers in each elevation category
-* for the entire network, the number of nodes, stretches, and loops
-* for the area covered by the network, the average node density
+<!-- * for the entire network, the number of nodes, stretches, and loops
+* for the area covered by the network, the average node density -->
 
 ## 4. How can I run the Planner myself?
 
-Steps:
 1. Set up QGIS
 2. Download the contents of this repository (`knudepunkter-fyn` folder)
 3. Open QGIS, set up a new project, and save it in the `knudepunkter-fyn` folder
 4. Open the Python console in QGIS, and run the scripts from the `scripts` folder in indicated order
 5. Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be changed 
-6. Explore the summary statistics (PDF): get an overview of overall network quality and general characteristics of the network 
+6. Explore the summary statistics: get an overview of overall network quality and general characteristics of the network 
 
-Detailed instructions are found [here](/docs/HOWTO_detailed.md).
+**Detailed instructions** for each step are found [here](/docs/HOWTO_detailed.md). 
+
 
 # Your feedback is greatly appreciated
 
-Once you have familiarized yourself with the Cycle Node Network Planner, we will be grateful for any feedback on the Tool! Please fill out the [survey here](LINK) (between 5 and 20 minutes).
-
-* Is the description of the tool clear and easy to follow?
-* Is the technical setup reproducible? 
-* Did you run into any issues when running the tool? If so, please elaborate
-* Using network Evaluation layers:
-    - Are the polygon layers useful? For example, is it helpful to see which parts of the network run through nature, culture, or agriculture areas?
-    - Are the point layers useful? For example, is it helpful to be able to visually distinguish between reached and unreached POIs? 
-    - Is the elevation layer useful? For example, is it helpful to see segments with particularly large slopes highlighted?
-* Are the summary statistics useful? Could they inform your planning process?
-* Do you have any comments on the visualization? (layer structure, feature size, colors, background maps, ...) What could be improved? What should be done differently?
-* Is there any information that you think is missing from the tool?
-* More thoughts/remarks
+Once you have familiarized yourself with the Cycle Node Network Planner, we will be grateful for any feedback! Please fill out the [survey here](LINK) (between 5 and 20 minutes).
 
 # Finding out more
 
@@ -81,4 +76,4 @@ Find out more about:
 
 # Troubleshooting: What if running the Planner doesn't work?
 
-For troubleshooting, [contact us](mailto:anvy@itu.dk)! We also prepared a QGIS project showing the final output of the tool. It is available for download [here](LINK).
+For troubleshooting, [contact us](mailto:anvy@itu.dk)! We also prepared a QGIS project showing the final output of the Planner. It is available for download [here](LINK).

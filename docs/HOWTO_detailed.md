@@ -1,13 +1,15 @@
 # How to use the Cycle Node Network Planner
 
-Below, you find detailed instructions on how to use the Cycle Node Network Planner. **Contents** of this file (click to jump to Step X):
+Below, you find detailed instructions on how to use the Cycle Node Network Planner. 
+
+**Contents** of this file (click to jump to Step X):
 
 * [Step 1](#step-1-set-up-qgis): Set up QGIS
 * [Step 2](#step-2-download-the-contents-of-this-repository): Download the contents of this repository (`knudepunkter-fyn` folder)
 * [Step 3](#step-3-set-up-a-qgis-project-in-the-knudepunkter-fyn-folder): Open QGIS, set up a new project, and save it in the `knudepunkter-fyn` folder
 * [Step 4](#step-4-run-scripts-from-the-qgis-python-console): Open the Python console in QGIS, and run the scripts from the `scripts` folder in indicated order
-* [Step 5](#step-5-explore-the-qgis-visualization): Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be changed 
-* [Step 6](#step-6-explore-the-summary-statistics): Explore the summary statistics (PDF): get an overview of overall network quality and general characteristics of the network 
+* [Step 5](#step-5-explore-the-qgis-visualization): Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be improved
+* [Step 6](#step-6-explore-the-summary-statistics): Explore the summary statistics: get an overview of overall network quality and general characteristics of the network 
 
 ***
 
