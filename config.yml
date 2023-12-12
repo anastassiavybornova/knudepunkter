@@ -1,5 +1,5 @@
 # provide the name of the study area
-study_area_name: "Fyn"
+study_area_name: "Faxe"
 
 # provide a list of municipality codes for this study area
 # (see here: https://danmarksadresser.dk/adressedata/kodelister/kommunekodeliste)
@@ -38,7 +38,7 @@ municipalities:
   # - "0270" # Gribskov
   # - "0306" # Odsherred
   # - "0316" # Holbæk
-  # - "0320" # Faxe
+  - "0320" # Faxe
   # - "0326" # Kalundborg
   # - "0329" # Ringsted
   # - "0330" # Slagelse
@@ -50,17 +50,17 @@ municipalities:
   # - "0376" # Guldborgsund
   # - "0390" # Vordingborg
   # - "0400" # Bornholm
-  - "0410" # Middelfart
+  # - "0410" # Middelfart
   # - "0411" # Christiansø
-  - "0420" # Assens
-  - "0430" # Faaborg-Midtfyn
-  - "0440" # Kerteminde
-  - "0450" # Nyborg
-  - "0461" # Odense
-  - "0479" # Svendborg
-  - "0480" # Nordfyns
-  - "0482" # Langeland
-  - "0492" # Ærø
+  # - "0420" # Assens
+  # - "0430" # Faaborg-Midtfyn
+  # - "0440" # Kerteminde
+  # - "0450" # Nyborg
+  # - "0461" # Odense
+  # - "0479" # Svendborg
+  # - "0480" # Nordfyns
+  # - "0482" # Langeland
+  # - "0492" # Ærø
   # - "0510" # Haderslev
   # - "0530" # Billund
   # - "0540" # Sønderborg
