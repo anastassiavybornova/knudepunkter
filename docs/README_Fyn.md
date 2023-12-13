@@ -1,3 +1,5 @@
+> insert an image (screenshot) of the Planner here
+
 # The Cycle Node Network Planner
 
 *A decision support tool under development, aimed at supporting the planning of Denmark's cycle node network.*

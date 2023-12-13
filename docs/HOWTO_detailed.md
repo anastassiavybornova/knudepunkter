@@ -38,12 +38,13 @@ Contents of this file (click to jump to corresponding step):
 "<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
 "<qgispythonpath>" -m pip install momepy
 "<qgispythonpath>" -m pip install osmnx==1.6.0
+"<qgispythonpath>" -m pip install contextily
 ```
 <!-- <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4 might not be needed on windows? for me it didnt work, had to redo geopandas reinstall one more time-->
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
 
-> **EXTRA STEP FOR WINDOWS: COPYPASTE SOME SSL FILES AS EXPLAINED HERE (Feb 22, 2022 reply) https://stackoverflow.com/questions/60290795/ssl-module-in-python-is-not-available-qgis 
+> TO INSERT: **EXTRA STEP FOR WINDOWS: COPYPASTE SOME SSL FILES AS EXPLAINED HERE (Feb 22, 2022 reply) https://stackoverflow.com/questions/60290795/ssl-module-in-python-is-not-available-qgis 
 
 **On MacOS/Linux**:
 ```
@@ -52,6 +53,7 @@ Contents of this file (click to jump to corresponding step):
 "<qgispythonpath>" -m pip install momepy
 "<qgispythonpath>" -m pip install osmnx==1.6.0
 "<qgispythonpath>" -m pip install numpy --force-reinstall -v numpy==1.22.4
+"<qgispythonpath>" -m pip install contextily
 ```
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
