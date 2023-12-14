@@ -80,7 +80,7 @@ polygons["polygon_area"] = polygons.area
 
 ### EXPORT RESULTS TO GPKG
 
-polygons.to_file(output_file, index=False)
+polygons.to_file(output_file, index=False, mode="w")
 
 print(f"Polygons exported to {output_file}!")
 

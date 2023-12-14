@@ -100,8 +100,8 @@ nodes = nodes.merge(pd_degrees, left_index=True, right_index=True)
 
 # Export
 ox.save_graphml(G_undirected, graph_file)
-edges.to_file(edgefile)
-nodes.to_file(nodefile)
+edges.to_file(edgefile, mode="w")
+nodes.to_file(nodefile, mode="w")
 
 ### Summary statistics of network
 res = {}  # initialize stats results dictionary

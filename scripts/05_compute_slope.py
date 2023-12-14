@@ -263,7 +263,7 @@ for seg_id, group in grouped:
 
 segs["slope"].fillna(0, inplace=True)
 
-segs.to_file(segments_slope_fp)
+segs.to_file(segments_slope_fp, mode="w")
 
 ###
 
@@ -298,7 +298,7 @@ for edge_id, group in grouped:
 
 ##### EXPORT RESULTS (SLOPE BY EDGE)
 
-edges.to_file(edges_slope_fp)
+edges.to_file(edges_slope_fp, mode="w")
 
 ##### PLOT RESULTS (SLOPE BY EDGE)
 
@@ -319,7 +319,7 @@ if plot_results:
 
 
 steep_segments = segs.loc[segs.slope > slope_threshold]
-steep_segments.to_file(steep_segments_fp)
+steep_segments.to_file(steep_segments_fp, mode="w")
 
 ### Save summary statistics of slope computation
 res = {}  # initialize stats results dictionary

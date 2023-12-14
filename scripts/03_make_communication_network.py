@@ -237,10 +237,10 @@ assert len(edges) == len(edges.id.unique())
 assert len(edges_no_parallel) == len(edges_no_parallel.id.unique())
 assert len(nodes_in_use) == len(nodes_in_use.id.unique())
 
-nodes_in_use.to_file(output_file_nodes)
-edges.to_file(output_file_edges)
+nodes_in_use.to_file(output_file_nodes, mode="w")
+edges.to_file(output_file_edges, mode="w")
 
-edges_no_parallel.to_file(output_file_edges_no_parallel)
+edges_no_parallel.to_file(output_file_edges_no_parallel, mode="w")
 
 # # save summary stats of communication network
 # res = {} # initialize stats results dictionary
