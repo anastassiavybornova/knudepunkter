@@ -123,7 +123,7 @@ for ix, row in child_nodes.iterrows():
         nodes.node_id == int(child_nodes.loc[ix, "refmain"])
     ].geometry.values[0]
     # print(f"idx {idx}, step 1")
-    
+
     if parent_geom.distance(row.geometry) > 100:
         continue
     else:
@@ -132,15 +132,15 @@ for ix, row in child_nodes.iterrows():
 
         # all edges which have this child node as their end node
         edges_end = edges.loc[edges.v == this_node_id]
-        # print(f"idx {idx}, step 2") 
-        
+        # print(f"idx {idx}, step 2")
+
         for ix, row in edges_start.iterrows():
             # get coordinate in edge linestring
             edge_coords = list(row.geometry.coords)
 
             # replace start coordinate (child node) with geometry of parent node
             edge_coords[0] = parent_geom.coords[0]
-            
+
             # create new linestring from updated coordinates
             new_linestring = LineString(edge_coords)
 
@@ -149,8 +149,8 @@ for ix, row in child_nodes.iterrows():
 
             # mark edge as modified
             edges.loc[ix, "modified"] = True
-            # print(f"idx {idx}, step 3") 
-            
+            # print(f"idx {idx}, step 3")
+
         for ix, row in edges_end.iterrows():
             # get coordinate in edge linestring
             edge_coords = list(row.geometry.coords)
@@ -167,7 +167,7 @@ for ix, row in child_nodes.iterrows():
             # mark edge as modified
             edges.loc[ix, "modified"] = True
             # print(f"idx {idx}, step 4")
-            
+
 # drop old u,v columns
 edges.drop(["u", "v"], axis=1, inplace=True)
 
@@ -247,7 +247,7 @@ edges_no_parallel.to_file(output_file_edges_no_parallel)
 # res["total_length"] = edges_no_parallel.to_crs(proj_crs).length.sum()
 # res["edges_count"] = len(edges_no_parallel)
 # res["nodes_in_use"] = len(nodes_in_use)
-# with open(f"{stats_path}stats_communication_network.json", "w") as opened_file: 
+# with open(f"{stats_path}stats_communication_network.json", "w") as opened_file:
 #     json.dump(res, opened_file, indent = 6)
 
 ### REMOVE LAYERS IF THEY EXIST ALREADY
@@ -342,5 +342,7 @@ print("layers added")
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("03_make_communication_network script ended successfully \n")

@@ -39,7 +39,7 @@ proj_crs = configs["proj_crs"]  # projected CRS
 input_file = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
 output_file = homepath + "/data/processed/workflow_steps/loop_polygons.gpkg"
 results_path = homepath + "/results/data/"  # store output geopackages here
-stats_path = homepath + "/results/stats/" # store output json here
+stats_path = homepath + "/results/stats/"  # store output json here
 
 ### LOAD INPUT DATA AND PROJECT
 gdf = gpd.read_file(input_file)
@@ -85,10 +85,10 @@ polygons.to_file(output_file, index=False)
 print(f"Polygons exported to {output_file}!")
 
 ### Summary statistics of polygonization
-res = {} # initialize stats results dictionary
+res = {}  # initialize stats results dictionary
 res["polygon_areas"] = list(polygons["polygon_area"])
-with open(f"{stats_path}stats_polygons.json", "w") as opened_file: 
-    json.dump(res, opened_file, indent = 6)
+with open(f"{stats_path}stats_polygons.json", "w") as opened_file:
+    json.dump(res, opened_file, indent=6)
 
 ### IF REQUESTED BY USER, DISPLAY LAYER
 
@@ -112,5 +112,7 @@ if display_polygons:
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("07_polygonize script ended successfully \n")

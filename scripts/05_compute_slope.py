@@ -40,7 +40,7 @@ os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 from owslib.wms import WebMapService
 import geopandas as gpd
 import yaml
-import json 
+import json
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -322,14 +322,14 @@ steep_segments = segs.loc[segs.slope > slope_threshold]
 steep_segments.to_file(steep_segments_fp)
 
 ### Save summary statistics of slope computation
-res = {} # initialize stats results dictionary
+res = {}  # initialize stats results dictionary
 res["segs_length"] = list(segs["length"])
 res["segs_slope"] = list(segs["slope"])
 res["segs_slope_min"] = segs.slope.min()
 res["segs_slope_max"] = segs.slope.max()
 res["segs_slope_mean"] = segs.slope.mean()
-with open(f"{stats_path}stats_slope.json", "w") as opened_file: 
-    json.dump(res, opened_file, indent = 6)
+with open(f"{stats_path}stats_slope.json", "w") as opened_file:
+    json.dump(res, opened_file, indent=6)
 
 ##### PLOT RESULTS (STEEP SEGMENTS)
 
@@ -412,5 +412,7 @@ turn_off_layers(turn_off_layer_names)
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("05_compute_slope script ended successfully \n")

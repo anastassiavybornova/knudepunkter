@@ -26,7 +26,7 @@ import os
 import yaml
 import networkx as nx
 from qgis.core import *
-import json 
+import json
 
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -104,12 +104,12 @@ edges.to_file(edgefile)
 nodes.to_file(nodefile)
 
 ### Summary statistics of network
-res = {} # initialize stats results dictionary
+res = {}  # initialize stats results dictionary
 res["node_count"] = len(G_undirected.nodes)
 res["edge_count"] = len(G_undirected.edges)
 res["node_degrees"] = dict(nx.degree(G))
-with open(f"{stats_path}stats_network.json", "w") as opened_file: 
-    json.dump(res, opened_file, indent = 6)
+with open(f"{stats_path}stats_network.json", "w") as opened_file:
+    json.dump(res, opened_file, indent=6)
 
 ### Visualization
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
@@ -173,5 +173,7 @@ if display_input_data == True and display_network_layer == True:
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("06_compute_network_statistics script ended successfully \n")
