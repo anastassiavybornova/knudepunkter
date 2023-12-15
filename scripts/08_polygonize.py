@@ -4,7 +4,7 @@
 display_polygons = True
 
 ##### NO CHANGES BELOW THIS LINE
-print("07_polygonize script started with user settings:")
+print("08_polygonize script started with user settings:")
 print(f"Display polygons: {display_polygons}")
 
 ### SETUP
@@ -128,4 +128,4 @@ if "Basemap" in layer_names:
 if "Ortofoto" in layer_names:
     move_basemap_back(basemap_name="Ortofoto")
 
-print("07_polygonize script ended successfully \n")
+print("08_polygonize script ended successfully \n")
