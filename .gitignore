@@ -221,3 +221,4 @@ data/NIRAS/*
 # outdated data sets
 data/raw/archive
 data/raw/archive/*
+scripts/03_make_communication_network_draft.py
