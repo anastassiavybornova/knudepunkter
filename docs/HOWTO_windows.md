@@ -20,19 +20,16 @@ Contents of this file (click to jump to corresponding step):
 
 <p align="center"><img alt="Check your QGIS version" src="/docs/screenshots/qgis-version.png" width=80%></p>
 
-<!-- Troubleshooting: if new installation on Mac, must be first opened 1x with rightclick and confirm -->
-
 2. Find out the path to the Python installation for the QGIS app on your local machine. Typically, this will be similar to: 
-* for Windows, `C:\Program Files\QGIS 3.28.13\apps\Python39\python`
-* for MacOS/Linux, `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`
 
+```
+C:\Program Files\QGIS 3.28.13\apps\Python39\python
+```
 
-
-3. Open your command line interface (on Windows: Command Prompt; on MacOS/Linux: Terminal)
+3. Open your command line interface (Command Prompt on Windows)
 
 4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) 
 
-**On Windows:**
 ```
 "<qgispythonpath>" -m pip install --upgrade shapely
 "<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
@@ -46,20 +43,6 @@ Contents of this file (click to jump to corresponding step):
 
 > TO INSERT: **EXTRA STEP FOR WINDOWS: COPYPASTE SOME SSL FILES AS EXPLAINED HERE (Feb 22, 2022 reply) https://stackoverflow.com/questions/60290795/ssl-module-in-python-is-not-available-qgis 
 
-**On MacOS/Linux**:
-```
-"<qgispythonpath>" -m pip install --upgrade shapely  
-"<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
-"<qgispythonpath>" -m pip install momepy
-"<qgispythonpath>" -m pip install osmnx==1.6.0
-"<qgispythonpath>" -m pip install numpy --force-reinstall -v numpy==1.22.4
-"<qgispythonpath>" -m pip install contextily
-```
-
-<p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
-
-***
-
 ## Step 2: Download the contents of this repository
 
 On this GitHub repository page, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter-fyn`. This will be the main folder for the entire workflow.
@@ -70,7 +53,9 @@ On this GitHub repository page, click on the `Code` button (in the upper right),
 
 ## Step 3: Fill out the configuration file
 
-Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.
+Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in any text editor (e.g. Notepad). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.
+
+<!-- Update this depending on which areas we get the data to work for -->
 
 <p align="center"><img alt="Fill out the configuration file" src="/docs/screenshots/config-fillout.png" width=80%></p>
 
@@ -79,6 +64,8 @@ Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in an
 ## Step 4: Open the QGIS project in the knudepunkter-fyn folder
 
 Open the empty QGIS project **`Fyn.qgz`**, located in the `knudepunkter-fyn` folder. 
+
+<!-- Update this depending on which areas we get the data to work for -->
 
 ***
 
