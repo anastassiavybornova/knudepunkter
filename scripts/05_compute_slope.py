@@ -30,6 +30,7 @@ print(f"\t Plot intermediate results: {plot_intermediate}")
 print(f"\t Plot final results: {plot_results}")
 print(f"\t Slope threshold: {slope_threshold}% (percent)")
 print("Please be patient, this might take a while!")
+print(f"If the script fails to complete, please try again!")
 
 ### SETUP
 
@@ -327,14 +328,14 @@ if os.path.exists(steep_segments_fp):
 steep_segments.to_file(steep_segments_fp, mode="w")
 
 ### Save summary statistics of slope computation
-# res = {}  # initialize stats results dictionary
-# res["segs_length"] = list(segs["length"])
-# res["segs_slope"] = list(segs["slope"])
-# res["segs_slope_min"] = segs.slope.min()
-# res["segs_slope_max"] = segs.slope.max()
-# res["segs_slope_mean"] = segs.slope.mean()
-# with open(f"{stats_path}stats_slope.json", "w") as opened_file:
-#     json.dump(res, opened_file, indent=6)
+res = {}  # initialize stats results dictionary
+res["segs_length"] = list(segs["length"])
+res["segs_slope"] = list(segs["slope"])
+res["segs_slope_min"] = segs.slope.min()
+res["segs_slope_max"] = segs.slope.max()
+res["segs_slope_mean"] = segs.slope.mean()
+with open(f"{stats_path}stats_slope.json", "w") as opened_file:
+    json.dump(res, opened_file, indent=6)
 
 ##### PLOT RESULTS (STEEP SEGMENTS)
 
