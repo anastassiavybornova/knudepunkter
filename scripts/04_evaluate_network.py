@@ -9,19 +9,20 @@
 display_input = True
 display_output = True
 
+##### NO CHANGES BELOW THIS LINE
+
 # define distance thresholds for polygon layers
-dist_veri = 100
-dist_agri = 100
-dist_culture = 100
-dist_nature = 100
-dist_summer = 100
+dist_veri = configs["polygon_buffers"]["dist_verify"]
+dist_agri = configs["polygon_buffers"]["dist_agriculture"]
+dist_culture = configs["polygon_buffers"]["dist_culture"]
+dist_nature = configs["polygon_buffers"]["dist_nature"]
+dist_summer = configs["polygon_buffers"]["dist_summer"]
 
 # define distance thresholds for point layers
-dist_faci = 100
-dist_serv = 500
-dist_pois = 1000
+dist_faci = configs["point_distances"]["dist_facilities"]
+dist_serv = configs["point_distances"]["dist_service"]
+dist_pois = configs["point_distances"]["dist_pois"]
 
-##### NO CHANGES BELOW THIS LINE
 print("04_evaluate_network script started with user settings:")
 print(f"\t * Display input: {display_input}; display_output: {display_output}")
 print(f"\t * Distance thresholds for polygon layers:")
