@@ -76,7 +76,7 @@ eval_path = homepath + "/data/user_input/"  # where is evaluation data
 results_path = homepath + "/results/data/"  # store output geopackages here
 stats_path = homepath + "/results/stats/"  # store output json here
 for path in [eval_path, results_path, stats_path]:
-    os.makedirs(p, exist_ok=True)
+    os.makedirs(path, exist_ok=True)
 
 ### IMPORT NETWORK EDGES
 edges = gpd.read_file(study_path)
@@ -412,6 +412,17 @@ for t in types:
 
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 

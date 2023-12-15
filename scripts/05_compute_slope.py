@@ -263,6 +263,8 @@ for seg_id, group in grouped:
 
 segs["slope"].fillna(0, inplace=True)
 
+if os.path.exists(segments_slope_fp):
+    os.remove(segments_slope_fp)
 segs.to_file(segments_slope_fp, mode="w")
 
 ###
@@ -297,7 +299,8 @@ for edge_id, group in grouped:
     edges["ave_slope"].loc[edges.edge_id == edge_id] = ave_slope
 
 ##### EXPORT RESULTS (SLOPE BY EDGE)
-
+if os.path.exists(edges_slope_fp):
+    os.remove(edges_slope_fp)
 edges.to_file(edges_slope_fp, mode="w")
 
 ##### PLOT RESULTS (SLOPE BY EDGE)
@@ -319,17 +322,19 @@ if plot_results:
 
 
 steep_segments = segs.loc[segs.slope > slope_threshold]
+if os.path.exists(steep_segments_fp):
+    os.remove(steep_segments_fp)
 steep_segments.to_file(steep_segments_fp, mode="w")
 
 ### Save summary statistics of slope computation
-res = {}  # initialize stats results dictionary
-res["segs_length"] = list(segs["length"])
-res["segs_slope"] = list(segs["slope"])
-res["segs_slope_min"] = segs.slope.min()
-res["segs_slope_max"] = segs.slope.max()
-res["segs_slope_mean"] = segs.slope.mean()
-with open(f"{stats_path}stats_slope.json", "w") as opened_file:
-    json.dump(res, opened_file, indent=6)
+# res = {}  # initialize stats results dictionary
+# res["segs_length"] = list(segs["length"])
+# res["segs_slope"] = list(segs["slope"])
+# res["segs_slope_min"] = segs.slope.min()
+# res["segs_slope_max"] = segs.slope.max()
+# res["segs_slope_mean"] = segs.slope.mean()
+# with open(f"{stats_path}stats_slope.json", "w") as opened_file:
+#     json.dump(res, opened_file, indent=6)
 
 ##### PLOT RESULTS (STEEP SEGMENTS)
 
@@ -410,6 +415,16 @@ turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
 
 turn_off_layers(turn_off_layer_names)
 
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 if "Ortofoto" in layer_names:

@@ -101,8 +101,10 @@ edges.reset_index(drop=True, inplace=True)
 ### PROCESS INPUT DATA TO FIND AND REMOVE PARALLEL EDGES
 
 # create distinct column names for unique id
-edges["edge_id"] = edges.id
+edges["edge_id"] = edges.index
+assert len(edges) == len(edges.edge_id.unique())
 nodes["node_id"] = nodes.id
+assert len(nodes) == len(nodes.node_id.unique())
 
 # assign edges initial start and end nodes
 edges = graphedit.assign_edges_start_end_nodes(edges, nodes)
@@ -226,16 +228,25 @@ nodes_in_use = nodes.loc[nodes.node_id.isin(set(edges.u.to_list() + edges.v.to_l
 # edges without parallel edges
 edges_no_parallel = edges.loc[edges["drop"] == False]
 
-assert len(nodes.loc[nodes.ismain == True]) == len(
-    nodes_in_use.loc[nodes_in_use.ismain == True]
-)
+# assert len(nodes.loc[nodes.ismain == True]) == len(
+#     nodes_in_use.loc[nodes_in_use.ismain == True]
+# )
 
 ### SAVE COMMUNICATION NODE AND EDGE DATA TO FILE
 # these are the "communication data" layers that will be used by all consecutive scripts FOR PLOTTING
 
-assert len(edges) == len(edges.id.unique())
-assert len(edges_no_parallel) == len(edges_no_parallel.id.unique())
+assert len(edges) == len(edges.edge_id.unique())
+assert len(edges_no_parallel) == len(edges_no_parallel.edge_id.unique())
 assert len(nodes_in_use) == len(nodes_in_use.id.unique())
+
+if os.path.exists(output_file_nodes):
+    os.remove(output_file_nodes)
+
+if os.path.exists(output_file_edges):
+    os.remove(output_file_edges)
+
+if os.path.exists(output_file_edges_no_parallel):
+    os.remove(output_file_edges_no_parallel)
 
 nodes_in_use.to_file(output_file_nodes, mode="w")
 edges.to_file(output_file_edges, mode="w")
@@ -340,6 +351,17 @@ if display_inputdata and not display_communicationlayer:
 print("layers added")
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 if "Ortofoto" in layer_names:

@@ -79,7 +79,8 @@ if not (polygons.geom_type == "Polygon").all():
 polygons["polygon_area"] = polygons.area
 
 ### EXPORT RESULTS TO GPKG
-
+if os.path.exists(output_file):
+    os.remove(output_file)
 polygons.to_file(output_file, index=False, mode="w")
 
 print(f"Polygons exported to {output_file}!")
@@ -110,6 +111,18 @@ if display_polygons:
 
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 if "Ortofoto" in layer_names:

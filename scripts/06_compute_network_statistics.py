@@ -99,6 +99,11 @@ pd_degrees = pd.DataFrame.from_dict(
 nodes = nodes.merge(pd_degrees, left_index=True, right_index=True)
 
 # Export
+if os.path.exists(edgefile):
+    os.remove(edgefile)
+if os.path.exists(nodefile):
+    os.remove(nodefile)
+
 ox.save_graphml(G_undirected, graph_file)
 edges.to_file(edgefile, mode="w")
 nodes.to_file(nodefile, mode="w")
@@ -171,6 +176,18 @@ if display_input_data == True and display_network_layer == True:
     )
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 if "Ortofoto" in layer_names:
