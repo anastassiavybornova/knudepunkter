@@ -85,7 +85,8 @@ In QGIS,
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=80%></p>
 
-<!-- The 05_compute_slope script sometimes needs a couple of times until it runs successfully -->
+**Troubleshooting**
+* If the script `05_compute_slope.py` script fails to run - please try again! (it sometimes requires several attempts)
 
 ***
 
