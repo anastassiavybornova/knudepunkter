@@ -26,7 +26,7 @@ import os
 import yaml
 import networkx as nx
 from qgis.core import *
-import json 
+import json
 
 # load configs
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -99,17 +99,22 @@ pd_degrees = pd.DataFrame.from_dict(
 nodes = nodes.merge(pd_degrees, left_index=True, right_index=True)
 
 # Export
+if os.path.exists(edgefile):
+    os.remove(edgefile)
+if os.path.exists(nodefile):
+    os.remove(nodefile)
+
 ox.save_graphml(G_undirected, graph_file)
-edges.to_file(edgefile)
-nodes.to_file(nodefile)
+edges.to_file(edgefile, mode="w")
+nodes.to_file(nodefile, mode="w")
 
 ### Summary statistics of network
-res = {} # initialize stats results dictionary
+res = {}  # initialize stats results dictionary
 res["node_count"] = len(G_undirected.nodes)
 res["edge_count"] = len(G_undirected.edges)
 res["node_degrees"] = dict(nx.degree(G))
-with open(f"{stats_path}stats_network.json", "w") as opened_file: 
-    json.dump(res, opened_file, indent = 6)
+with open(f"{stats_path}stats_network.json", "w") as opened_file:
+    json.dump(res, opened_file, indent=6)
 
 ### Visualization
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
@@ -171,7 +176,21 @@ if display_input_data == True and display_network_layer == True:
     )
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("06_compute_network_statistics script ended successfully \n")

@@ -44,7 +44,6 @@ exec(open(homepath + "/src/plot_func.py").read())
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
-dataforsyning_token = configs["dataforsyning_token"]
 
 print("done: setup")
 
@@ -54,8 +53,8 @@ print("done: setup")
 os.makedirs(homepath + "/data/processed/workflow_steps", exist_ok=True)
 
 # define paths to input files
-node_inpath = (homepath + "/data/raw/network/nodes.gpkg")
-edge_inpath = (homepath + "/data/raw/network/edges.gpkg")
+node_inpath = homepath + "/data/raw/network/nodes.gpkg"
+edge_inpath = homepath + "/data/raw/network/edges.gpkg"
 
 # define paths to output files
 nodetech_outpath = homepath + "/data/processed/workflow_steps/nodes_technical.gpkg"
@@ -73,7 +72,7 @@ study_area = gpd.read_file(filepath_study)
 study_area = study_area.to_crs(proj_crs)
 
 # Remove layers from project if they exist already
-remove_existing_layers(["Study area", "beta data (pre-network)"])
+remove_existing_layers(["beta data (pre-network)"])
 
 print("done: study area")
 
@@ -125,32 +124,24 @@ print("done: process data")
 
 ### SAVE TECHNICAL NODE AND EDGE DATA TO FILE
 # these are the "technical data" layers that will be used by all consecutive scripts FOR PLOTTING
-nodes.to_file(nodetech_outpath)
-edges.to_file(edgetech_outpath)
+if os.path.exists(nodetech_outpath):
+    os.remove(nodetech_outpath)
+if os.path.exists(edgetech_outpath):
+    os.remove(edgetech_outpath)
+nodes.to_file(nodetech_outpath, mode="w")
+edges.to_file(edgetech_outpath, mode="w")
 print(f"Technical data layer for nodes in study area saved to: {nodetech_outpath}")
 print(f"Technical data layer for edges in study area saved to: {edgetech_outpath}")
 
 
 ### IF REQUESTED BY USER, DISPLAY LAYERS
 
-remove_existing_layers(["Study area", "Input data", "Technical network", "Basemap"])
+remove_existing_layers(["Input data", "Technical network"])
 
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
-# input data (entire raw data set from folkersma and study area)
+# input data (entire raw data set from folkersma)
 if display_inputdata == True:
-    sa_layer = QgsVectorLayer(filepath_study, "Study area", "ogr")
-    if not sa_layer.isValid():
-        print("Study area layer failed to load!")
-    else:
-        QgsProject.instance().addMapLayer(sa_layer)
-        draw_simple_polygon_layer(
-            "Study area",
-            color="250,181,127,128",
-            outline_color="black",
-            outline_width=0.5,
-        )
-
     input_layer = QgsVectorLayer(edge_inpath, "Input data", "ogr")
     if not input_layer.isValid():
         print("Layer failed to load!")
@@ -172,18 +163,18 @@ if display_technicallayer == True:
 if display_inputdata and display_technicallayer:
     group_layers(
         group_name="Make technical network layer",
-        layer_names=["Study area", "Input data", "Technical network"],
+        layer_names=["Input data", "Technical network"],
     )
 
-    zoom_to_layer("Study area")
+    zoom_to_layer("Technical network")
 
 if display_inputdata == True and display_technicallayer == False:
     group_layers(
         group_name="Make technical network layer",
-        layer_names=["Study area", "Input data"],
+        layer_names=["Input data"],
     )
 
-    zoom_to_layer("Study area")
+    zoom_to_layer("Input data")
 
 if display_inputdata == False and display_technicallayer == True:
     group_layers(
@@ -193,16 +184,21 @@ if display_inputdata == False and display_technicallayer == True:
     zoom_to_layer("Technical network")
 
 
-if dataforsyning_token and (display_inputdata or display_technicallayer):
-    basemap_name = "topo_skaermkort_daempet"
-    url = f"https://api.dataforsyningen.dk/{basemap_name}_DAF?service%3DWMTS%26request%3DGetCapabilities%26token%3D{dataforsyning_token}"
-    source = f"crs={proj_crs}&dpiMode=7&format=image/jpeg&layers={basemap_name}&styles=default&tileMatrixSet=View1&tilePixelRatio=0&url={url}"
-    basemap = QgsRasterLayer(source, "Basemap", "wms")
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
 
-    QgsProject.instance().addMapLayer(basemap, False)
+    move_study_area_front()
 
-    root = QgsProject.instance().layerTreeRoot()
-
-    root.insertLayer(-1, basemap)
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("02_make_technical_network script ended successfully \n")

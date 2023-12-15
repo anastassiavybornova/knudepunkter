@@ -50,6 +50,7 @@ if homepath not in sys.path:
 # import python packages
 import os
 import os.path
+
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import pandas as pd
@@ -60,7 +61,9 @@ import json
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
-colorfile = os.path.join(homepath, "colors.yml") # load color dictionary for visualization
+colorfile = os.path.join(
+    homepath, "colors.yml"
+)  # load color dictionary for visualization
 colors = yaml.load(open(colorfile), Loader=yaml.FullLoader)
 
 # import functions
@@ -73,7 +76,7 @@ eval_path = homepath + "/data/user_input/"  # where is evaluation data
 results_path = homepath + "/results/data/"  # store output geopackages here
 stats_path = homepath + "/results/stats/"  # store output json here
 for path in [eval_path, results_path, stats_path]:
-    os.makedirs(p, exist_ok=True)
+    os.makedirs(path, exist_ok=True)
 
 ### IMPORT NETWORK EDGES
 edges = gpd.read_file(study_path)
@@ -133,7 +136,7 @@ if display_input:
 
 #### **** EVALUATE POLYGON LAYERS **** ####
 
-res = {} # initialize stats results dictionary
+res = {}  # initialize stats results dictionary
 
 #### AGRICULTURE ####
 
@@ -276,7 +279,7 @@ if os.path.exists(eval_path + "facilities.gpkg"):
         faci_input,
         faci_output_within,
         faci_output_outside,
-        res_facilities
+        res_facilities,
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "facilities.gpkg",
         within_reach_output_fp=results_path
@@ -306,11 +309,12 @@ if os.path.exists(eval_path + "service.gpkg"):
         service_input,
         service_output_within,
         service_output_outside,
-        res_service
+        res_service,
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "service.gpkg",
         within_reach_output_fp=results_path + f"service_within_reach_{dist_serv}.gpkg",
-        outside_reach_output_fp=results_path + f"service_outside_reach_{dist_serv}.gpkg",
+        outside_reach_output_fp=results_path
+        + f"service_outside_reach_{dist_serv}.gpkg",
         network_edges=edges,
         dist=dist_faci,
         name="Services",
@@ -330,10 +334,10 @@ if os.path.exists(eval_path + "service.gpkg"):
 #### POIS ####
 if os.path.exists(eval_path + "pois.gpkg"):
     (
-        pois_input, 
-        pois_output_within, 
+        pois_input,
+        pois_output_within,
         pois_output_outside,
-        res_pois
+        res_pois,
     ) = evaluate_export_plot_point(
         input_fp=eval_path + "pois.gpkg",
         within_reach_output_fp=results_path + f"pois_within_reach_{dist_pois}.gpkg",
@@ -355,8 +359,8 @@ if os.path.exists(eval_path + "pois.gpkg"):
     output_layers.append(pois_output_outside)
 
 ### SAVE RESULTS OF SUMMARY STATISTICS
-with open(f"{stats_path}stats_evaluation.json", "w") as opened_file: 
-    json.dump(res, opened_file, indent = 6) 
+with open(f"{stats_path}stats_evaluation.json", "w") as opened_file:
+    json.dump(res, opened_file, indent=6)
 
 ### VISUALIZATION
 
@@ -408,7 +412,21 @@ for t in types:
 
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("04_evaluate_network script ended successfully \n")

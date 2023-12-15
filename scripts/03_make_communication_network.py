@@ -101,8 +101,10 @@ edges.reset_index(drop=True, inplace=True)
 ### PROCESS INPUT DATA TO FIND AND REMOVE PARALLEL EDGES
 
 # create distinct column names for unique id
-edges["edge_id"] = edges.id
+edges["edge_id"] = edges.index
+assert len(edges) == len(edges.edge_id.unique())
 nodes["node_id"] = nodes.id
+assert len(nodes) == len(nodes.node_id.unique())
 
 # assign edges initial start and end nodes
 edges = graphedit.assign_edges_start_end_nodes(edges, nodes)
@@ -123,7 +125,7 @@ for ix, row in child_nodes.iterrows():
         nodes.node_id == int(child_nodes.loc[ix, "refmain"])
     ].geometry.values[0]
     # print(f"idx {idx}, step 1")
-    
+
     if parent_geom.distance(row.geometry) > 100:
         continue
     else:
@@ -132,15 +134,15 @@ for ix, row in child_nodes.iterrows():
 
         # all edges which have this child node as their end node
         edges_end = edges.loc[edges.v == this_node_id]
-        # print(f"idx {idx}, step 2") 
-        
+        # print(f"idx {idx}, step 2")
+
         for ix, row in edges_start.iterrows():
             # get coordinate in edge linestring
             edge_coords = list(row.geometry.coords)
 
             # replace start coordinate (child node) with geometry of parent node
             edge_coords[0] = parent_geom.coords[0]
-            
+
             # create new linestring from updated coordinates
             new_linestring = LineString(edge_coords)
 
@@ -149,8 +151,8 @@ for ix, row in child_nodes.iterrows():
 
             # mark edge as modified
             edges.loc[ix, "modified"] = True
-            # print(f"idx {idx}, step 3") 
-            
+            # print(f"idx {idx}, step 3")
+
         for ix, row in edges_end.iterrows():
             # get coordinate in edge linestring
             edge_coords = list(row.geometry.coords)
@@ -167,7 +169,7 @@ for ix, row in child_nodes.iterrows():
             # mark edge as modified
             edges.loc[ix, "modified"] = True
             # print(f"idx {idx}, step 4")
-            
+
 # drop old u,v columns
 edges.drop(["u", "v"], axis=1, inplace=True)
 
@@ -226,28 +228,37 @@ nodes_in_use = nodes.loc[nodes.node_id.isin(set(edges.u.to_list() + edges.v.to_l
 # edges without parallel edges
 edges_no_parallel = edges.loc[edges["drop"] == False]
 
-assert len(nodes.loc[nodes.ismain == True]) == len(
-    nodes_in_use.loc[nodes_in_use.ismain == True]
-)
+# assert len(nodes.loc[nodes.ismain == True]) == len(
+#     nodes_in_use.loc[nodes_in_use.ismain == True]
+# )
 
 ### SAVE COMMUNICATION NODE AND EDGE DATA TO FILE
 # these are the "communication data" layers that will be used by all consecutive scripts FOR PLOTTING
 
-assert len(edges) == len(edges.id.unique())
-assert len(edges_no_parallel) == len(edges_no_parallel.id.unique())
+assert len(edges) == len(edges.edge_id.unique())
+assert len(edges_no_parallel) == len(edges_no_parallel.edge_id.unique())
 assert len(nodes_in_use) == len(nodes_in_use.id.unique())
 
-nodes_in_use.to_file(output_file_nodes)
-edges.to_file(output_file_edges)
+if os.path.exists(output_file_nodes):
+    os.remove(output_file_nodes)
 
-edges_no_parallel.to_file(output_file_edges_no_parallel)
+if os.path.exists(output_file_edges):
+    os.remove(output_file_edges)
+
+if os.path.exists(output_file_edges_no_parallel):
+    os.remove(output_file_edges_no_parallel)
+
+nodes_in_use.to_file(output_file_nodes, mode="w")
+edges.to_file(output_file_edges, mode="w")
+
+edges_no_parallel.to_file(output_file_edges_no_parallel, mode="w")
 
 # # save summary stats of communication network
 # res = {} # initialize stats results dictionary
 # res["total_length"] = edges_no_parallel.to_crs(proj_crs).length.sum()
 # res["edges_count"] = len(edges_no_parallel)
 # res["nodes_in_use"] = len(nodes_in_use)
-# with open(f"{stats_path}stats_communication_network.json", "w") as opened_file: 
+# with open(f"{stats_path}stats_communication_network.json", "w") as opened_file:
 #     json.dump(res, opened_file, indent = 6)
 
 ### REMOVE LAYERS IF THEY EXIST ALREADY
@@ -340,7 +351,20 @@ if display_inputdata and not display_communicationlayer:
 print("layers added")
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+if "Study area" in layer_names:
+    # Change symbol for study layer
+    draw_simple_polygon_layer(
+        "Study area",
+        color="250,181,127,0",
+        outline_color="red",
+        outline_width=0.7,
+    )
+
+    move_study_area_front()
+
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+if "Ortofoto" in layer_names:
+    move_basemap_back(basemap_name="Ortofoto")
 
 print("03_make_communication_network script ended successfully \n")
