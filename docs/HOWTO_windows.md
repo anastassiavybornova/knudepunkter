@@ -23,12 +23,21 @@ Contents of this file (click to jump to corresponding step):
 2. Find out the path to the Python installation for the QGIS app on your local machine. Typically, this will be similar to: 
 
 ```
-C:\Program Files\QGIS 3.28.13\apps\Python39\python
+C:\Program Files\QGIS 3.28\apps\Python39\python
 ```
 
-3. Open your command line interface (Command Prompt on Windows)
+3. To avoid issues with permissions for the custom setup of Python packages in your QGIS installation on Windows, you will need to copy-paste the following two files:
 
-4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) 
+```
+libcrypto-1_1-x64.dll
+libssl-1_1-x64.dll
+```
+
+from the `\bin\` subfolder to the Python installation subfolder (as identified in step 2) of your QGIS installation. To do so, simply open your file explorer and navigate to the path `C:\Program Files\QGIS 3.28\bin`; locate the 2 files and copy them; navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\python`; and paste the 2 files here. Note that the exact file path might look slightly different on your machine (e.g. a different QGIS version number, or a different Python version number).
+
+4. Open your command line interface (Command Prompt on Windows)
+
+5. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) 
 
 ```
 "<qgispythonpath>" -m pip install --upgrade shapely
@@ -40,8 +49,6 @@ C:\Program Files\QGIS 3.28.13\apps\Python39\python
 <!-- <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4 might not be needed on windows? for me it didnt work, had to redo geopandas reinstall one more time-->
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
-
-> TO INSERT: **EXTRA STEP FOR WINDOWS: COPYPASTE SOME SSL FILES AS EXPLAINED HERE (Feb 22, 2022 reply) https://stackoverflow.com/questions/60290795/ssl-module-in-python-is-not-available-qgis 
 
 ## Step 2: Download the contents of this repository
 
