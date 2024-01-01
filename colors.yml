@@ -14,3 +14,11 @@
 "service_outside": "243, 205, 255"
 "pois": "0, 74, 255"
 "pois_outside": "151, 181, 255"
+
+# slope layers
+"slope_0" : "#ffbaba" # 255, 186, 186
+"slope_a" : "#ff5252" # 255, 82, 82
+"slope_b":  "#ff0000" # 255, 0, 0
+"slope_c" : "#a70000" # 167, 0, 0
+
+
