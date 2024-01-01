@@ -1,36 +1,8 @@
-# In this script, we:
-# - import the communication layer (network edges)
-# - evaluate network with Septima polygon layers (based on user-defined distance thresholds)
-# - evaluate network with Septima point layers (based on user-defined distance thresholds)
-# - optional (if requested by user):
-#   display input (communication layer); display output (all evaluation layers)
-# NOTE: The script will take a while
-
-# Compute slope for edge segments and whole edges
-
-#### CUSTOM SETTINGS
-segment_length = 100  # max segment length in meters
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 plot_intermediate = True
 plot_results = True
-slope_threshold = 7  # percent slope
-
-# Definition of slope classes used for plotting.
-# Format: (label, lower bound, upper bound, color (hex code))
-slope_ranges = [
-    ("Manageable elevation", 0.0, 2.99999, "#ffbaba"),
-    ("Noticeable elevation", 3.0, 4.999999, "#ff5252"),
-    ("Steep elevation", 5.0, 6.9999999, "#ff0000"),
-    ("Very steep elevation", 7, 100.0, "#a70000"),
-]
 
 ##### NO CHANGES BELOW THIS LINE
-print("05_compute_slope script started with user settings:")
-print(f"\t Maximal segment length: {segment_length}m")
-print(f"\t Plot intermediate results: {plot_intermediate}")
-print(f"\t Plot final results: {plot_results}")
-print(f"\t Slope threshold: {slope_threshold}% (percent)")
-print("Please be patient, this might take a while!")
-print(f"If the script fails to complete, please try again!")
 
 ### SETUP
 
@@ -49,12 +21,23 @@ homepath = QgsProject.instance().homePath()
 # import plotting functions
 exec(open(homepath + "/src/plot_func.py").read())
 
-# load configs
+# load configs and colors
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 dataforsyning_token = configs["dataforsyning_token"]
 sa_name = configs["study_area_name"]
+segment_length = configs["segment_length"]
+slope_threshold = configs["slope_ranges"][-1]
+
+colorfile = os.path.join(homepath, "colors.yml")  # filepath of config file
+colors = yaml.load(open(colorfile), Loader=yaml.FullLoader)
+slope_colors = [
+    colors["slope_0"], 
+    colors["slope_a"], 
+    colors["slope_b"], 
+    colors["slope_c"]
+    ]
 
 #### PATHS
 
@@ -76,6 +59,15 @@ edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
 steep_segments_fp = homepath + "/results/data/very_steep_segments.gpkg"
 results_path = homepath + "/results/data/"  # store output geopackages here
 stats_path = homepath + "/results/stats/"  # store output json here
+
+# print out user settings
+print("05_compute_slope script started with user settings:")
+print(f"\t Maximal segment length: {segment_length}m")
+print(f"\t Plot intermediate results: {plot_intermediate}")
+print(f"\t Plot final results: {plot_results}")
+print(f"\t Slope threshold: {slope_threshold}% (percent)")
+print("Please be patient, this might take a while!")
+print(f"If the script fails to complete, please try again!")
 
 ##### IMPORT STUDY AREA EDGES AS GDF
 edges = gpd.read_file(edges_fp)
@@ -279,8 +271,12 @@ vlayer_slope = QgsVectorLayer(
 if plot_results:
     QgsProject.instance().addMapLayer(vlayer_slope)
 
-    draw_slope_layer("Segments slope", slope_ranges=slope_ranges)
-
+    draw_slope_layer(
+        layer_name="Segments slope", 
+        slope_ranges=configs["slope_ranges"],
+        slope_colors=slope_colors,
+        slope_field="slope"
+        )
 
 ### GET MIN MAX AVE SLOPE FOR EDGES (BASED ON EDGE SEGMENTS) ######
 
@@ -316,11 +312,11 @@ if plot_results:
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
     draw_slope_layer(
-        layer_name="Edges average slope",
-        slope_ranges=slope_ranges,
-        slope_field="ave_slope",
-    )
-
+        layer_name="Edges average slope", 
+        slope_ranges=configs["slope_ranges"],
+        slope_colors=slope_colors,
+        slope_field="ave_slope"
+        )
 
 steep_segments = segs.loc[segs.slope > slope_threshold]
 if os.path.exists(steep_segments_fp):
