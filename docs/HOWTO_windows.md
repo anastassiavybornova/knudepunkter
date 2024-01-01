@@ -37,7 +37,7 @@ from the `\bin\` subfolder to the Python installation subfolder (as identified i
 
 4. Open your command line interface (Command Prompt on Windows)
 
-5. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) 
+5. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) Note that you have to be connected to the internet for the installs to work.
 
 ```
 "<qgispythonpath>" -m pip install --upgrade shapely
@@ -93,6 +93,8 @@ Repeat steps 3-11 for all scripts (from `01_define_study_area.py` to `07_plot_su
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=80%></p>
 
 **Troubleshooting**
+* Note that for some of the scripts, run time could take up to several minutes, and QGIS may become unresponsive while the script is running.
+* Note that for some of the scripts, a stable internet connection is required.
 * If the script `05_compute_slope.py` script fails to run - please try again! (it sometimes requires several attempts)
 
 
