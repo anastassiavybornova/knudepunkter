@@ -98,14 +98,20 @@ Repeat steps 3-11 for all scripts (from `01_define_study_area.py` to `07_plot_su
 
 ## Step 6: Explore the QGIS visualization
 
-> Screenshot
+Explore the results of the workflow by (de)selecting layers in the QGIS project. 
 
-Explain layers
+For example, select "Culture/Network in culture areas" within the "Evaluate network" layer to explore which parts of the network lead through culturally particularly interesting parts of the study area.
+
+<p align="center"><img alt="Explore evaluation: culture areas" src="/docs/screenshots/explore-culture.png" width=60%></p>
+
+Or, select "POIS" within the "Evaluate network" layer to explore which points of interest are within vs. outside reach (dark vs. light color) of the network. Use the "Identify features" tool to get more information on a particular feature on the map.
+
+<p align="center"><img alt="Explore evaluation: points of interest (POIs)" src="/docs/screenshots/explore-pois.png" width=60%></p>
 
 ***
 
 ## Step 7: Explore the summary statistics
 
-> Screenshot
+After running all scripts, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `knudepunkter-fyn` folder):
 
-Explain separate points
+<p align="center"><img alt="Summary statistics for study area" src="/docs/screenshots/evaluation_Fyn.png" width=80%></p>
