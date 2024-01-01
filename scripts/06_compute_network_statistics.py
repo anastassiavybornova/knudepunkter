@@ -1,6 +1,6 @@
 ##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
-display_input_data = True
+display_input_data = False
 display_network_layer = True
 
 ### NO CHANGES BELOW THIS LINE
