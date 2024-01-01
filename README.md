@@ -1,4 +1,4 @@
-<p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=60%></p>
+<p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=100%></p>
 
 # The Cycle Node Network Planner
 
