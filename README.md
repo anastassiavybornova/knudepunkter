@@ -1,40 +1,76 @@
+<p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=60%></p>
+
 # The Cycle Node Network Planner
 
-<center>
-<img alt="Cycle node network in Jutland, Denmark" src="/images/social.png" width=80%>
-</center>
+*A decision support tool under development, aimed at supporting the planning of Denmark's cycle node network.*
 
-With this project, we want to assist the planning of [knudepunktnetsværker](https://www.kystognaturturisme.dk/cykelknudepunkter) (cycle node networks) in Denmark and beyond. This repository contains a set of scripts and detailed instructions. The user can run all scripts with step-by-step explanations in their QGIS Python console. The scripts help the user to:
+The Cycle Node Network Planner is a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) in the framework of [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network Planner runs in QGIS and Python.
 
-* Define the area of interest (a part of Denmark)
-* Fetch and process spatial data (Septima) & beta network data (GeoFA, provided by Folkersma) for this area
-* Evaluate the beta network based on spatial data & network structure
-* Visualize and explore results of the analysis in QGIS
+Here, we present a demo version of the Cycle Node Network Plannner, pre-set to run for the island of Fyn. 
 
-## Setup
+# Getting started
 
-1. You need QGIS-LTR 3.28 Firenze (can be downloaded [here](https://www.qgis.org/en/site/forusers/download.html))  
-2. Find out the path to the Python installation for the QGIS app on your local machine, e.g. `/Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9`. 
-3. Use this path (abbreviated as `<qgispythonpath>` below) to run from terminal, in indicated order:  
-    - `<qgispythonpath> -m pip install --upgrade shapely`  
-    - `<qgispythonpath> -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0`
-    - `<qgispythonpath> -m pip install momepy`  
-    - `<qgispythonpath> -m pip install osmnx`  
-    - `<qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4`
+## 1. What are the main features of the Cycle Node Network Planner?
 
-<!-- OSMNX should be installed as /Applications/QGIS.app/Contents/MacOS/bin/python3.9 -m pip install osmnx==1.6.0 -->
+The Cycle Node Network Planner takes all relevant data layers provided by Septima (as visualized in NIRAS' WebGIS application) as point of departure. The Planner then *merges and summarizes* these data; and uses them to *evaluate* the cycle node network. All [evaluation](#2-what-are-the-evaluation-criteria-of-the-planner) results are displayed in QGIS. In addition, [summary statistics](#3-what-are-the-summary-statistics-generated-by-the-planner) of the cycle node network are generated. By exploring the QGIS results and the summary statistics, planners can get a better overview of the network characteristics, and identify potential improvements to the network.
 
-For detailed instructions on setup, click [here](docs/SETUP_detailed.md).
+## 2. What are the evaluation criteria of the Planner?
 
-## Running the scripts
+The Planner helps users to evaluate a cycle node network through 3 perspectives: polygon layers, point layers, and elevation.
 
-After completing the setup:
-1. Download this repository to your local machine
-2. Open QGIS
-3. In QGIS, open a new (empty) QGIS project
-4. Save the QGIS project in the main folder of the repository
-5. Open the Python console plugin in QGIS (`Plugins > Python Console`)
-6. On top of the QGIS Python console, press the `Show editor` button to view the editor 
-7. In this QGIS Python console editor, **open** and then **run** the scripts in indicated order (01, 02, ...)
+### Polygon layers
 
-For detailed instructions on running the scripts, click [here](docs/RUNSCRIPTS_detailed.md).
+Polygon layers show the attributes of the area (land use) surrounding the cycle node networks, by category. The Planner computes and visualizes which network segments go through which category of land use, using a buffer of 100m around the cycle node network. There are five polygon layers:
+* Nature (forests, lakes, beaches, etc.)
+* Culture (city centers, historical landscapes, etc.)
+* Agriculture
+* Summerhouse areas
+* Areas to verify (where it is worth double-checking whether cycling conditions are appropriate, such as industrial areas, military facilities, business areas, etc.)
+
+### Point layers
+
+Point layers contain specific locations that are of interest for cyclists and tourists. The Planner computes whether specific locations are in feasible distance (as the crow flies) from the cycle node network. There are three point layers:
+* Facilities: locations good to have directly on the road (max. 100m distance), such as drinking water, toilets, and bicycle shops
+* Services: locations good to have close to the road (max. 500m distance), such as groceries and places to sleep
+* POIs (Points Of Interest): locations good to have within an acceptable detour (max. 1km distance), such as landmarks and museums
+
+The distance threshold for each of the point layers is set to a default value indicated above, but can be adjusted by the user.
+
+### Elevation
+
+Elevation is shown as an attribute of ~100m segments which together make up the cycle node network, and binned into four categories, aimed at the average leisure cyclist on a city bike:
+* <3% no elevation, or manageable elevation
+* 3-5% noticeable elevation, that can get tiresome after a longer period
+* 5-7% steep elevation, that can get tiresome quickly
+* \> 7% very steep elevation, unbikeable for most cyclists
+
+The elevation thresholds are set to the default values indicated above, but can be adjusted by the user.
+
+## 3. What are the summary statistics generated by the Planner?
+
+The summary statistics show:
+* for each of the polygon layers, the number and percentage of kilometers of cycle node network within that layer
+* for each of the point layers, the number and percentage of reached vs. unreached points
+* for the elevation layer, the number and percentage of kilometers in each elevation category
+<!-- * for the entire network, the number of nodes, stretches, and loops
+* for the area covered by the network, the average node density -->
+
+## 4. How can I run the Planner myself?
+
+1. Set up QGIS
+2. Download the contents of this repository (`knudepunkter-fyn` folder)
+3. Fill out the configuration file
+4. Open the empty QGIS project `Fyn.qgz` in the `knudepunkter-fyn` folder
+5. Open the Python console in QGIS, and run the scripts from the `scripts` folder in indicated order
+6. Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be changed 
+7. Explore the summary statistics: get an overview of overall network quality and general characteristics of the network 
+
+**Detailed instructions** for each step are found [here](/docs/HOWTO_detailed.md). 
+
+# Your feedback is greatly appreciated
+
+Once you have familiarized yourself with the Cycle Node Network Planner, we will be grateful for any feedback! Please fill out the [survey here](LINK) (between 5 and 20 minutes).
+
+# Troubleshooting: What if running the Planner doesn't work?
+
+For troubleshooting, [contact us](mailto:anvy@itu.dk)! If you want to see a sample final output of the Planner, you can download the QGIS project [here](LINK).
