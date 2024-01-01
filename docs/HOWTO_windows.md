@@ -33,7 +33,7 @@ libcrypto-1_1-x64.dll
 libssl-1_1-x64.dll
 ```
 
-from the `\bin\` subfolder to the Python installation subfolder (as identified in step 2) of your QGIS installation. To do so, simply open your file explorer and navigate to the path `C:\Program Files\QGIS 3.28\bin`; locate the 2 files and copy them; navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\python`; and paste the 2 files here. Note that the exact file path might look slightly different on your machine (e.g. a different QGIS version number, or a different Python version number).
+from the `\bin\` subfolder to the Python installation subfolder (as identified in step 2) of your QGIS installation. To do so, simply open your file explorer and navigate to the path `C:\Program Files\QGIS 3.28\bin`; locate the 2 files and copy them; navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\python`; and paste the 2 files here. Note that the exact file paths might look slightly different on your machine (e.g. a different QGIS version number, or a different Python version number).
 
 4. Open your command line interface (Command Prompt on Windows)
 
@@ -60,9 +60,7 @@ On this GitHub repository page, click on the `Code` button (in the upper right),
 
 ## Step 3: Fill out the configuration file
 
-Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in any text editor (e.g. Notepad). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.
-
-<!-- Update this depending on which areas we get the data to work for -->
+Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in any text editor (e.g. Notepad). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis. This is set to the following 10 municipalities by default: 0410 Middelfart, 0420 Assens, 0430 Faaborg-Midtfyn, 0440 Kerteminde, 0450 Nyborg, 0461 Odense, 0479 Svendborg, 0480 Nordfyns, 0482 Langeland and 0492 Æro. 
 
 <p align="center"><img alt="Fill out the configuration file" src="/docs/screenshots/config-fillout.png" width=80%></p>
 
@@ -71,8 +69,6 @@ Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in an
 ## Step 4: Open the QGIS project in the knudepunkter-fyn folder
 
 Open the empty QGIS project **`Fyn.qgz`**, located in the `knudepunkter-fyn` folder. 
-
-<!-- Update this depending on which areas we get the data to work for -->
 
 ***
 

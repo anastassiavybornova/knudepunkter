@@ -55,9 +55,7 @@ On this GitHub repository page, click on the `Code` button (in the upper right),
 
 ## Step 3: Fill out the configuration file
 
-Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.
-
-<!-- Update this depending on which areas we get the data to work for -->
+Open the file `config.yml`, located in the main folder `knudepunkter-fyn`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.  This is set to the following 10 municipalities by default: 0410 Middelfart, 0420 Assens, 0430 Faaborg-Midtfyn, 0440 Kerteminde, 0450 Nyborg, 0461 Odense, 0479 Svendborg, 0480 Nordfyns, 0482 Langeland and 0492 Æro. 
 
 <p align="center"><img alt="Fill out the configuration file" src="/docs/screenshots/config-fillout.png" width=80%></p>
 
