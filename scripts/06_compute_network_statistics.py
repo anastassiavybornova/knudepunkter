@@ -1,13 +1,10 @@
-### Script for converting preprocessed beta data to network/graph format
-
-### *********
-### CUSTOM SETTINGS
-### *********
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
 display_input_data = True
 display_network_layer = True
 
 ### NO CHANGES BELOW THIS LINE
+
 print("06_compute_network_statistics script started with user settings:")
 print(f"\t Display input data: {display_input_data}")
 print(f"\t Display network layer: {display_network_layer}")

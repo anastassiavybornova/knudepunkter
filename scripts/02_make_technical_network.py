@@ -1,19 +1,13 @@
-# In this script, we:
-# - get the user-defined study area polygon
-# - get the input data and cut it to the study area
-# - preprocess the input data to create the technical layer
-# - save the technical layer to a subfolder
-# - optional (if requested by user):
-#   display study area; input data; and technical layer
-# the technical layer will be used ONLY FOR PLOTTING by future scripts
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
-##### CUSTOM SETTINGS
-display_inputdata = (
-    True  # display the study area polygon and the entire Folkersma data set?
-)
-display_technicallayer = True  # display the technical layer of edges?
+# display technical layer of edges (output of this step)?
+display_technicallayer = True  
+
+# display the entire input data set (for all of DK)? 
+display_inputdata = False  
 
 ##### NO CHANGES BELOW THIS LINE
+
 print("02_make_technical_network script started with user settings:")
 print(f"\t * Display input data: {display_inputdata}")
 print(f"\t * Display technical layer: {display_technicallayer}")

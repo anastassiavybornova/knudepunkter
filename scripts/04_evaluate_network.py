@@ -1,11 +1,5 @@
-# In this script, we:
-# - import the communication layer (network edges)
-# - evaluate network with Septima polygon layers (based on user-defined distance thresholds)
-# - evaluate network with Septima point layers (based on user-defined distance thresholds)
-# - optional (if requested by user):
-#   display input (communication layer); display output (all evaluation layers)
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
-##### CUSTOM SETTINGS
 display_input = True
 display_output = True
 

@@ -1,17 +1,14 @@
-# In this script, we:
-# - get the user-defined study area polygon
-# - get the input data and cut it to the study area
-# - process the input data in the study area to find and remove parallel edges
-# - save communication layer to file
-# - optional (if requested by user): display input data and communication layer
-# the communication layer (without parallel edges) will be USED AS INPUT FOR ALL FOLLOWING SCRIPTS
-# (evaluation and network analysis), but NOT for plotting
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
-##### CUSTOM SETTINGS
-display_inputdata = True
+# display communication layer (output of this step)?
 display_communicationlayer = True
 
+# display entire input data set (for all of DK)?
+display_inputdata = False
+
+
 ##### NO CHANGES BELOW THIS LINE
+
 print("03_make_communication_network script started with user settings:")
 print(f"\t * Display input data: {display_inputdata}")
 print(f"\t * Display communication layer: {display_communicationlayer}")

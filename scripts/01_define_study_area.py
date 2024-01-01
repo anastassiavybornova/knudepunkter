@@ -1,7 +1,10 @@
-##### CUSTOM SETTINGS
-display_studyarea = True  # display the study area polygon?
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
+
+# display the study area polygon?
+display_studyarea = True  
 
 ##### NO CHANGES BELOW THIS LINE
+
 print("01_define_study_area started with user settings:")
 print(f"\t * Display user-defined study area: {display_studyarea}")
 
