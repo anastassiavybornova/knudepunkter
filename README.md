@@ -1,8 +1,8 @@
-<p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=100%></p>
-
 # The Cycle Node Network Planner
 
 *A decision support tool under development, aimed at supporting the planning of Denmark's cycle node network.*
+
+<p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=100%></p>
 
 The Cycle Node Network Planner is a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) in the framework of [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network Planner runs in QGIS and Python.
 
