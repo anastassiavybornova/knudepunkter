@@ -57,15 +57,9 @@ The summary statistics show:
 
 ## 4. How can I run the Planner myself?
 
-1. Set up QGIS
-2. Download the contents of this repository (`knudepunkter-fyn` folder)
-3. Fill out the configuration file
-4. Open the empty QGIS project `Fyn.qgz` in the `knudepunkter-fyn` folder
-5. Open the Python console in QGIS, and run the scripts from the `scripts` folder in indicated order
-6. Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be changed 
-7. Explore the summary statistics: get an overview of overall network quality and general characteristics of the network 
-
-**Detailed instructions** for each step are found [here](/docs/HOWTO_detailed.md). 
+Find detailed instructions for
+* Windows: [here](docs/HOWTO_windows.md)
+* MacOS/Linux: [here](docs/HOWTO_macOS.md)
 
 # Your feedback is greatly appreciated
 
