@@ -489,10 +489,10 @@ def remove_existing_layers(layer_name_list):
 
     return None
 
-
 def draw_slope_layer(
     layer_name,
     slope_ranges,
+    slope_colors,
     slope_field="slope",
     line_width=1,
     line_style="solid",
@@ -513,8 +513,24 @@ def draw_slope_layer(
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
     ranges = []
+ 
+    slope_ranges += [100] # add max value (upper limit)
+    # make pairs of upper-lower limits for ranges
+    slope_pairs = [list(pair) for pair in zip(slope_ranges, slope_ranges[1:])]
 
-    for label, lower, upper, color in slope_ranges:
+    slope_names = [
+        f"{slope_pairs[0][0]}-{slope_pairs[0][1]}% (manageable elevation)", 
+        f"{slope_pairs[1][0]}-{slope_pairs[1][1]}% (noticeable elevation)", 
+        f"{slope_pairs[2][0]}-{slope_pairs[2][1]}% (steep elevation)", 
+        f">{slope_pairs[3][0]}% (very steep elevation)"
+        ]
+   
+    # to make sure upper and lower limit are not identical for disparate ranges:
+    for i in range(len(slope_pairs)-1):
+        slope_pairs[i][1] -= 10**-6 
+    slope_defs = [z for z in zip(slope_names, slope_pairs, slope_colors)]
+
+    for label, (lower, upper), color in slope_defs:
         symbol = QgsLineSymbol.createSimple(
             {
                 "width": line_width,
