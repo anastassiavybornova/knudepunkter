@@ -1,5 +1,5 @@
 # provide the name of the study area
-study_area_name: "Faxe"
+study_area_name: "Fyn"
 
 # provide a list of municipality codes for this study area
 # (see here: https://danmarksadresser.dk/adressedata/kodelister/kommunekodeliste)
@@ -38,7 +38,7 @@ municipalities:
   # - "0270" # Gribskov
   # - "0306" # Odsherred
   # - "0316" # Holbæk
-  - "0320" # Faxe
+  # - "0320" # Faxe
   # - "0326" # Kalundborg
   # - "0329" # Ringsted
   # - "0330" # Slagelse
@@ -50,17 +50,17 @@ municipalities:
   # - "0376" # Guldborgsund
   # - "0390" # Vordingborg
   # - "0400" # Bornholm
-  #  - "0410" # Middelfart
+  - "0410" # Middelfart
   # - "0411" # Christiansø
-  #  - "0420" # Assens
-  #  - "0430" # Faaborg-Midtfyn
-  #  - "0440" # Kerteminde
-  #  - "0450" # Nyborg
-  #  - "0461" # Odense
-  #  - "0479" # Svendborg
-  #  - "0480" # Nordfyns
-  #  - "0482" # Langeland
-  #  - "0492" # Ærø
+  - "0420" # Assens
+  - "0430" # Faaborg-Midtfyn
+  - "0440" # Kerteminde
+  - "0450" # Nyborg
+  - "0461" # Odense
+  - "0479" # Svendborg
+  - "0480" # Nordfyns
+  - "0482" # Langeland
+  - "0492" # Ærø
   # - "0510" # Haderslev
   # - "0530" # Billund
   # - "0540" # Sønderborg
@@ -104,25 +104,6 @@ municipalities:
   # - "0851" # Aalborg
   # - "0860" # Hjørring
 
-### POLYGON LAYERS
-# buffer zone for land use: in a buffer zone of how many meters 
-# around the network edges should the land use be considered?
-# define distance thresholds for polygon layers
-polygon_buffers:
-  "dist_verify": 100
-  "dist_agriculture": 100
-  "dist_culture": 100
-  "dist_nature": 100
-  "dist_summer": 100
-
-### POINT LAYERS
-# buffer zone for locations: in a buffer zone of how many meters
-# around the network edges should the locations be considered as "within reach"?
-point_distances:
-  "dist_facilities": 100
-  "dist_service": 500
-  "dist_pois": 1000
-
 ### NO CHANGES NEEDED BELOW THIS LINE
 
 # provide projected crs 
@@ -142,3 +123,35 @@ evaluation_layers:
   - "pois"
   - "service"
   - "verify"
+  
+  ### POLYGON LAYERS
+# buffer zone for land use: in a buffer zone of how many meters 
+# around the network edges should the land use be considered?
+# define distance thresholds for polygon layers
+polygon_buffers:
+  "dist_verify": 100
+  "dist_agriculture": 100
+  "dist_culture": 100
+  "dist_nature": 100
+  "dist_summer": 100
+
+### POINT LAYERS
+# buffer zone for locations: in a buffer zone of how many meters
+# around the network edges should the locations be considered as "within reach"?
+point_distances:
+  "dist_facilities": 100
+  "dist_service": 500
+  "dist_pois": 1000
+
+### SLOPE COMPUTATION
+
+# max segment length in meters (slope will be computed for each segment separately)
+segment_length: 100  
+
+slope_ranges: [0, 3, 5, 7] # in percent (%) elevation
+# in the format [0, a, b, c]
+# this will be used to classify the edges by slope:
+# edges with a slope within the interval [0, a] --> "Manageable elevation"
+# edges with a slope within the interval [a, b] --> "Noticeable elevation"
+# edges with a slope within the interval [b, c] --> "Steep elevation"
+# edges with a slope above c --> "Very steep elevation"
