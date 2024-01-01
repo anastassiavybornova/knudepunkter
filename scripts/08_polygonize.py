@@ -1,6 +1,5 @@
-# DESCRIBE SCRIPT
+##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
-##### CUSTOM SETTINGS
 display_polygons = True
 
 ##### NO CHANGES BELOW THIS LINE
