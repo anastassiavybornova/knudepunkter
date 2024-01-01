@@ -138,7 +138,7 @@ res = {}  # initialize stats results dictionary
 if os.path.exists(eval_path + "agriculture.gpkg"):
     agri_input_name, agri_output_name, res_agriculture = evaluate_export_plot_poly(
         input_fp=eval_path + "agriculture.gpkg",
-        output_fp=results_path + f"agricultural_network_{dist_agri}.gpkg",
+        output_fp=results_path + f"agriculture_network_{dist_agri}.gpkg",
         network_edges=edges,
         dist=dist_agri,
         name="Agricultural",
