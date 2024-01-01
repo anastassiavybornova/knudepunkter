@@ -20,6 +20,7 @@ homepath = QgsProject.instance().homePath()
 
 # import plotting functions
 exec(open(homepath + "/src/plot_func.py").read())
+exec(open(homepath + "/src/stat_func.py").read())
 
 # load configs and colors
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -38,6 +39,7 @@ slope_colors = [
     colors["slope_b"], 
     colors["slope_c"]
     ]
+slope_colors = [rgb2hex(c) for c in slope_colors]
 
 #### PATHS
 

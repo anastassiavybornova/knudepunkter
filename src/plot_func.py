@@ -1,8 +1,6 @@
 from random import randrange
-
 # from qgis.core import QgsVectorLayer
 from qgis.core import *
-
 
 def move_study_area_front(layer_name="Study area"):
     # get basemap layer
@@ -21,7 +19,6 @@ def move_study_area_front(layer_name="Study area"):
 
     # remove original
     root.removeLayer(layer)
-
 
 def move_basemap_back(basemap_name="Basemap"):
     # get basemap layer
@@ -49,7 +46,6 @@ def turn_off_layers(layer_names):
         QgsProject.instance().layerTreeRoot().findLayer(
             layer.id()
         ).setItemVisibilityChecked(False)
-
 
 def add_layer_to_group(layer_name, group, position=-1):
     """
@@ -100,7 +96,6 @@ def group_layers(group_name, layer_names, remove_group_if_exists=True):
 
         parent.removeChildNode(tree_layer)
 
-
 def color_ramp_items(colormap, nclass):
     """
     Returns nclass colors from color map
@@ -112,7 +107,6 @@ def color_ramp_items(colormap, nclass):
 
     return colors
 
-
 def change_alpha(q_color, alpha):
     color_string_list = str(q_color).split()
 
@@ -123,7 +117,6 @@ def change_alpha(q_color, alpha):
     rgb_string = " ".join(rgb_values)
 
     return rgb_string
-
 
 def draw_linear_graduated_layer(
     layer_name,
