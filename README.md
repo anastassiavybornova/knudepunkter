@@ -63,8 +63,8 @@ Find detailed instructions for
 
 # Your feedback is greatly appreciated
 
-Once you have familiarized yourself with the Cycle Node Network Planner, we will be grateful for any feedback! Please fill out the [survey here](LINK) (between 5 and 20 minutes).
+Once you have familiarized yourself with the Cycle Node Network Planner, we will be grateful for any feedback! Please fill out the [survey here](https://forms.gle/STYj1Qz8b9jH8Bf46) (10-20 minutes) while you go through the Cycle Node Network Planner workflow, or afterwards.
 
 # Troubleshooting: What if running the Planner doesn't work?
 
-For troubleshooting, [contact us](mailto:anvy@itu.dk)! If you want to see a sample final output of the Planner, you can download the QGIS project [here](LINK).
+For troubleshooting, [contact us](mailto:anvy@itu.dk)! If you want to see a sample final output of the Planner, check out the `Fyn-finished.qgz` project in the main folder of this repository.
