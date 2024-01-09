@@ -47,6 +47,7 @@ from the `\bin\` subfolder to the Python installation subfolder (as identified i
 "<qgispythonpath>" -m pip install contextily
 ```
 <!-- <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4 might not be needed on windows? for me it didnt work, had to redo geopandas reinstall one more time-->
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), run `./setuppython.sh <qgispythonpath>`.
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
 

@@ -4,7 +4,7 @@
 
 <p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=100%></p>
 
-The Cycle Node Network Planner is a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) in the framework of [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network Planner runs in QGIS and Python.
+The Cycle Node Network Planner is a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) as part of the project [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter). Our goal is to provide an open-source, customizable, data-driven decision support tool for the planning of Denmark's cycle node network. The Cycle Node Network Planner runs in QGIS and Python.
 
 Here, we present a demo version of the Cycle Node Network Plannner, pre-set to run for the island of Fyn. 
 
@@ -16,11 +16,11 @@ The Cycle Node Network Planner takes all relevant data layers provided by Septim
 
 ## 2. What are the evaluation criteria of the Planner?
 
-The Planner helps users to evaluate a cycle node network through 3 perspectives: polygon layers, point layers, and elevation.
+The Planner helps users to evaluate a cycle node network based on 3 different data types: polygon layers, point layers, and elevation data.
 
 ### Polygon layers
 
-Polygon layers show the attributes of the area (land use) surrounding the cycle node networks, by category. The Planner computes and visualizes which network segments go through which category of land use, using a buffer of 100m around the cycle node network. There are five polygon layers:
+Polygon layers show the land use of the areas surrounding the cycle node networks, by category. The Planner computes and visualizes which network segments go through which category of land use, using a buffer of 100m around the cycle node network. There are five polygon layers:
 * Nature (forests, lakes, beaches, etc.)
 * Culture (city centers, historical landscapes, etc.)
 * Agriculture
@@ -29,7 +29,7 @@ Polygon layers show the attributes of the area (land use) surrounding the cycle 
 
 ### Point layers
 
-Point layers contain specific locations that are of interest for cyclists and tourists. The Planner computes whether specific locations are in feasible distance (as the crow flies) from the cycle node network. There are three point layers:
+Point layers contain specific locations that are of interest for cyclists and tourists. The Planner computes whether specific locations are in feasible distance (as the crow flies) from the cycle node network. There are 3 point layers:
 * Facilities: locations good to have directly on the road (max. 100m distance), such as drinking water, toilets, and bicycle shops
 * Services: locations good to have close to the road (max. 500m distance), such as groceries and places to sleep
 * POIs (Points Of Interest): locations good to have within an acceptable detour (max. 1km distance), such as landmarks and museums
