@@ -36,7 +36,6 @@ edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.
 edgefile = homepath + "/data/processed/workflow_steps/edges_beta.gpkg"
 nodefile = homepath + "/data/processed/workflow_steps/nodes_beta.gpkg"
 graph_file = homepath + "/data/processed/workflow_steps/network_graph.json"
-results_path = homepath + "/results/data/"  # store output geopackages here
 stats_path = homepath + "/results/stats/"  # store output geopackages here
 
 # load data
@@ -112,6 +111,7 @@ res["edge_count"] = len(G_undirected.edges)
 res["node_degrees"] = dict(nx.degree(G))
 with open(f"{stats_path}stats_network.json", "w") as opened_file:
     json.dump(res, opened_file, indent=6)
+print(f"Network statistics saved to {stats_path}stats_network.json")
 
 ### Visualization
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])

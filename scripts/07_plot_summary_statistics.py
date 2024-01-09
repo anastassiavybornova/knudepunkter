@@ -141,6 +141,7 @@ stats_fig = plot_overview(
     pois=pois
     )
 stats_fig.savefig(homepath + f"/results/plots/evaluation_{study_area_name}.png", dpi = 300)
+print(f"Summary statistics plot saved to {homepath}/results/plots/evaluation_{study_area_name}.png")
 
 ### end of script
 print("07_plot_summary_statistics script ended successfully")
