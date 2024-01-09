@@ -5,32 +5,6 @@ display_output = True
 
 ##### NO CHANGES BELOW THIS LINE
 
-# define distance thresholds for polygon layers
-dist_veri = configs["polygon_buffers"]["dist_verify"]
-dist_agri = configs["polygon_buffers"]["dist_agriculture"]
-dist_culture = configs["polygon_buffers"]["dist_culture"]
-dist_nature = configs["polygon_buffers"]["dist_nature"]
-dist_summer = configs["polygon_buffers"]["dist_summer"]
-
-# define distance thresholds for point layers
-dist_faci = configs["point_distances"]["dist_facilities"]
-dist_serv = configs["point_distances"]["dist_service"]
-dist_pois = configs["point_distances"]["dist_pois"]
-
-print("04_evaluate_network script started with user settings:")
-print(f"\t * Display input: {display_input}; display_output: {display_output}")
-print(f"\t * Distance thresholds for polygon layers:")
-print(f"\t \t - Areas to verify: {dist_veri}m")
-print(f"\t \t - Agricultural areas: {dist_agri}m")
-print(f"\t \t - Culture areas: {dist_culture}m")
-print(f"\t \t - Nature areas: {dist_nature}m")
-print(f"\t \t - Summerhouse areas: {dist_summer}m")
-print(f"\t * Distance thresholds for point layers:")
-print(f"\t \t - Facilities: {dist_faci}m")
-print(f"\t \t - Service: {dist_serv}m")
-print(f"\t \t - Points of interest: {dist_pois}m")
-print("Please be patient, this might take a while!")
-
 ### SETUP
 
 # define homepath variable (where is the qgis project saved?)
@@ -72,6 +46,32 @@ results_path = homepath + "/results/data/"  # store output geopackages here
 stats_path = homepath + "/results/stats/"  # store output json here
 for path in [eval_path, results_path, stats_path]:
     os.makedirs(path, exist_ok=True)
+
+# define distance thresholds for polygon layers
+dist_veri = configs["polygon_buffers"]["dist_verify"]
+dist_agri = configs["polygon_buffers"]["dist_agriculture"]
+dist_culture = configs["polygon_buffers"]["dist_culture"]
+dist_nature = configs["polygon_buffers"]["dist_nature"]
+dist_summer = configs["polygon_buffers"]["dist_summer"]
+
+# define distance thresholds for point layers
+dist_faci = configs["point_distances"]["dist_facilities"]
+dist_serv = configs["point_distances"]["dist_service"]
+dist_pois = configs["point_distances"]["dist_pois"]
+
+print("04_evaluate_network script started with user settings:")
+print(f"\t * Display input: {display_input}; display_output: {display_output}")
+print(f"\t * Distance thresholds for polygon layers:")
+print(f"\t \t - Areas to verify: {dist_veri}m")
+print(f"\t \t - Agricultural areas: {dist_agri}m")
+print(f"\t \t - Culture areas: {dist_culture}m")
+print(f"\t \t - Nature areas: {dist_nature}m")
+print(f"\t \t - Summerhouse areas: {dist_summer}m")
+print(f"\t * Distance thresholds for point layers:")
+print(f"\t \t - Facilities: {dist_faci}m")
+print(f"\t \t - Service: {dist_serv}m")
+print(f"\t \t - Points of interest: {dist_pois}m")
+print("Please be patient, this might take a while!")
 
 ### IMPORT NETWORK EDGES
 edges = gpd.read_file(study_path)
