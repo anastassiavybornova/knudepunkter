@@ -26,14 +26,23 @@ Contents of this file (click to jump to corresponding step):
 C:\Program Files\QGIS 3.28\apps\Python39\python
 ```
 
-3. To avoid issues with permissions for the custom setup of Python packages in your QGIS installation on Windows, you will need to copy-paste the following two files:
-
+3. To avoid issues with permissions for the custom setup of Python packages in your QGIS installation on Windows, you will need to copy-paste the following two files,
 ```
 libcrypto-1_1-x64.dll
 libssl-1_1-x64.dll
 ```
 
-from the `\bin\` subfolder to the Python installation subfolder (as identified in step 2) of your QGIS installation. To do so, simply open your file explorer and navigate to the path `C:\Program Files\QGIS 3.28\bin`; locate the 2 files and copy them; navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\python`; and paste the 2 files here. Note that the exact file paths might look slightly different on your machine (e.g. a different QGIS version number, or a different Python version number).
+* **from** the `\bin\` subfolder of your QGIS installation
+* **to** the `\apps\Python39\python` subfolder of your QGIS installation. 
+
+To do so, simply 
+* open your file explorer
+* navigate to the path `C:\Program Files\QGIS 3.28\bin` 
+* locate the 2 files and copy them 
+* navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\python` and 
+* paste the 2 files here. 
+
+**Note** that the exact file paths might look slightly different on your machine (e.g. a different QGIS version number, or a different Python version number).
 
 4. Open your command line interface (Command Prompt on Windows)
 
