@@ -30,18 +30,21 @@ Contents of this file (click to jump to corresponding step):
 
 3. Open your command line interface (Terminal on macOS)
 
-4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands in your commmand line interface, in indicated order. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 2, and hit enter.) Note that you have to be connected to the internet for the installs to work.
+4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` by the path from step 2, and hit enter.) Note that you have to be connected to the internet for the installs to work.
 
 ```
-"<qgispythonpath>" -m pip install --upgrade shapely  
-"<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
-"<qgispythonpath>" -m pip install momepy
-"<qgispythonpath>" -m pip install osmnx==1.6.0
-"<qgispythonpath>" -m pip install numpy --force-reinstall -v numpy==1.22.4
-"<qgispythonpath>" -m pip install contextily
+<qgispythonpath> -m pip install --upgrade shapely  
+<qgispythonpath> -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
+<qgispythonpath> -m pip install momepy
+<qgispythonpath> -m pip install osmnx==1.6.0
+<qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4
+<qgispythonpath> -m pip install contextily
 ```
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), run `./setuppython.sh <qgispythonpath>`.
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
+
+5. If you had QGIS open, restart QGIS now for the changes to take effect.
 
 ***
 
@@ -55,7 +58,7 @@ On this GitHub repository page, click on the `Code` button (in the upper right),
 
 ## Step 3: Fill out the configuration file
 
-Open the file `config.yml`, located in the main folder `knudepunkter`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.  This is set to the following 10 municipalities by default: 0410 Middelfart, 0420 Assens, 0430 Faaborg-Midtfyn, 0440 Kerteminde, 0450 Nyborg, 0461 Odense, 0479 Svendborg, 0480 Nordfyns, 0482 Langeland and 0492 Æro. 
+Open the file `config.yml`, located in the main folder `knudepunkter`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.  This is set to the following 10 municipalities by default: 0410 Middelfart, 0420 Assens, 0430 Faaborg-Midtfyn, 0440 Kerteminde, 0450 Nyborg, 0461 Odense, 0479 Svendborg, 0480 Nordfyns, 0482 Langeland and 0492 Ærø. 
 
 <p align="center"><img alt="Fill out the configuration file" src="/docs/screenshots/config-fillout.png" width=80%></p>
 
@@ -63,7 +66,7 @@ Open the file `config.yml`, located in the main folder `knudepunkter`, in any te
 
 ## Step 4: Open the QGIS project in the knudepunkter folder
 
-Open the empty QGIS project **`Fyn.qgz`**, located in the `knudepunkter` folder. 
+Open the empty QGIS project **`fyn.qgz`**, located in the `knudepunkter` folder. 
 
 <!-- Update this depending on which areas we get the data to work for -->
 
@@ -83,7 +86,7 @@ In QGIS,
 8. Each script contains a line beneath which no changes should be introduced.
 9. Click on `Run`.
 10. While the script is running, you will see status messages in the console window.
-11. Once you see the message `Script XXX ended succcessfully`, you can run the next script. 
+11. Once you see the message `Script XXX ended succcessfully`, save the project (cmd+s), and run the next script. 
 
 Repeat steps 3-11 for all scripts (from `01_define_study_area.py` to `07_plot_summary_statistics.py`) consecutively.
 
