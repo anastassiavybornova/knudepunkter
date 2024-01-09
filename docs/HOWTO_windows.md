@@ -54,7 +54,7 @@ from the `\bin\` subfolder to the Python installation subfolder (as identified i
 
 ## Step 2: Download the contents of this repository
 
-On this GitHub repository page, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter`. This will be the main folder for the entire workflow.
+On the [landing page](../README.md) of this repository, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter`. This will be the main folder for the entire workflow.
 
 <p align="center"><img alt="Download the knudepunkter folder" src="/docs/screenshots/github.png" width=80%></p>
 
