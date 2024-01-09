@@ -16,7 +16,7 @@ Contents of this file (click to jump to corresponding step):
 
 ## Step 1: Set up QGIS
 
-1. You need QGIS-LTR 3.28 Firenze. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, [click here](https://www.qgis.org/en/site/forusers/download.html). When downloading, make sure to install not the newest, but the latest stable version (QGIS-LTS 3.28).
+1. The Cycle Node Network Planner was developed to run with QGIS-LTR 3.28 Firenze, but might also work with later versions. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, [click here](https://www.qgis.org/en/site/forusers/download.html). 
 
 <p align="center"><img alt="Check your QGIS version" src="/docs/screenshots/qgis-version.png" width=80%></p>
 
@@ -47,7 +47,8 @@ from the `\bin\` subfolder to the Python installation subfolder (as identified i
 "<qgispythonpath>" -m pip install contextily
 ```
 <!-- <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4 might not be needed on windows? for me it didnt work, had to redo geopandas reinstall one more time-->
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), run `./setuppython.sh <qgispythonpath>`.
+
+<!-- Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), run `./setuppython.sh <qgispythonpath>`. -->
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
 
@@ -56,6 +57,8 @@ Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/
 On this GitHub repository page, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter`. This will be the main folder for the entire workflow.
 
 <p align="center"><img alt="Download the knudepunkter folder" src="/docs/screenshots/github.png" width=80%></p>
+
+**Note:** If you already work with the Git command line extension and prefer to clone the repository instead of downloading it, you need to have [`git-lfs`](https://git-lfs.com) installed on your machine before cloning. 
 
 ***
 

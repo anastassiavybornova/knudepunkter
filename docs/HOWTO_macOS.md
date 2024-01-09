@@ -16,7 +16,7 @@ Contents of this file (click to jump to corresponding step):
 
 ## Step 1: Set up QGIS
 
-1. You need QGIS-LTR 3.28 Firenze. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, [click here](https://www.qgis.org/en/site/forusers/download.html). When downloading, make sure to install not the newest, but the latest stable version (QGIS-LTS 3.28).
+1. The Cycle Node Network Planner was developed to run with QGIS-LTR 3.28 Firenze, but might also work with later versions. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, [click here](https://www.qgis.org/en/site/forusers/download.html). 
 
 <p align="center"><img alt="Check your QGIS version" src="/docs/screenshots/qgis-version.png" width=80%></p>
 
@@ -54,6 +54,8 @@ On this GitHub repository page, click on the `Code` button (in the upper right),
 
 <p align="center"><img alt="Download the knudepunkter folder" src="/docs/screenshots/github.png" width=80%></p>
 
+**Note:** If you already work with the Git command line extension and prefer to clone the repository instead of downloading it, you need to have [`git-lfs`](https://git-lfs.com) installed on your machine before cloning. 
+
 ***
 
 ## Step 3: Fill out the configuration file
@@ -66,7 +68,7 @@ Open the file `config.yml`, located in the main folder `knudepunkter`, in any te
 
 ## Step 4: Open the QGIS project in the knudepunkter folder
 
-Open the empty QGIS project **`fyn.qgz`**, located in the `knudepunkter` folder. 
+Open the empty QGIS project **`Fyn.qgz`**, located in the `knudepunkter` folder. 
 
 <!-- Update this depending on which areas we get the data to work for -->
 
