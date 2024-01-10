@@ -7,7 +7,7 @@ Contents of this file (click to jump to corresponding step):
 * [Step 1](#step-1-set-up-qgis): Set up QGIS
 * [Step 2](#step-2-download-the-contents-of-this-repository): Download the contents of this repository (`knudepunkter` folder)
 * [Step 3](#step-3-fill-out-the-configuration-file): Fill out the configuration file
-* [Step 4](#step-4-open-the-qgis-project-in-the-knudepunkter-folder): Open the empty QGIS project `Fyn.qgz` in the `knudepunkter` folder
+* [Step 4](#step-4-open-the-qgis-project-in-the-knudepunkter-main-folder): Open the empty QGIS project `Fyn.qgz` in the `knudepunkter-main` folder
 * [Step 5](#step-5-run-scripts-from-the-qgis-python-console): Open the Python console in QGIS, and run the scripts from the `scripts` folder in indicated order
 * [Step 6](#step-6-explore-the-qgis-visualization): Explore the QGIS visualization: use the evaluation layers (polygons, points, elevation) to assess in which places the network should be improved
 * [Step 7](#step-7-explore-the-summary-statistics): Explore the summary statistics: get an overview of overall network quality and general characteristics of the network 
@@ -22,7 +22,7 @@ Contents of this file (click to jump to corresponding step):
 
 <!-- Troubleshooting: if new installation on Mac, must be first opened 1x with rightclick and confirm -->
 
-2. Find out the path to the Python installation for the QGIS app on your local machine. Typically, this will be similar to
+2. Find out the path to the Python installation for the QGIS app on your local machine. That is, find the full path to the `python3.9` application file located in your QGIS installation folder. Typically, this will be similar to
 
 ```
 /Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9
@@ -40,7 +40,7 @@ Contents of this file (click to jump to corresponding step):
 <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4
 <qgispythonpath> -m pip install contextily
 ```
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), run `./setuppython.sh <qgispythonpath>`.
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to the `knudepunkter-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
 
@@ -50,9 +50,9 @@ Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/
 
 ## Step 2: Download the contents of this repository
 
-On the [landing page](https://github.com/anastassiavybornova/knudepunkter/) of this repository, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter`. This will be the main folder for the entire workflow.
+On the [landing page](https://github.com/anastassiavybornova/knudepunkter/) of this repository, click on the `Code` button (in the upper right), then `Download ZIP` to download the entire repository to your local machine. Unzip the downloaded folder `knudepunkter-main`. This will be the main folder for the entire workflow.
 
-<p align="center"><img alt="Download the knudepunkter folder" src="/docs/screenshots/github.png" width=80%></p>
+<p align="center"><img alt="Download the knudepunkter-main folder" src="/docs/screenshots/github.png" width=80%></p>
 
 **Note:** If you already work with the Git command line extension and prefer to clone the repository instead of downloading it, you need to have [`git-lfs`](https://git-lfs.com) installed on your machine before cloning. 
 
@@ -60,15 +60,15 @@ On the [landing page](https://github.com/anastassiavybornova/knudepunkter/) of t
 
 ## Step 3: Fill out the configuration file
 
-Open the file `config.yml`, located in the main folder `knudepunkter`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.  This is set to the following 10 municipalities by default: 0410 Middelfart, 0420 Assens, 0430 Faaborg-Midtfyn, 0440 Kerteminde, 0450 Nyborg, 0461 Odense, 0479 Svendborg, 0480 Nordfyns, 0482 Langeland and 0492 Ærø. 
+Open the file `config.yml`, located in the main folder `knudepunkter-main`, in any text editor (e.g. Notepad on Windows, or TextEdit on MacOS). Provide the study area name of your choice, in quotation marks (the default is "Fyn"). Then, in the list of municipalities, remove the hashtags for all municipalities that you want to include in the analysis.  This is set to the following 10 municipalities by default: 0410 Middelfart, 0420 Assens, 0430 Faaborg-Midtfyn, 0440 Kerteminde, 0450 Nyborg, 0461 Odense, 0479 Svendborg, 0480 Nordfyns, 0482 Langeland and 0492 Ærø. 
 
 <p align="center"><img alt="Fill out the configuration file" src="/docs/screenshots/config-fillout.png" width=80%></p>
 
 ***
 
-## Step 4: Open the QGIS project in the knudepunkter folder
+## Step 4: Open the QGIS project in the knudepunkter-main folder
 
-Open the empty QGIS project **`Fyn.qgz`**, located in the `knudepunkter` folder. 
+Open the empty QGIS project **`Fyn.qgz`**, located in the `knudepunkter-main` folder. 
 
 <!-- Update this depending on which areas we get the data to work for -->
 
@@ -81,7 +81,7 @@ In QGIS,
 1. Open the Python Console 
 2. Click on `Show Editor`
 3. Click on `Open Script`
-4. Navigate to the `scripts` folder (within the `knudepunkter` main folder) 
+4. Navigate to the `scripts` folder (within the `knudepunkter-main` folder) 
 5. Select the next script (by number: 01, then 02, ...)
 6. Click on `Open`
 7. Optionally, at the top of each script, you can adjust display settings (type `True` or `False` for displaying vs. not displaying the layers generated by this script). 
@@ -95,9 +95,15 @@ Repeat steps 3-11 for all scripts (from `01_define_study_area.py` to `07_plot_su
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=80%></p>
 
 **Troubleshooting**
-* Note that for some of the scripts, run time could take up to several minutes, and QGIS may become unresponsive while the script is running.
+* Note that QGIS might become unresponsive for several minutes while a script is running. 
+* At any stop in the workflow, you can save the QGIS project, close it, and then come back to it later.
 * Note that for some of the scripts, a stable internet connection is required.
 * If the script `05_compute_slope.py` script fails to run - please try again! (it sometimes requires several attempts)
+* if a script fails to complete and throws an error message: 
+    * erase the corresponding layer (named the same as the script) in the Layers window of QGIS 
+    * save, close, and reopen the QGIS project
+    * try to run the script again
+    * if the problem persists: create a new QGIS project in the `knudepunkter-main` folder and restart the workflow there from script 01
 
 ***
 
@@ -117,6 +123,6 @@ Or, select "POIS" within the "Evaluate network" layer to explore which points of
 
 ## Step 7: Explore the summary statistics
 
-After running all scripts, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `knudepunkter` folder):
+After running all scripts, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `knudepunkter-main` folder):
 
 <p align="center"><img alt="Summary statistics for study area" src="/docs/screenshots/evaluation_Fyn.png" width=80%></p>
