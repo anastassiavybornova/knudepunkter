@@ -100,7 +100,7 @@ Repeat steps 3-11 for all scripts (from `01_define_study_area.py` to `07_plot_su
 * Note that for some of the scripts, a stable internet connection is required.
 * If the script `05_compute_slope.py` script fails to run - please try again! (it sometimes requires several attempts)
 * if a script fails to complete and throws an error message: 
-    * erase the corresponding layer (named the same as the script) in the Layers window of QGIS 
+    * remove layers added by the script, and delete the files created by the script (including temporary/partial files)
     * save, close, and reopen the QGIS project
     * try to run the script again
     * if the problem persists: create a new QGIS project in the `knudepunkter-main` folder and restart the workflow there from script 01
