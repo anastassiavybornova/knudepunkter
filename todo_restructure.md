@@ -1,0 +1,1 @@
+See [issue 18](https://github.com/anastassiavybornova/knudepunkter/issues/18)
