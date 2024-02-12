@@ -10,7 +10,9 @@ All data must be in the same projected coordinate reference system.
 
 A technical network representation is however too detailed for small scale overview maps and for more general analysis of the node network structure. For example, using the technical network will result in over-counting of the network extent in locations where different paths on each side of a road are used for different travel directions, just as the technical network might contain duplicate nodes with identical node numbers to support navigation. To avoid these issues, the Cycle Node Network Planner makes use of a simplified network representation, sometimes referred to as a 'communication network' [CITE SEPTIMA].
 
-To run the Cycle Node Network Planner, input data with a generalized representation is required. Specifically, the input network data must consist of two separate data set: one with linestring geometries representing the network edges in the bicycle network and one with point geometries representing the cycle nodes. All nodes must have a unique node id and all edges must be uniquely indexed by their start and end node. No parallel edges are allowed, so if more than one edge runs between the same node pair, the edge must be split by adding an interstitial node on one of the parallel edges (even if the edges have different geometries). The data must be in a common geospatial format readable by both QGIS and GeoPandas and be provided in a projected coordinate reference system (CRS). Importantly, the network must be topologically correct, i.e. with snapping of edge and node geometries.
+To run the Cycle Node Network Planner, input data with a generalized representation is required. Specifically, the input network data must consist of two separate data set: one with linestring geometries representing the network edges in the bicycle network and one with point geometries representing the cycle nodes. All nodes must have a unique node id and all edges must be uniquely indexed by their start and end node. Additionally, the nodes must have a column with a *node number* specifying the number for all nodes that are part of the navigational cycle node system.
+
+No parallel edges are allowed, so if more than one edge runs between the same node pair, the edge must be split by adding an interstitial node on one of the parallel edges (even if the edges have different geometries). The data must be in a common geospatial format readable by both QGIS and GeoPandas and be provided in a projected coordinate reference system (CRS). Importantly, the network must be topologically correct, i.e. with snapping of edge and node geometries.
 
 <p align="center"><img alt="Illustration of interstitial node" src="/images/inter_node.png" width=50%></p>
 
@@ -27,7 +29,8 @@ If only a highly detailed network data set is available (e.g. in a format used f
 * *Not* contain parallel edges with the same start and end nodes that are *not* representing stretches on the same road/path. In that case, an interstitial node must be added to split one of the parallel edges.
 
 * Unlike a generalized network, a technical network might contain more than one node with the same node ID. This for example happens at intersections, where more than one node geometry is needed for a correct detailed mapping of the network, but all nodes at the intersection belongs to the same 'cycle node' used for navigation.
-    * In that case, the node data set must contain an attribute 'main'. For each node number, *one* node must have 'main' = True, while all other nodes with that number must have 'main' = False (see illustration below).
+    * In that case, the node data set must contain an attribute 'main'. For each intersection mapped with more than one node, *one* node must have 'main' = True, while all other nodes at the intersection must have 'main' = False (see illustration below).
+    * The nodes with 'main' = False must additionally have a column 'main_ref', which contains the node id of their main node (the node with 'main' = True).
 
 <p align="center"><img alt="Illustration of main node" src="/images/main_node.png" width=50%></p>
 
