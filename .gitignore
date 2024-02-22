@@ -221,3 +221,6 @@ data/NIRAS/*
 data/raw/archive
 data/raw/archive/*
 scripts/03_make_communication_network_draft.py
+
+# other
+todo_*.md
